@@ -59,6 +59,76 @@ public class SWTProtocolTest {
   }
 
   @Test
+  public void writeStringNullBuffer() throws Exception {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("buffer cannot be null");
+
+    SWTProtocol.writeString(null, "");
+  }
+
+  @Test
+  public void writeStringNullValue() throws Exception {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("value cannot be null");
+
+    SWTProtocol.writeString(ChannelBuffers.dynamicBuffer(), null);
+  }
+
+  @Test
+  public void writeStringValueTooLong() throws Exception {
+    String value = "x";
+    while (value.length() < Short.MAX_VALUE) {
+      value = value + value;
+    }
+
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("value is too long: " + value.length());
+
+    SWTProtocol.writeString(ChannelBuffers.dynamicBuffer(), value);
+  }
+
+  @Test
+  public void writeStringIndexOutOfBoundsWhileWriteLength() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeString(buffer, "foo");
+  }
+
+  @Test
+  public void writeStringIndexOutOfBoundsWhileWriteValue() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(3);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeString(buffer, "foo");
+  }
+
+  @Test
+  public void writeStringEmpty() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeString(buffer, "");
+
+    assertThat(buffer.readableBytes(), is(2));
+    assertThat(buffer.readShort(), is((short)0));
+  }
+
+  @Test
+  public void writeString() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeString(buffer, "foo");
+
+    assertThat(buffer.readableBytes(), is(5));
+    assertThat(buffer.readShort(), is((short)3));
+    assertThat(buffer.readByte(), is((byte)'f'));
+    assertThat(buffer.readByte(), is((byte)'o'));
+    assertThat(buffer.readByte(), is((byte)'o'));
+  }
+
+  @Test
   public void readArgumentInvalidType() throws Exception {
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
     buffer.writeByte(42);

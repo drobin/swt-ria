@@ -93,6 +93,44 @@ public class SWTProtocol {
   }
 
   /**
+   * Encodes the given string into the given buffer.
+   *
+   * @param buffer The destination buffer
+   * @param value The value to be encoded
+   * @throws SWTProtocolException if encoding failed
+   * @throws IndexOutOfBoundsException if the buffer is not big enough
+   * @throws NullPointerException if one of the arguments are <code>null</code>
+   */
+  public static void writeString(ChannelBuffer buffer, String value)
+      throws SWTProtocolException, IndexOutOfBoundsException,
+             NullPointerException {
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    if (value == null) {
+      throw new NullPointerException("value cannot be null");
+    }
+
+    if (value.length() > Short.MAX_VALUE) {
+      throw new SWTProtocolException("value is too long: " + value.length());
+    }
+
+    buffer.writeShort(value.length());
+
+    try {
+      byte bytes[] = value.getBytes("US-ASCII");
+      if (bytes.length <= buffer.writableBytes()) {
+        buffer.writeBytes(bytes);
+      } else {
+        throw new IndexOutOfBoundsException();
+      }
+    } catch (UnsupportedEncodingException e) {
+      throw new SWTProtocolException(e);
+    }
+  }
+  /**
    * Reads an argument from the given channel.
    * <p>
    * The special case here is, that you don't know what kind of argument you
