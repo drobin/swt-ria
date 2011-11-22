@@ -1,5 +1,9 @@
 package de.robind.swt.protocol;
 
+import java.io.UnsupportedEncodingException;
+
+import org.jboss.netty.buffer.ChannelBuffer;
+
 /**
  * Constants and values used by the protocol.
  *
@@ -36,4 +40,55 @@ public class SWTProtocol {
    * A response-message
    */
   public static final byte TYPE_RSP = 0x01;
+
+  /**
+   * A string-argument
+   */
+  public static final byte ARG_STRING = 1;
+
+  /**
+   * An integer-argument.
+   */
+  public static final byte ARG_INT = 2;
+
+  /**
+   * A byte-argument.
+   */
+  public static final byte ARG_BYTE = 3;
+
+  /**
+   * A boolean-argument.
+   */
+  public static final byte ARG_BOOL = 6;
+
+  /**
+   * Reads a string from the given buffer.
+   * <p>
+   * The string starts with a two-byte length, followed by the byte-data with
+   * the previous specified length.
+   *
+   * @param buffer The source buffer
+   * @return The decoded string
+   * @throws SWTProtocolException if decoding has failed
+   * @throws IndexOutOfBoundsException if not enough data are available in
+   *         <code>buffer</code>.
+   */
+  public static String readString(ChannelBuffer buffer)
+      throws SWTProtocolException, IndexOutOfBoundsException {
+
+    short length = buffer.readShort();
+    if (length < 0) {
+      throw new SWTProtocolException(
+          "String cannot have negative length (" + length + ")");
+    }
+
+    byte value[] = new byte[length];
+    buffer.readBytes(value);
+
+    try {
+      return (new String(value, "US-ASCII"));
+    } catch (UnsupportedEncodingException e) {
+      throw new SWTProtocolException(e);
+    }
+  }
 }
