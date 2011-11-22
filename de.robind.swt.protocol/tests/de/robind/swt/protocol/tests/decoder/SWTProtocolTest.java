@@ -194,4 +194,144 @@ public class SWTProtocolTest {
     assertThat(value, is(instanceOf(Boolean.class)));
     assertThat((Boolean)value, is(false));
   }
+
+  @Test
+  public void writeArgumentInvalidArgument() throws Exception {
+    class Foo {
+    }
+
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Invalid argument of type de.robind.swt.protocol.tests.decoder.SWTProtocolTest$1Foo");
+
+    SWTProtocol.writeArgument(ChannelBuffers.dynamicBuffer(), new Foo());
+  }
+
+  @Test
+  public void writeArgumentStringIndexOutOfBoundsWhileWriteType() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+    buffer.writerIndex(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, "foo");
+  }
+
+  @Test
+  public void writeArgumentStringOutOfBoundsWhileWriteString() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(3);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, "foo");
+  }
+
+  @Test
+  public void writeArgumentString() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, "foo");
+    assertThat(buffer.readableBytes(), is(6));
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_STRING));
+    assertThat(buffer.readShort(), is((short)3));
+    assertThat(buffer.readByte(), is((byte)'f'));
+    assertThat(buffer.readByte(), is((byte)'o'));
+    assertThat(buffer.readByte(), is((byte)'o'));
+  }
+
+  @Test
+  public void writeArgumentIntIndexOutOfBoundsWhileWriteType() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+    buffer.writerIndex(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, 4711);
+  }
+
+  @Test
+  public void writeArgumentIntOutOfBoundsWhileWriteString() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(3);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, 4711);
+  }
+
+  @Test
+  public void writeArgumentInt() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, 4711);
+    assertThat(buffer.readableBytes(), is(5));
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_INT));
+    assertThat(buffer.readInt(), is(4711));
+  }
+
+  @Test
+  public void writeArgumentByteIndexOutOfBoundsWhileWriteType() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+    buffer.writerIndex(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, (byte)42);
+  }
+
+  @Test
+  public void writeArgumentByteOutOfBoundsWhileWriteString() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, (byte)42);
+  }
+
+  @Test
+  public void writeArgumentByte() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, (byte)42);
+    assertThat(buffer.readableBytes(), is(2));
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_BYTE));
+    assertThat(buffer.readByte(), is((byte)42));
+  }
+
+  @Test
+  public void writeArgumentBoolIndexOutOfBoundsWhileWriteType() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+    buffer.writerIndex(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, true);
+  }
+
+  @Test
+  public void writeArgumentBoolOutOfBoundsWhileWriteString() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, true);
+  }
+
+  @Test
+  public void writeArgumentBoolTrue() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, true);
+    assertThat(buffer.readableBytes(), is(2));
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_BOOL));
+    assertThat(buffer.readByte(), is((byte)1));
+  }
+
+  @Test
+  public void writeArgumentBoolFalse() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, false);
+    assertThat(buffer.readableBytes(), is(2));
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_BOOL));
+    assertThat(buffer.readByte(), is((byte)0));
+  }
 }

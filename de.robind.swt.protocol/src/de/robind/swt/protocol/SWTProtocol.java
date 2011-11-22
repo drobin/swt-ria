@@ -156,4 +156,43 @@ public class SWTProtocol {
       default: throw new SWTProtocolException("Invalid argument-type: " + type);
     }
   }
+
+  /**
+   * Writes an argument into the given stream.
+   *
+   * @param buffer The destination buffer.
+   * @param value The argument to be encoded
+   * @throws SWTProtocolException if encoding has failed
+   * @throws IndexOutOfBoundsException if the bufer is not big enough
+   * @throws NullPointerException if one of the arguments are <code>null</code>
+   */
+  public static void writeArgument(ChannelBuffer buffer, Object value)
+      throws SWTProtocolException, IndexOutOfBoundsException,
+             NullPointerException {
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    if (value == null) {
+      throw new NullPointerException("value cannot be null");
+    }
+
+    if (value instanceof String) {
+      buffer.writeByte(ARG_STRING);
+      writeString(buffer, (String)value);
+    } else if (value instanceof Integer) {
+      buffer.writeByte(ARG_INT);
+      buffer.writeInt((Integer)value);
+    } else if (value instanceof Byte) {
+      buffer.writeByte(ARG_BYTE);
+      buffer.writeByte((Byte)value);
+    } else if (value instanceof Boolean) {
+      buffer.writeByte(ARG_BOOL);
+      buffer.writeByte((Boolean)value ? 1 : 0);
+    } else {
+      throw new SWTProtocolException(
+          "Invalid argument of type " + value.getClass().getName());
+    }
+  }
 }
