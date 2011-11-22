@@ -9,6 +9,7 @@ import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTObjectId;
+import de.robind.swt.msg.SWTRegRequest;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -45,7 +46,9 @@ public class SWTMessageDecoder extends FrameDecoder {
       throw new SWTDecoderException("Invalid magic number: " + magic);
     }
 
-    if (operation != SWTProtocol.OP_NEW && operation != SWTProtocol.OP_CALL) {
+    if (operation != SWTProtocol.OP_NEW && operation != SWTProtocol.OP_CALL &&
+        operation != SWTProtocol.OP_REG) {
+
       buffer.resetReaderIndex();
       throw new SWTDecoderException("Invalid operation: " + operation);
     }
@@ -151,6 +154,12 @@ public class SWTMessageDecoder extends FrameDecoder {
       }
 
       return (new SWTCallRequest(new SWTObjectId(destObj), method, args));
+    } else if (operation == SWTProtocol.OP_REG) {
+      int objId = buffer.readInt();
+      int eventType = buffer.readInt();
+      boolean enable = SWTProtocol.readBoolean(buffer);
+
+      return (new SWTRegRequest(new SWTObjectId(objId), eventType, enable));
     } else {
       return (null);
     }
