@@ -130,6 +130,26 @@ public class SWTProtocol {
       throw new SWTProtocolException(e);
     }
   }
+
+  /**
+   * Reads a boolean value from the given channel.
+   *
+   * @param buffer The source buffer
+   * @return The decoded boolean value
+   * @throws IndexOutOfBoundsException if not enough data are available in
+   *         <code>buffer</code>
+   * @throws NullPointerException if <code>buffer</code> is <code>null</code>
+   */
+  public static boolean readBoolean(ChannelBuffer buffer)
+      throws IndexOutOfBoundsException, NullPointerException {
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    return (buffer.readByte() == 1);
+  }
+
   /**
    * Reads an argument from the given channel.
    * <p>
@@ -149,10 +169,10 @@ public class SWTProtocol {
 
     byte type = buffer.readByte();
     switch (type) {
-      case ARG_STRING: return readString(buffer);
+      case ARG_STRING: return (readString(buffer));
       case ARG_INT:    return (buffer.readInt());
       case ARG_BYTE:   return (buffer.readByte());
-      case ARG_BOOL:   return (buffer.readByte() == 1);
+      case ARG_BOOL:   return (readBoolean(buffer));
       default: throw new SWTProtocolException("Invalid argument-type: " + type);
     }
   }

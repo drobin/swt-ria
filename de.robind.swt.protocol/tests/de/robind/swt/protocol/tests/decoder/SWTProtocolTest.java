@@ -129,6 +129,41 @@ public class SWTProtocolTest {
   }
 
   @Test
+  public void readBooleanNullBuffer() {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("buffer cannot be null");
+
+    SWTProtocol.readBoolean(null);
+  }
+
+  @Test
+  public void readBooleanIndexOutOfBounds() {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+    buffer.writeByte(42);
+    buffer.readByte();
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.readBoolean(buffer);
+  }
+
+  @Test
+  public void readBooleanTrue() {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(1);
+
+    assertThat(SWTProtocol.readBoolean(buffer), is(true));
+  }
+
+  @Test
+  public void readBooleanFalse() {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(0);
+
+    assertThat(SWTProtocol.readBoolean(buffer), is(false));
+  }
+
+  @Test
   public void readArgumentInvalidType() throws Exception {
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
     buffer.writeByte(42);
