@@ -5,8 +5,10 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
+import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
+import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -43,7 +45,7 @@ public class SWTMessageDecoder extends FrameDecoder {
       throw new SWTDecoderException("Invalid magic number: " + magic);
     }
 
-    if (operation != SWTProtocol.OP_NEW) {
+    if (operation != SWTProtocol.OP_NEW && operation != SWTProtocol.OP_CALL) {
       buffer.resetReaderIndex();
       throw new SWTDecoderException("Invalid operation: " + operation);
     }
@@ -130,6 +132,25 @@ public class SWTMessageDecoder extends FrameDecoder {
       }
 
       return (new SWTNewRequest(objId, objClass, args));
+    } else if (operation == SWTProtocol.OP_CALL) {
+      int destObj = buffer.readInt();
+      String method = SWTProtocol.readString(buffer);
+      byte numArgs = buffer.readByte();
+
+      if (method.length() == 0) {
+        throw new SWTDecoderException("method cannot be empty");
+      }
+
+      if (numArgs < 0) {
+        throw new SWTDecoderException("Invalid number of arguments: " + numArgs);
+      }
+
+      Object args[] = new Object[numArgs];
+      for (int i = 0; i < numArgs; i++) {
+        args[i] = SWTProtocol.readArgument(buffer);
+      }
+
+      return (new SWTCallRequest(new SWTObjectId(destObj), method, args));
     } else {
       return (null);
     }
