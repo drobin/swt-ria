@@ -151,6 +151,24 @@ public class SWTProtocol {
   }
 
   /**
+   * Writes a boolean value into the given buffer.
+   *
+   * @param buffer The destination buffer
+   * @param value The value to be encoded
+   * @throws IndexOutOfBoundsException if the buffer if not big enough
+   * @throws NullPointerException if <code>buffer</code> is <code>null</code>
+   */
+  public static void writeBoolean(ChannelBuffer buffer, boolean value)
+      throws IndexOutOfBoundsException, NullPointerException {
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    buffer.writeByte(value ? 1 : 0);
+  }
+
+  /**
    * Reads an argument from the given channel.
    * <p>
    * The special case here is, that you don't know what kind of argument you
