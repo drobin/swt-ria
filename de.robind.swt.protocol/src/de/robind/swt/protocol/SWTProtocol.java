@@ -91,4 +91,31 @@ public class SWTProtocol {
       throw new SWTProtocolException(e);
     }
   }
+
+  /**
+   * Reads an argument from the given channel.
+   * <p>
+   * The special case here is, that you don't know what kind of argument you
+   * are reading. That's why the argument starts with one of the
+   * <code>ARG_</code>-values, which defines the type of the argument.
+   * Dedepending on the value the concrete argument is read and returned from
+   * the channel and returned.
+   *
+   * @param buffer The source buffer
+   * @return The argument
+   * @throws SWTProtocolException if decoding has failed
+   * @throws IndexOutOfBoundsException if not enough data are available
+   */
+  public static Object readArgument(ChannelBuffer buffer)
+      throws SWTProtocolException, IndexOutOfBoundsException {
+
+    byte type = buffer.readByte();
+    switch (type) {
+      case ARG_STRING: return readString(buffer);
+      case ARG_INT:    return (buffer.readInt());
+      case ARG_BYTE:   return (buffer.readByte());
+      case ARG_BOOL:   return (buffer.readByte() == 1);
+      default: throw new SWTProtocolException("Invalid argument-type: " + type);
+    }
+  }
 }
