@@ -6,6 +6,9 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTNewRequest;
+import de.robind.swt.msg.SWTRequest;
+import de.robind.swt.msg.SWTResponse;
 
 /**
  * Decoder used to decode a byte-stream received from the {@link Channel}
@@ -61,6 +64,88 @@ public class SWTMessageDecoder extends FrameDecoder {
       return (null);
     }
 
-    return (new Object());
+    SWTMessage message = null;
+
+    switch (type) {
+      case SWTProtocol.TYPE_REQ:
+       message = decodeRequestMessage(operation, buffer);
+       break;
+      case SWTProtocol.TYPE_RSP:
+       message = decodeResponseMessage(operation, buffer);
+       break;
+    }
+
+    if (message == null) {
+      throw new Error("Should never be reached");
+    }
+
+    if (buffer.readerIndex() < payloadLength + 8) {
+      // The payload was not read completely
+      throw new SWTDecoderException(
+          "Data still in payload. Available: " + payloadLength +
+          ", consumed: " + (buffer.readerIndex() - 8));
+    }
+
+    if (buffer.readerIndex() > payloadLength + 8) {
+      // payload-overflow. More data read then available
+      throw new SWTDecoderException(
+          "Payload-overflow. Available: " + payloadLength +
+          ", consumed: " + (buffer.readerIndex() - 8));
+    }
+
+    return (message);
+  }
+
+  /**
+   * Decodes a {@link SWTRequest request-message}.
+   *
+   * @param operation The operation
+   * @param buffer The buffer with source data
+   * @return The decoded request-message
+   * @throws SWTProtocolException if decoding has failed
+   */
+  private SWTRequest decodeRequestMessage(
+      byte operation, ChannelBuffer buffer) throws SWTProtocolException {
+
+    if (operation == SWTProtocol.OP_NEW) {
+      int objId = buffer.readInt();
+      String objClassString = SWTProtocol.readString(buffer);
+      Class<?> objClass;
+
+      try {
+        objClass = Class.forName(objClassString);
+      } catch (ClassNotFoundException e) {
+        throw new SWTDecoderException("Invalid objClass: " + objClassString);
+      }
+
+      byte numArgs = buffer.readByte();
+
+      if (numArgs < 0) {
+        throw new SWTDecoderException("Invalid number of arguments: " + numArgs);
+      }
+
+      Object args[] = new Object[numArgs];
+      for (int i = 0; i < numArgs; i++) {
+        args[i] = SWTProtocol.readArgument(buffer);
+      }
+
+      return (new SWTNewRequest(objId, objClass, args));
+    } else {
+      return (null);
+    }
+  }
+
+  /**
+   * Decodes a {@link SWTResponse response-message}
+   *
+   * @param operation The operation
+   * @param buffer The buffer with source-data
+   * @return The decoded response-message
+   * @throws SWTDecoderException if decoding has failed
+   */
+  private SWTResponse decodeResponseMessage(
+      byte operation, ChannelBuffer buffer) throws SWTDecoderException {
+
+    return (null);
   }
 }
