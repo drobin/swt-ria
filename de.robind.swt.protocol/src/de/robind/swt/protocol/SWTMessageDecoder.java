@@ -8,6 +8,7 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
+import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRegRequest;
 import de.robind.swt.msg.SWTRequest;
@@ -53,7 +54,7 @@ public class SWTMessageDecoder extends FrameDecoder {
       throw new SWTDecoderException("Invalid operation: " + operation);
     }
 
-    if (type != SWTProtocol.TYPE_REQ) {
+    if (type != SWTProtocol.TYPE_REQ && type != SWTProtocol.TYPE_RSP) {
       buffer.resetReaderIndex();
       throw new SWTDecoderException("Invalid message-type: " + type);
     }
@@ -76,7 +77,7 @@ public class SWTMessageDecoder extends FrameDecoder {
        message = decodeRequestMessage(operation, buffer);
        break;
       case SWTProtocol.TYPE_RSP:
-       message = decodeResponseMessage(operation, buffer);
+       message = decodeResponseMessage(operation, buffer, payloadLength);
        break;
     }
 
@@ -170,12 +171,29 @@ public class SWTMessageDecoder extends FrameDecoder {
    *
    * @param operation The operation
    * @param buffer The buffer with source-data
+   * @param payloadLength Length of payload
    * @return The decoded response-message
    * @throws SWTDecoderException if decoding has failed
    */
   private SWTResponse decodeResponseMessage(
-      byte operation, ChannelBuffer buffer) throws SWTDecoderException {
+      byte operation, ChannelBuffer buffer, int payloadLength)
+          throws SWTProtocolException {
 
-    return (null);
+    if (operation == SWTProtocol.OP_NEW) {
+      if (payloadLength > 0) {
+        String className = SWTProtocol.readString(buffer);
+        String message = SWTProtocol.readString(buffer);
+
+        if (className.length() == 0) {
+          throw new SWTDecoderException("Class-name cannot be empty");
+        }
+
+        return (new SWTNewResponse(className, message));
+      } else {
+        return (SWTNewResponse.success());
+      }
+    } else {
+      return (null);
+    }
   }
 }
