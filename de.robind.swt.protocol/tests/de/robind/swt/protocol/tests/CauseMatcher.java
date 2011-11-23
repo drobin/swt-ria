@@ -1,4 +1,4 @@
-package de.robind.swt.protocol.decoder;
+package de.robind.swt.protocol.tests;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

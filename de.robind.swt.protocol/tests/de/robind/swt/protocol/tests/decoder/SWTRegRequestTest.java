@@ -1,7 +1,7 @@
 package de.robind.swt.protocol.tests.decoder;
 
-import static de.robind.swt.protocol.decoder.CauseMatcher.causeClass;
-import static de.robind.swt.protocol.decoder.CauseMatcher.causeMsg;
+import static de.robind.swt.protocol.tests.CauseMatcher.causeClass;
+import static de.robind.swt.protocol.tests.CauseMatcher.causeMsg;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
