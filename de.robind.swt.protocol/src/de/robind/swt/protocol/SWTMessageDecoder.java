@@ -6,6 +6,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 import de.robind.swt.msg.SWTCallRequest;
+import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
@@ -191,6 +192,13 @@ public class SWTMessageDecoder extends FrameDecoder {
         return (new SWTNewResponse(className, message));
       } else {
         return (SWTNewResponse.success());
+      }
+    } else if (operation == SWTProtocol.OP_CALL) {
+      if (payloadLength > 0) {
+        Object result = SWTProtocol.readArgument(buffer);
+        return (new SWTCallResponse(result));
+      } else {
+        return (SWTCallResponse.voidResult());
       }
     } else {
       return (null);
