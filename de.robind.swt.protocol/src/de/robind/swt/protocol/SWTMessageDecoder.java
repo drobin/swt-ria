@@ -12,6 +12,7 @@ import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRegRequest;
+import de.robind.swt.msg.SWTRegResponse;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -199,6 +200,19 @@ public class SWTMessageDecoder extends FrameDecoder {
         return (new SWTCallResponse(result));
       } else {
         return (SWTCallResponse.voidResult());
+      }
+    } else if (operation == SWTProtocol.OP_REG) {
+      if (payloadLength > 0) {
+        String className = SWTProtocol.readString(buffer);
+        String message = SWTProtocol.readString(buffer);
+
+        if (className.length() == 0) {
+          throw new SWTDecoderException("Class-name cannot be empty");
+        }
+
+        return (new SWTRegResponse(className, message));
+      } else {
+        return (SWTRegResponse.success());
       }
     } else {
       return (null);
