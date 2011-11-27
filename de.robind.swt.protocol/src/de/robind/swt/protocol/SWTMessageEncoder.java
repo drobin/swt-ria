@@ -11,6 +11,7 @@ import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
+import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTOpCall;
 import de.robind.swt.msg.SWTOpNew;
 import de.robind.swt.msg.SWTRequest;
@@ -127,6 +128,15 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       }
 
       return (SWTProtocol.OP_CALL);
+    } else if (msg instanceof SWTOpNew) {
+      SWTNewResponse response = (SWTNewResponse)msg;
+
+      if (!response.isSuccessful()) {
+        SWTProtocol.writeString(buffer, response.getExceptionClass());
+        SWTProtocol.writeString(buffer, response.getExceptionMessage());
+      }
+
+      return (SWTProtocol.OP_NEW);
     } else {
       throw new SWTProtocolException(
           "Response not supported: " + msg.getClass().getName());
