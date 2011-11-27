@@ -4,6 +4,9 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
+import de.robind.swt.protocol.SWTMessageDecoder;
+import de.robind.swt.protocol.SWTMessageEncoder;
+
 /**
  * SWTServer pipeline-factory.
  * <p>
@@ -16,6 +19,11 @@ public class PipelineFactory implements ChannelPipelineFactory {
    * @see org.jboss.netty.channel.ChannelPipelineFactory#getPipeline()
    */
   public ChannelPipeline getPipeline() throws Exception {
-    return (Channels.pipeline());
+    ChannelPipeline pipeline = Channels.pipeline();
+
+    pipeline.addLast("encoder", new SWTMessageEncoder());
+    pipeline.addLast("decoder", new SWTMessageDecoder());
+
+    return (pipeline);
   }
 }
