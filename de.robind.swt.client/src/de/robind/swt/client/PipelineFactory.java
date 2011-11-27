@@ -15,6 +15,20 @@ import de.robind.swt.protocol.SWTMessageEncoder;
  * @author Robin Doer
  */
 public class PipelineFactory implements ChannelPipelineFactory {
+  /**
+   * The environment of the client
+   */
+  private SWTClientEnvironment env = null;
+
+  /**
+   * Creates a new {@link PipelineFactory}.
+   *
+   * @param env The environment of the client
+   */
+  public PipelineFactory(SWTClientEnvironment env) {
+    this.env = env;
+  }
+
   /* (non-Javadoc)
    * @see org.jboss.netty.channel.ChannelPipelineFactory#getPipeline()
    */
@@ -23,7 +37,7 @@ public class PipelineFactory implements ChannelPipelineFactory {
 
     pipeline.addLast("decoder", new SWTMessageDecoder());
     pipeline.addLast("encoder", new SWTMessageEncoder());
-    pipeline.addLast("application", new SWTClientHandler());
+    pipeline.addLast("application", new SWTClientHandler(this.env));
 
     return (pipeline);
   }
