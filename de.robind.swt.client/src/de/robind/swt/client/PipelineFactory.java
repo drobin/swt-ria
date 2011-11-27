@@ -23,6 +23,7 @@ public class PipelineFactory implements ChannelPipelineFactory {
 
     pipeline.addLast("decoder", new SWTMessageDecoder());
     pipeline.addLast("encoder", new SWTMessageEncoder());
+    pipeline.addLast("application", new SWTClientHandler());
 
     return (pipeline);
   }
