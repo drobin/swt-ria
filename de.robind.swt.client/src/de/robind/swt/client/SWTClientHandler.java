@@ -3,7 +3,11 @@ package de.robind.swt.client;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ExceptionEvent;
+import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
+
+import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTRequest;
 
 
 /**
@@ -29,6 +33,45 @@ public class SWTClientHandler extends SimpleChannelHandler {
    */
   public SWTClientHandler(SWTClientEnvironment env) {
     this.env = env;
+  }
+
+  /* (non-Javadoc)
+   * @see org.jboss.netty.channel.SimpleChannelHandler#messageReceived(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.MessageEvent)
+   */
+  @Override
+  public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
+      throws Exception {
+
+    // The request-message from server
+    if (e.getMessage() instanceof SWTRequest) {
+      SWTRequest request = (SWTRequest)e.getMessage();
+      logger.debug("Request:" + request);
+
+      // Schedule message, so it can be handles within the SWT-loop.
+      env.requestQueue.offer(request);
+      env.display.wake();
+    } else {
+      throw new Exception(
+          "Upsupported message-type: " + e.getMessage().getClass());
+    }
+
+    // Simple forward message upstream without modifying the message
+    ctx.sendUpstream(e);
+  }
+
+  /* (non-Javadoc)
+   * @see org.jboss.netty.channel.SimpleChannelHandler#writeRequested(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.MessageEvent)
+   */
+  @Override
+  public void writeRequested(ChannelHandlerContext ctx, MessageEvent e)
+      throws Exception {
+
+    // The answer-message to be send back to server
+    SWTMessage message = (SWTMessage)e.getMessage();
+    logger.debug("Response:" + message);
+
+    // Simply forward downstream without modifying the message
+    ctx.sendDownstream(e);
   }
 
   /* (non-Javadoc)
