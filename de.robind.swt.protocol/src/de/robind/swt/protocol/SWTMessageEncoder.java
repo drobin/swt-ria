@@ -7,7 +7,9 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
+import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTOpCall;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -68,9 +70,26 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
    * @param msg The message to be encoded
    * @param buffer The destination buffer
    * @return The operation (one of the SWTProtocol.OP_*-values).
+   * @throws SWTProtocolException if encoding failed
    */
-  private byte encodeRequestMessage(SWTRequest msg, ChannelBuffer buffer) {
-    return (0);
+  private byte encodeRequestMessage(SWTRequest msg, ChannelBuffer buffer)
+      throws SWTProtocolException {
+
+    if (msg instanceof SWTOpCall) {
+      SWTCallRequest request = (SWTCallRequest)msg;
+
+      buffer.writeInt(request.getDestinationObject().getId());
+      SWTProtocol.writeString(buffer, request.getMethod());
+      buffer.writeByte(request.getArguments().length);
+
+      for (Object arg: request.getArguments()) {
+        SWTProtocol.writeArgument(buffer, arg);
+      }
+
+      return (SWTProtocol.OP_CALL);
+    } else {
+      return (0);
+    }
   }
 
   /**
