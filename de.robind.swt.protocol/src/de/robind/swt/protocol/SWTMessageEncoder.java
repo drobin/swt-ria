@@ -10,7 +10,9 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTOpCall;
+import de.robind.swt.msg.SWTOpNew;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -88,6 +90,18 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       }
 
       return (SWTProtocol.OP_CALL);
+    } else if (msg instanceof SWTOpNew) {
+      SWTNewRequest request = (SWTNewRequest)msg;
+
+      buffer.writeInt(request.getId());
+      SWTProtocol.writeString(buffer, request.getObjClass().getName());
+      buffer.writeByte(request.getArguments().length);
+
+      for (Object arg: request.getArguments()) {
+        SWTProtocol.writeArgument(buffer, arg);
+      }
+
+      return (SWTProtocol.OP_NEW);
     } else {
       throw new SWTProtocolException(
           "Request not supported: " + msg.getClass().getName());
