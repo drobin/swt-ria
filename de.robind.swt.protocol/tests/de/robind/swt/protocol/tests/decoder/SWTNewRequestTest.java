@@ -1,89 +1,63 @@
 package de.robind.swt.protocol.tests.decoder;
 
-import static de.robind.swt.protocol.tests.CauseMatcher.causeClass;
-import static de.robind.swt.protocol.tests.CauseMatcher.causeMsg;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.handler.codec.embedder.DecoderEmbedder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTNewRequest;
-import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
 import de.robind.swt.protocol.SWTProtocolException;
 
-public class SWTNewRequestTest {
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
-  private SWTMessageDecoder decoder = null;
-  DecoderEmbedder<SWTNewRequest> embedder = null;
-
-  @Before
-  public void setup() {
-    this.decoder = new SWTMessageDecoder();
-    this.embedder = new DecoderEmbedder<SWTNewRequest>(this.decoder);
-  }
-
-  @After
-  public void teardown() {
-    this.embedder = null;
-    this.decoder = null;
+public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
+  public SWTNewRequestTest() {
+    super(SWTProtocol.OP_NEW, SWTProtocol.TYPE_REQ);
   }
 
   @Test
-  public void emptyObjClass() throws Exception {
+  public void emptyObjClass() throws Throwable {
     ChannelBuffer buffer = createBuffer(7);
     buffer.writeInt(4711);
     SWTProtocol.writeString(buffer, "");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Invalid objClass: "));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Invalid objClass: ");
 
-    this.embedder.offer(buffer);
-    this.embedder.poll();
+    decodeMessage(buffer);
   }
 
   @Test
-  public void unknownObjClass() throws Exception {
+  public void unknownObjClass() throws Throwable {
     ChannelBuffer buffer = createBuffer(10);
     buffer.writeInt(4711);
     SWTProtocol.writeString(buffer, "foo");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Invalid objClass: foo"));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Invalid objClass: foo");
 
-    this.embedder.offer(buffer);
-    this.embedder.poll();
+    decodeMessage(buffer);
   }
 
   @Test
-  public void invalidNumArguments() throws Exception {
+  public void invalidNumArguments() throws Throwable {
     ChannelBuffer buffer = createBuffer(23);
     buffer.writeInt(4711);
     SWTProtocol.writeString(buffer, "java.lang.Object");
     buffer.writeByte(-1);
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Invalid number of arguments: -1"));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Invalid number of arguments: -1");
 
-    this.embedder.offer(buffer);
-    this.embedder.poll();
+    decodeMessage(buffer);
   }
 
   @Test
-  public void noArguments() throws Exception {
+  public void noArguments() throws Throwable {
     ChannelBuffer buffer = createBuffer(23);
     buffer.writeInt(4711);
     SWTProtocol.writeString(buffer, "java.lang.Object");
@@ -91,8 +65,7 @@ public class SWTNewRequestTest {
 
     buffer.writeByte(0);
 
-    this.embedder.offer(buffer);
-    SWTNewRequest msg = this.embedder.poll();
+    SWTNewRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
     assertThat(msg.getId(), is(4711));
@@ -101,7 +74,7 @@ public class SWTNewRequestTest {
   }
 
   @Test
-  public void withArguments() throws Exception {
+  public void withArguments() throws Throwable {
     ChannelBuffer buffer = createBuffer(30);
     buffer.writeInt(4711);
     SWTProtocol.writeString(buffer, "java.lang.Object");
@@ -109,8 +82,7 @@ public class SWTNewRequestTest {
     SWTProtocol.writeArgument(buffer, 4711);
     SWTProtocol.writeArgument(buffer, true);
 
-    this.embedder.offer(buffer);
-    SWTNewRequest msg = this.embedder.poll();
+    SWTNewRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
     assertThat(msg.getId(), is(4711));
@@ -121,21 +93,20 @@ public class SWTNewRequestTest {
   }
 
   @Test
-  public void payloadNotEmptied() throws Exception {
+  public void payloadNotEmptied() throws Throwable {
     ChannelBuffer buffer = createBuffer(5);
     buffer.writeInt(4711);
     SWTProtocol.writeString(buffer, "java.lang.Object");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Payload-overflow. Available: 5, consumed: 23"));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Payload-overflow. Available: 5, consumed: 23");
 
-    this.embedder.offer(buffer);
-    this.embedder.poll();
+    decodeMessage(buffer);
   }
 
   @Test
-  public void payloadOverflow() throws Exception {
+  public void payloadOverflow() throws Throwable {
     ChannelBuffer buffer = createBuffer(24);
     buffer.writeInt(4711);
     SWTProtocol.writeString(buffer, "java.lang.Object");
@@ -143,21 +114,9 @@ public class SWTNewRequestTest {
 
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Data still in payload. Available: 24, consumed: 23"));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Data still in payload. Available: 24, consumed: 23");
 
-    this.embedder.offer(buffer);
-    this.embedder.poll();
-  }
-
-  private ChannelBuffer createBuffer(int payloadLength) {
-    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
-
-    buffer.writeShort(SWTProtocol.MAGIC);
-    buffer.writeByte(SWTProtocol.OP_NEW);
-    buffer.writeByte(SWTProtocol.TYPE_REQ);
-    buffer.writeInt(payloadLength);
-
-    return (buffer);
+    decodeMessage(buffer);
   }
 }

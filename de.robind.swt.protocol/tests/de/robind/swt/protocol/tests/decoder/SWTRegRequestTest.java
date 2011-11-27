@@ -1,53 +1,29 @@
 package de.robind.swt.protocol.tests.decoder;
 
-import static de.robind.swt.protocol.tests.CauseMatcher.causeClass;
-import static de.robind.swt.protocol.tests.CauseMatcher.causeMsg;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBuffers;
-import org.jboss.netty.handler.codec.embedder.DecoderEmbedder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTRegRequest;
-import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
 import de.robind.swt.protocol.SWTProtocolException;
 
-public class SWTRegRequestTest {
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
-  private SWTMessageDecoder decoder = null;
-  DecoderEmbedder<SWTRegRequest> embedder = null;
-
-  @Before
-  public void setup() {
-    this.decoder = new SWTMessageDecoder();
-    this.embedder = new DecoderEmbedder<SWTRegRequest>(this.decoder);
-  }
-
-  @After
-  public void teardown() {
-    this.embedder = null;
-    this.decoder = null;
+public class SWTRegRequestTest extends AbstractDecoderTest<SWTRegRequest> {
+  public SWTRegRequestTest() {
+    super(SWTProtocol.OP_REG, SWTProtocol.TYPE_REQ);
   }
 
   @Test
-  public void success() {
+  public void success() throws Throwable {
     ChannelBuffer buffer = createBuffer(9);
     buffer.writeInt(4711);
     buffer.writeInt(555);
     SWTProtocol.writeBoolean(buffer, true);
 
-    this.embedder.offer(buffer);
-    SWTRegRequest msg = this.embedder.poll();
+    SWTRegRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
     assertThat(msg.getDestinationObject().getId(), is(4711));
@@ -56,7 +32,7 @@ public class SWTRegRequestTest {
   }
 
   @Test
-  public void payloadNotEmptied() throws Exception {
+  public void payloadNotEmptied() throws Throwable {
     ChannelBuffer buffer = createBuffer(10);
     buffer.writeInt(4711);
     buffer.writeInt(555);
@@ -64,35 +40,22 @@ public class SWTRegRequestTest {
 
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Data still in payload. Available: 10, consumed: 9"));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Data still in payload. Available: 10, consumed: 9");
 
-    this.embedder.offer(buffer);
-    this.embedder.poll();
+    decodeMessage(buffer);
   }
 
   @Test
-  public void payloadOverflow() throws Exception {
+  public void payloadOverflow() throws Throwable {
     ChannelBuffer buffer = createBuffer(5);
     buffer.writeInt(4711);
     buffer.writeInt(555);
     SWTProtocol.writeBoolean(buffer, true);
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Payload-overflow. Available: 5, consumed: 9"));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Payload-overflow. Available: 5, consumed: 9");
 
-    this.embedder.offer(buffer);
-    this.embedder.poll();
-  }
-
-  private ChannelBuffer createBuffer(int payloadLength) {
-    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
-
-    buffer.writeShort(SWTProtocol.MAGIC);
-    buffer.writeByte(SWTProtocol.OP_REG);
-    buffer.writeByte(SWTProtocol.TYPE_REQ);
-    buffer.writeInt(payloadLength);
-
-    return (buffer);
+    decodeMessage(buffer);
   }
 }
