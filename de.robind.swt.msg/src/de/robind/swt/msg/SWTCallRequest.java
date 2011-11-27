@@ -32,6 +32,10 @@ public class SWTCallRequest implements SWTOpCall, SWTRequest {
       throw new NullPointerException("destObj cannot be null");
     }
 
+    if (!destObj.isValid()) {
+      throw new IllegalArgumentException("destObj cannot be invalid");
+    }
+
     if (method == null) {
       throw new NullPointerException("method cannot be null");
     }

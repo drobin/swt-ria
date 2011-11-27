@@ -20,13 +20,13 @@ import de.robind.swt.msg.SWTTrap;
 public class SWTCallRequestTest {
   @Test
   public void isSWTMessage() {
-    SWTCallRequest msg = new SWTCallRequest(SWTObjectId.undefined(), "xxx");
+    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg, is(instanceOf(SWTMessage.class)));
   }
 
   @Test
   public void isSWTRequest() {
-    SWTCallRequest msg = new SWTCallRequest(SWTObjectId.undefined(), "xxx");
+    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
     assertThat(msg, is(not(instanceOf(SWTTrap.class))));
@@ -34,7 +34,7 @@ public class SWTCallRequestTest {
 
   @Test
   public void isSWTOpCall() {
-    SWTCallRequest msg = new SWTCallRequest(SWTObjectId.undefined(), "xxx");
+    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg, is(instanceOf(SWTOpCall.class)));
   }
 
@@ -43,9 +43,14 @@ public class SWTCallRequestTest {
     new SWTCallRequest(null, "xxx");
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void undefinedObjId() {
+    new SWTCallRequest(SWTObjectId.undefined(), "xxx");
+  }
+
   @Test(expected = NullPointerException.class)
   public void nullMethod() {
-    new SWTCallRequest(SWTObjectId.undefined(), null);
+    new SWTCallRequest(new SWTObjectId(1), null);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -62,13 +67,13 @@ public class SWTCallRequestTest {
 
   @Test
   public void getMethod() {
-    SWTCallRequest msg = new SWTCallRequest(SWTObjectId.undefined(), "xxx");
+    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg.getMethod(), is(equalTo("xxx")));
   }
 
   @Test
   public void noArguments() {
-    SWTCallRequest msg = new SWTCallRequest(SWTObjectId.undefined(), "xxx");
+    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg.getArguments().length, is(0));
   }
 
@@ -76,7 +81,7 @@ public class SWTCallRequestTest {
   public void getArguments() {
     Object obj = new Object();
 
-    SWTCallRequest msg = new SWTCallRequest(SWTObjectId.undefined(), "xxx",
+    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx",
         "foo", 4711, obj);
     assertThat(msg.getArguments().length, is(3));
     assertThat(msg.getArguments()[0], is(instanceOf(String.class)));
