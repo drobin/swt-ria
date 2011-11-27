@@ -14,6 +14,8 @@ import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTOpCall;
 import de.robind.swt.msg.SWTOpNew;
+import de.robind.swt.msg.SWTOpReg;
+import de.robind.swt.msg.SWTRegRequest;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -103,6 +105,14 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       }
 
       return (SWTProtocol.OP_NEW);
+    } else if (msg instanceof SWTOpReg) {
+      SWTRegRequest request = (SWTRegRequest)msg;
+
+      buffer.writeInt(request.getDestinationObject().getId());
+      buffer.writeInt(request.getEventType());
+      SWTProtocol.writeBoolean(buffer, request.enable());
+
+      return (SWTProtocol.OP_REG);
     } else {
       throw new SWTProtocolException(
           "Request not supported: " + msg.getClass().getName());
