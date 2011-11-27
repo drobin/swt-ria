@@ -1,4 +1,4 @@
-package de.robind.swt.protocol.tests.decoder;
+package de.robind.swt.protocol.tests;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
