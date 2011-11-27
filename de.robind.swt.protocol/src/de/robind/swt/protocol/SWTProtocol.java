@@ -117,15 +117,13 @@ public class SWTProtocol {
       throw new SWTProtocolException("value is too long: " + value.length());
     }
 
+    buffer.ensureWritableBytes(2);
     buffer.writeShort(value.length());
 
     try {
       byte bytes[] = value.getBytes("US-ASCII");
-      if (bytes.length <= buffer.writableBytes()) {
-        buffer.writeBytes(bytes);
-      } else {
-        throw new IndexOutOfBoundsException();
-      }
+      buffer.ensureWritableBytes(bytes.length);
+      buffer.writeBytes(bytes);
     } catch (UnsupportedEncodingException e) {
       throw new SWTProtocolException(e);
     }
@@ -165,6 +163,7 @@ public class SWTProtocol {
       throw new NullPointerException("buffer cannot be null");
     }
 
+    buffer.ensureWritableBytes(1);
     buffer.writeByte(value ? 1 : 0);
   }
 
@@ -217,15 +216,19 @@ public class SWTProtocol {
     }
 
     if (value instanceof String) {
+      buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_STRING);
       writeString(buffer, (String)value);
     } else if (value instanceof Integer) {
+      buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_INT);
       buffer.writeInt((Integer)value);
     } else if (value instanceof Byte) {
+      buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_BYTE);
       buffer.writeByte((Byte)value);
     } else if (value instanceof Boolean) {
+      buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_BOOL);
       buffer.writeByte((Boolean)value ? 1 : 0);
     } else {
