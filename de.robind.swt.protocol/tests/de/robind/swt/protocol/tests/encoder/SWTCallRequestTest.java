@@ -5,35 +5,15 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.handler.codec.embedder.EncoderEmbedder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTObjectId;
-import de.robind.swt.protocol.SWTMessageEncoder;
 import de.robind.swt.protocol.SWTProtocol;
 
-public class SWTCallRequestTest {
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
-  private SWTMessageEncoder encoder = null;
-  EncoderEmbedder<ChannelBuffer> embedder = null;
-
-  @Before
-  public void setup() {
-    this.encoder = new SWTMessageEncoder();
-    this.embedder = new EncoderEmbedder<ChannelBuffer>(this.encoder);
-  }
-
-  @After
-  public void teardown() {
-    this.embedder = null;
-    this.encoder = null;
+public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
+  public SWTCallRequestTest() {
+    super(SWTProtocol.OP_CALL, SWTProtocol.TYPE_REQ);
   }
 
   @Test
@@ -56,17 +36,5 @@ public class SWTCallRequestTest {
     assertThat(buffer.readByte(), is((byte)2));
     assertThat((Integer)SWTProtocol.readArgument(buffer), is(1));
     assertThat((Boolean)SWTProtocol.readArgument(buffer), is(true));
-  }
-
-  private ChannelBuffer encodeMessage(SWTCallRequest msg, int payloadLength) {
-    this.embedder.offer(msg);
-    ChannelBuffer buffer = this.embedder.poll();
-
-    assertThat(buffer.readShort(), is(SWTProtocol.MAGIC));
-    assertThat(buffer.readByte(), is(SWTProtocol.OP_CALL));
-    assertThat(buffer.readByte(), is(SWTProtocol.TYPE_REQ));
-    assertThat(buffer.readInt(), is(payloadLength));
-
-    return (buffer);
   }
 }
