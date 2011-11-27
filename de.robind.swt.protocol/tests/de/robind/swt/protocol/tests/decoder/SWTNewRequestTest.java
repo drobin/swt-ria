@@ -17,9 +17,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTNewRequest;
-import de.robind.swt.protocol.SWTDecoderException;
 import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
+import de.robind.swt.protocol.SWTProtocolException;
 
 public class SWTNewRequestTest {
   @Rule
@@ -47,7 +47,7 @@ public class SWTNewRequestTest {
     SWTProtocol.writeString(buffer, "");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid objClass: "));
 
     this.embedder.offer(buffer);
@@ -61,7 +61,7 @@ public class SWTNewRequestTest {
     SWTProtocol.writeString(buffer, "foo");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid objClass: foo"));
 
     this.embedder.offer(buffer);
@@ -75,7 +75,7 @@ public class SWTNewRequestTest {
     SWTProtocol.writeString(buffer, "java.lang.Object");
     buffer.writeByte(-1);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid number of arguments: -1"));
 
     this.embedder.offer(buffer);
@@ -127,7 +127,7 @@ public class SWTNewRequestTest {
     SWTProtocol.writeString(buffer, "java.lang.Object");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Payload-overflow. Available: 5, consumed: 23"));
 
     this.embedder.offer(buffer);
@@ -143,7 +143,7 @@ public class SWTNewRequestTest {
 
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Data still in payload. Available: 24, consumed: 23"));
 
     this.embedder.offer(buffer);

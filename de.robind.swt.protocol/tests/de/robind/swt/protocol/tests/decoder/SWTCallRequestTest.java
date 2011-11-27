@@ -17,9 +17,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.protocol.SWTDecoderException;
 import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
+import de.robind.swt.protocol.SWTProtocolException;
 
 public class SWTCallRequestTest {
   @Rule
@@ -47,7 +47,7 @@ public class SWTCallRequestTest {
     SWTProtocol.writeString(buffer, "");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("method cannot be empty"));
 
     this.embedder.offer(buffer);
@@ -61,7 +61,7 @@ public class SWTCallRequestTest {
     SWTProtocol.writeString(buffer, "foo");
     buffer.writeByte(-1);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid number of arguments: -1"));
 
     this.embedder.offer(buffer);
@@ -113,7 +113,7 @@ public class SWTCallRequestTest {
 
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Data still in payload. Available: 11, consumed: 10"));
 
     this.embedder.offer(buffer);
@@ -127,7 +127,7 @@ public class SWTCallRequestTest {
     SWTProtocol.writeString(buffer, "foo");
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Payload-overflow. Available: 5, consumed: 10"));
 
     this.embedder.offer(buffer);

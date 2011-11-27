@@ -46,24 +46,25 @@ public class SWTMessageDecoder extends FrameDecoder {
 
     if (magic !=SWTProtocol.MAGIC) {
       buffer.resetReaderIndex();
-      throw new SWTDecoderException("Invalid magic number: " + magic);
+      throw new SWTProtocolException("Invalid magic number: " + magic);
     }
 
     if (operation != SWTProtocol.OP_NEW && operation != SWTProtocol.OP_CALL &&
         operation != SWTProtocol.OP_REG) {
 
       buffer.resetReaderIndex();
-      throw new SWTDecoderException("Invalid operation: " + operation);
+      throw new SWTProtocolException("Invalid operation: " + operation);
     }
 
     if (type != SWTProtocol.TYPE_REQ && type != SWTProtocol.TYPE_RSP) {
       buffer.resetReaderIndex();
-      throw new SWTDecoderException("Invalid message-type: " + type);
+      throw new SWTProtocolException("Invalid message-type: " + type);
     }
 
     if (payloadLength < 0) {
       buffer.resetReaderIndex();
-      throw new SWTDecoderException("Invalid payload-length: " + payloadLength);
+      throw new SWTProtocolException(
+          "Invalid payload-length: " + payloadLength);
     }
 
     // Wait until the whole payload is available
@@ -89,14 +90,14 @@ public class SWTMessageDecoder extends FrameDecoder {
 
     if (buffer.readerIndex() < payloadLength + 8) {
       // The payload was not read completely
-      throw new SWTDecoderException(
+      throw new SWTProtocolException(
           "Data still in payload. Available: " + payloadLength +
           ", consumed: " + (buffer.readerIndex() - 8));
     }
 
     if (buffer.readerIndex() > payloadLength + 8) {
       // payload-overflow. More data read then available
-      throw new SWTDecoderException(
+      throw new SWTProtocolException(
           "Payload-overflow. Available: " + payloadLength +
           ", consumed: " + (buffer.readerIndex() - 8));
     }
@@ -123,13 +124,13 @@ public class SWTMessageDecoder extends FrameDecoder {
       try {
         objClass = Class.forName(objClassString);
       } catch (ClassNotFoundException e) {
-        throw new SWTDecoderException("Invalid objClass: " + objClassString);
+        throw new SWTProtocolException("Invalid objClass: " + objClassString);
       }
 
       byte numArgs = buffer.readByte();
 
       if (numArgs < 0) {
-        throw new SWTDecoderException("Invalid number of arguments: " + numArgs);
+        throw new SWTProtocolException("Invalid number of arguments: " + numArgs);
       }
 
       Object args[] = new Object[numArgs];
@@ -144,11 +145,12 @@ public class SWTMessageDecoder extends FrameDecoder {
       byte numArgs = buffer.readByte();
 
       if (method.length() == 0) {
-        throw new SWTDecoderException("method cannot be empty");
+        throw new SWTProtocolException("method cannot be empty");
       }
 
       if (numArgs < 0) {
-        throw new SWTDecoderException("Invalid number of arguments: " + numArgs);
+        throw new SWTProtocolException(
+            "Invalid number of arguments: " + numArgs);
       }
 
       Object args[] = new Object[numArgs];
@@ -187,7 +189,7 @@ public class SWTMessageDecoder extends FrameDecoder {
         String message = SWTProtocol.readString(buffer);
 
         if (className.length() == 0) {
-          throw new SWTDecoderException("Class-name cannot be empty");
+          throw new SWTProtocolException("Class-name cannot be empty");
         }
 
         return (new SWTNewResponse(className, message));
@@ -207,7 +209,7 @@ public class SWTMessageDecoder extends FrameDecoder {
         String message = SWTProtocol.readString(buffer);
 
         if (className.length() == 0) {
-          throw new SWTDecoderException("Class-name cannot be empty");
+          throw new SWTProtocolException("Class-name cannot be empty");
         }
 
         return (new SWTRegResponse(className, message));

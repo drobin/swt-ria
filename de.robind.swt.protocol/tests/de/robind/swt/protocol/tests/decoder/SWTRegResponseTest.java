@@ -17,9 +17,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTRegResponse;
-import de.robind.swt.protocol.SWTDecoderException;
 import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
+import de.robind.swt.protocol.SWTProtocolException;
 
 public class SWTRegResponseTest {
   @Rule
@@ -46,7 +46,7 @@ public class SWTRegResponseTest {
     SWTProtocol.writeString(buffer, "");
     SWTProtocol.writeString(buffer, "");
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Class-name cannot be empty"));
 
     this.embedder.offer(buffer);
@@ -102,7 +102,7 @@ public class SWTRegResponseTest {
 
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Data still in payload. Available: 8, consumed: 7"));
 
     this.embedder.offer(buffer);
@@ -115,7 +115,7 @@ public class SWTRegResponseTest {
     SWTProtocol.writeString(buffer, "foo");
     SWTProtocol.writeString(buffer, "");
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Payload-overflow. Available: 5, consumed: 7"));
 
     this.embedder.offer(buffer);

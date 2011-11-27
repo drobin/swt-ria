@@ -15,9 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.robind.swt.protocol.SWTDecoderException;
 import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
+import de.robind.swt.protocol.SWTProtocolException;
 
 public class HeaderTest {
   @Rule
@@ -61,7 +61,7 @@ public class HeaderTest {
 
   @Test
   public void invalidMagic() {
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid magic number: 4711"));
 
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
@@ -76,7 +76,7 @@ public class HeaderTest {
 
   @Test
   public void invalidOperation() {
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid operation: 42"));
 
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
@@ -91,7 +91,7 @@ public class HeaderTest {
 
   @Test
   public void invalidType() {
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid message-type: 42"));
 
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
@@ -106,7 +106,7 @@ public class HeaderTest {
 
   @Test
   public void invalidPayloadLength() {
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Invalid payload-length: -1"));
 
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();

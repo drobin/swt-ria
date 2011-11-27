@@ -16,9 +16,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTRegRequest;
-import de.robind.swt.protocol.SWTDecoderException;
 import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
+import de.robind.swt.protocol.SWTProtocolException;
 
 public class SWTRegRequestTest {
   @Rule
@@ -64,7 +64,7 @@ public class SWTRegRequestTest {
 
     buffer.writeByte(0);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Data still in payload. Available: 10, consumed: 9"));
 
     this.embedder.offer(buffer);
@@ -78,7 +78,7 @@ public class SWTRegRequestTest {
     buffer.writeInt(555);
     SWTProtocol.writeBoolean(buffer, true);
 
-    exception.expect(causeClass(SWTDecoderException.class));
+    exception.expect(causeClass(SWTProtocolException.class));
     exception.expect(causeMsg("Payload-overflow. Available: 5, consumed: 9"));
 
     this.embedder.offer(buffer);
