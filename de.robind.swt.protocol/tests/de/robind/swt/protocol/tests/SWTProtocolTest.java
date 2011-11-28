@@ -274,7 +274,7 @@ public class SWTProtocolTest {
     }
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Invalid argument of type de.robind.swt.protocol.tests.decoder.SWTProtocolTest$1Foo");
+    exception.expectMessage("Invalid argument of type de.robind.swt.protocol.tests.SWTProtocolTest$1Foo");
 
     SWTProtocol.writeArgument(ChannelBuffers.dynamicBuffer(), new Foo());
   }
