@@ -1,11 +1,15 @@
 package de.robind.swt.server;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.jboss.netty.channel.Channel;
+
+import de.robind.swt.msg.SWTResponse;
 
 /**
  * An application running on the application-server
@@ -29,6 +33,12 @@ public class SWTApplication extends Thread {
   private Key key = new SWTApplicationKey(this);
 
   /**
+   * Queue holds responses received from the client.
+   */
+  private BlockingQueue<SWTResponse> responseQueue =
+      new LinkedBlockingQueue<SWTResponse>();
+
+  /**
    * Creates a new {@link SWTApplication}.
    *
    * @param channel The related channel
@@ -46,6 +56,16 @@ public class SWTApplication extends Thread {
     return (this.channel);
   }
 
+  /**
+   * Returns the queue, which holds responses received from the connected
+   * client.
+   *
+   * @return Queue with responses send by the client
+   */
+  public BlockingQueue<SWTResponse> getResponseQueue() {
+    return (this.responseQueue);
+  }
+
   /* (non-Javadoc)
    * @see java.lang.Thread#run()
    */
@@ -60,5 +80,7 @@ public class SWTApplication extends Thread {
     } catch (Exception e) {
       logger.error("Failed to run the application", e);
     }
+
+    this.channel.close();
   }
 }
