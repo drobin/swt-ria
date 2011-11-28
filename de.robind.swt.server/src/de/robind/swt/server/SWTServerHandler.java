@@ -4,7 +4,10 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
+import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
+
+import de.robind.swt.msg.SWTMessage;
 
 /**
  * Channel-handler used to handle server business logic.
@@ -43,6 +46,17 @@ public class SWTServerHandler extends SimpleChannelHandler {
 
     SWTApplication application = (SWTApplication)ctx.getAttachment();
     application.join();
+  }
+
+  /* (non-Javadoc)
+   * @see org.jboss.netty.channel.SimpleChannelHandler#messageReceived(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.MessageEvent)
+   */
+  @Override
+  public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
+      throws Exception {
+
+    SWTMessage message = (SWTMessage)e.getMessage();
+    logger.debug("Message received: " + message);
   }
 
   /* (non-Javadoc)
