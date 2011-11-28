@@ -2,6 +2,7 @@ package de.robind.swt.client;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
@@ -55,6 +56,34 @@ public class SWTObject {
   }
 
   /**
+   * Invokes a method on a SWT-object.
+   * <p>
+   * The method with the name <code>methodName</code> is located in
+   * <code>objMap</code> under the given <code>id</code>.
+   *
+   * @param objMap The mapping between object-id and object. If one of the
+   *               arguments points to a SWT-object, then the method searches
+   *               for the object inside this mapping.
+   * @param id The id of the object inside <code>objMap</code>
+   * @param methodName The name of the method to be invoked
+   * @param args Arguments passed to the method
+   * @return Result returned by the method (which can be <code>null</code>).
+   * @throws NoSuchMethodException if the method is not available
+   * @throws InvocationTargetException if the method throws an exception.
+   * @throws IllegalAccessException if the method is inaccessible.
+   */
+  public static Object callMethod(SWTObjectMap objMap, int id,
+      String methodName, Object... args) throws NoSuchMethodException,
+      InvocationTargetException, IllegalAccessException {
+
+    Object obj = objMap.get(id);
+    Object arguments[] = normalizeArguments(objMap, args);
+    Method method = findMethod(objMap, obj.getClass(), methodName, arguments);
+
+    return (method.invoke(obj, arguments));
+  }
+
+  /**
    * Searches for a constructor, which can be called with the given arguments.
    *
    * @param objMap The mapping from object-id to object
@@ -84,6 +113,47 @@ public class SWTObject {
     // Constructor not found
     throw new NoSuchMethodException(
         objClass.getSimpleName() + "(" + Arrays.toString(arguments) + ")");
+  }
+
+  /**
+   * Searches for a method in <code>objClass</code> that can be invoked with
+   * the given arguments.
+   *
+   * @param objMap The mapping from the object-id to the SWT-object
+   * @param objClass The related class
+   * @param name Name of method
+   * @param arguments Arguments, which should be passed to the method
+   * @return The related method
+   * @throws NoSuchMethodException if no matching method is available in
+   *         <code>objClass</code>.
+   */
+  private static Method findMethod(SWTObjectMap objMap, Class<?> objClass,
+      String name, Object arguments[]) throws NoSuchMethodException {
+
+    for (Method method: objClass.getMethods()) {
+      logger.debug("Checking: " + method);
+
+      // The name needs to be match.
+      // Otherwise you can skip the following tests.
+      if (!method.getName().equals(name)) {
+        continue;
+      }
+
+      // Check the parameter-list of the method
+      // If the parameter-list does not match the argument-list, you can skip
+      // the method.
+      if (!checkParameter(objMap, method.getParameterTypes(), arguments)) {
+        continue;
+      }
+
+      logger.debug("Using: " + method);
+      return (method);
+    }
+
+    // Method not found
+    throw new NoSuchMethodException(
+        objClass.getSimpleName() + "." + name +
+        "(" + Arrays.toString(arguments) + ")");
   }
 
   /**
