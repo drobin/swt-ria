@@ -1,10 +1,13 @@
 package de.robind.swt.demo;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 public class ButtonDemo {
   public static void main(String[] args) {
@@ -13,11 +16,20 @@ public class ButtonDemo {
     Shell shell = new Shell(display);
     shell.setText("Button Demo");
 
-    Button button = new Button (shell, SWT.CENTER);
-    button.setText("Click me");
-
-    FillLayout layout = new FillLayout();
+    GridLayout layout = new GridLayout();
+    layout.numColumns = 2;
     shell.setLayout(layout);
+
+    Button button = new Button (shell, SWT.PUSH);
+    button.setText("Click me");
+    button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+
+    Label label = new Label(shell, SWT.BORDER);
+    label.setText("# of clicks:");
+    label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+
+    Text text = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
+    text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     shell.open();
     while (!shell.isDisposed()) {
