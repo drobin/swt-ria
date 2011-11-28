@@ -52,7 +52,19 @@ public class SWTClient {
 
       SWTRequest request;
       while ((request = env.requestQueue.poll()) != null) {
-        SWTResponse response = handleRequest(objMap, request);
+        SWTResponse response = null;
+
+        if (request instanceof SWTOpNew &&
+            ((SWTNewRequest)request).getObjClass().equals(Display.class)) {
+
+          // Creating a Display is a special task because you already have a
+          // Display. But we assign the object-id to our display.
+          objMap.put(((SWTNewRequest)request).getId(), display);
+          response = SWTNewResponse.success();
+        } else {
+          response = handleRequest(objMap, request);
+        }
+
         Channels.write(future.getChannel(), response);
       }
     }
