@@ -8,6 +8,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTResponse;
 
 /**
  * Channel-handler used to handle server business logic.
@@ -70,8 +71,15 @@ public class SWTServerHandler extends SimpleChannelHandler {
   public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
       throws Exception {
 
-    SWTMessage message = (SWTMessage)e.getMessage();
-    logger.debug("Received: " + message);
+    SWTApplication app = (SWTApplication)ctx.getAttachment();
+
+    if (e.getMessage() instanceof SWTResponse) {
+      logger.debug("Response received: " + e.getMessage());
+      app.getResponseQueue().put((SWTResponse)e.getMessage());
+    } else {
+      throw new Exception("Unexpected message of type " +
+          e.getMessage().getClass().getName() + " received");
+    }
 
     // Simple forward message upstream without modifying the message
     ctx.sendUpstream(e);
