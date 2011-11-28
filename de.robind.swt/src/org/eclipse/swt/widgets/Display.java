@@ -88,8 +88,6 @@ public class Display extends Device {
    *  </ul>
    */
   public boolean sleep() throws SWTException {
-    ClientTasks tasks = DisplayPool.getInstance().getClientTasks();
-    tasks.receiveEvent(getKey());
     return (false);
   }
 
