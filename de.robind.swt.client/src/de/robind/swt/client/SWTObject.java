@@ -34,32 +34,24 @@ public class SWTObject {
    *           <code>objMap</code> under this id.
    * @param objClass The class of the object to be created
    * @param args Arguments passed to the constructor
-   * @return On success, the new object is returned. Of an error occured,
-   *         <code>null</code> is returned.
+   * @return The new object is returned.
+   * @throws NoSuchMethodException if the constructor is not available
+   * @throws InvocationTargetException if the constructor throws an exception.
+   * @throws IllegalAccessException if the constructor is inaccessible.
+   * @throws InstantiationException if the class represents an abstract class.
    */
   public static Object createObject(SWTObjectMap objMap, int id,
-      Class<?> objClass, Object... args) {
+      Class<?> objClass, Object... args) throws NoSuchMethodException,
+      InvocationTargetException, IllegalAccessException,
+      InstantiationException {
 
     Object arguments[] = normalizeArguments(objMap, args);
-
     Constructor<?> ctor = findConstructor(objMap, objClass, arguments);
-    if (ctor == null) {
-      return (null);
-    }
+    Object obj = ctor.newInstance(arguments);
 
-    try {
-      Object obj = ctor.newInstance(arguments);
-      objMap.put(id, obj);
-      return (obj);
-    } catch (InvocationTargetException e) {
-      logger.error("Failed to create a new instance of " +
-          objClass.getName(), e.getCause());
-      return (null);
-    } catch (Exception e) {
-      logger.error("Failed to create a new instance of " +
-          objClass.getName(), e);
-      return (null);
-    }
+    objMap.put(id, obj);
+
+    return (obj);
   }
 
   /**
@@ -68,11 +60,12 @@ public class SWTObject {
    * @param objMap The mapping from object-id to object
    * @param objClass The related class
    * @param arguments Arguments, which should be passed to the constructor.
-   * @return The matching constructor. If the constructor was not found,
-   *         <code>null</code> is returned.
+   * @return The matching constructor.
+   * @throws NoSuchMethodException if no matching constructor is available in
+   *         <code>objClass</code>.
    */
   private static Constructor<?> findConstructor(SWTObjectMap objMap,
-      Class<?> objClass, Object arguments[]) {
+      Class<?> objClass, Object arguments[]) throws NoSuchMethodException {
 
     for (Constructor<?> ctor: objClass.getConstructors()) {
       logger.debug("Checking: " + ctor);
@@ -89,9 +82,8 @@ public class SWTObject {
     }
 
     // Constructor not found
-    logger.error("Constructor not found: " + objClass.getSimpleName() +
-        "(" + Arrays.toString(arguments) + ")");
-    return (null);
+    throw new NoSuchMethodException(
+        objClass.getSimpleName() + "(" + Arrays.toString(arguments) + ")");
   }
 
   /**
