@@ -49,6 +49,21 @@ public class SWTServerHandler extends SimpleChannelHandler {
   }
 
   /* (non-Javadoc)
+   * @see org.jboss.netty.channel.SimpleChannelHandler#writeRequested(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.MessageEvent)
+   */
+  @Override
+  public void writeRequested(ChannelHandlerContext ctx, MessageEvent e)
+      throws Exception {
+
+    // Message send to the client
+    SWTMessage message = (SWTMessage)e.getMessage();
+    logger.debug("Send:" + message);
+
+    // Simply forward downstream without modifying the message
+    ctx.sendDownstream(e);
+  }
+
+  /* (non-Javadoc)
    * @see org.jboss.netty.channel.SimpleChannelHandler#messageReceived(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.MessageEvent)
    */
   @Override
@@ -56,7 +71,10 @@ public class SWTServerHandler extends SimpleChannelHandler {
       throws Exception {
 
     SWTMessage message = (SWTMessage)e.getMessage();
-    logger.debug("Message received: " + message);
+    logger.debug("Received: " + message);
+
+    // Simple forward message upstream without modifying the message
+    ctx.sendUpstream(e);
   }
 
   /* (non-Javadoc)
