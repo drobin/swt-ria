@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.protocol.SWTProtocol;
 import de.robind.swt.protocol.SWTProtocolException;
 
@@ -202,6 +203,85 @@ public class SWTProtocolTest {
   }
 
   @Test
+  public void readSwtObjectIdNullBuffer() throws Exception {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("buffer cannot be null");
+
+    SWTProtocol.readSwtObjectId(null);
+  }
+
+  @Test
+  public void readSwtObjectIdIndexOutOfBounds() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+    buffer.writeByte(42);
+    buffer.readByte();
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.readSwtObjectId(buffer);
+  }
+
+  @Test
+  public void readSwtObjectIdValid() {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeInt(4711);
+
+    SWTObjectId objId = SWTProtocol.readSwtObjectId(buffer);
+    assertThat(objId.isValid(), is(true));
+    assertThat(objId.getId(), is(4711));
+  }
+
+  @Test
+  public void readSwtObjectIdInvalid() {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeInt(-1);
+
+    SWTObjectId objId = SWTProtocol.readSwtObjectId(buffer);
+    assertThat(objId.isValid(), is(false));
+  }
+
+  @Test
+  public void writeSwtObjectNullBuffer() {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("buffer cannot be null");
+
+    SWTProtocol.writeSwtObjectId(null, SWTObjectId.undefined());
+  }
+
+  @Test
+  public void writeSwtObjectNullValue() {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("value cannot be null");
+
+    SWTProtocol.writeSwtObjectId(ChannelBuffers.dynamicBuffer(), null);
+  }
+
+  @Test
+  public void writeSwtObjectIdIndexOutOfBounds() {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(3);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeSwtObjectId(buffer, SWTObjectId.undefined());
+  }
+
+  @Test
+  public void writeSwtObjectIdValid() {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    SWTProtocol.writeSwtObjectId(buffer, new SWTObjectId(4711));
+
+    assertThat(buffer.readInt(), is(4711));
+  }
+
+  @Test
+  public void writeSwtObjectIdInvalid() {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    SWTProtocol.writeSwtObjectId(buffer, SWTObjectId.undefined());
+
+    assertThat(buffer.readInt(), is(-1));
+  }
+
+  @Test
   public void readArgumentInvalidType() throws Exception {
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
     buffer.writeByte(42);
@@ -266,6 +346,29 @@ public class SWTProtocolTest {
     Object value = SWTProtocol.readArgument(buffer);
     assertThat(value, is(instanceOf(Boolean.class)));
     assertThat((Boolean)value, is(false));
+  }
+
+  @Test
+  public void readArgumentSwtObjectIdValid() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(SWTProtocol.ARG_SWTOBJ);
+    buffer.writeInt(4711);
+
+    Object value = SWTProtocol.readArgument(buffer);
+    assertThat(value, is(instanceOf(SWTObjectId.class)));
+    assertThat(((SWTObjectId)value).isValid(), is(true));
+    assertThat(((SWTObjectId)value).getId(), is(4711));
+  }
+
+  @Test
+  public void readArgumentSwtObjectIdInvalid() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(SWTProtocol.ARG_SWTOBJ);
+    buffer.writeInt(-1);
+
+    Object value = SWTProtocol.readArgument(buffer);
+    assertThat(value, is(instanceOf(SWTObjectId.class)));
+    assertThat(((SWTObjectId)value).isValid(), is(false));
   }
 
   @Test
@@ -406,5 +509,34 @@ public class SWTProtocolTest {
     assertThat(buffer.readableBytes(), is(2));
     assertThat(buffer.readByte(), is(SWTProtocol.ARG_BOOL));
     assertThat(buffer.readByte(), is((byte)0));
+  }
+
+  @Test
+  public void writeArgumentSwtObjectIdIndexOutOfBounds() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(3);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArgument(buffer, new SWTObjectId(4711));
+  }
+
+  @Test
+  public void writeArgumentSwtObjectIdValid() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, new SWTObjectId(4711));
+
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_SWTOBJ));
+    assertThat(buffer.readInt(), is(4711));
+  }
+
+  @Test
+  public void writeArgumentSwtObjectIdInvalid() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, SWTObjectId.undefined());
+
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_SWTOBJ));
+    assertThat(buffer.readInt(), is(-1));
   }
 }

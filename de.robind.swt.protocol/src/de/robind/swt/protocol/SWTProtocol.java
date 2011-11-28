@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 
+import de.robind.swt.msg.SWTObjectId;
+
 /**
  * Constants and values used by the protocol.
  *
@@ -59,7 +61,12 @@ public class SWTProtocol {
   /**
    * A boolean-argument.
    */
-  public static final byte ARG_BOOL = 6;
+  public static final byte ARG_BOOL = 4;
+
+  /**
+   * The argument is a {@link SWTObjectId}.
+   */
+  public static final byte ARG_SWTOBJ = 5;
 
   /**
    * Reads a string from the given buffer.
@@ -168,6 +175,54 @@ public class SWTProtocol {
   }
 
   /**
+   * Reads a {@link SWTObjectId} from the given channel.
+   *
+   * @param The source buffer
+   * @return The decoded value
+   * @throws IndexOutOfBoundsException if not enough data are available in
+   *         <code>buffer</code>
+   * @throws NullPointerException if <code>buffer</code> is <code>null</code>
+   */
+  public static SWTObjectId readSwtObjectId(ChannelBuffer buffer)
+      throws IndexOutOfBoundsException, NullPointerException {
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    int objId = buffer.readInt();
+    return (objId != -1 ? new SWTObjectId(objId) : SWTObjectId.undefined());
+  }
+
+  /**
+   * Writes a {@link SWTObjectId} into the given buffer.
+   *
+   * @param buffer The destination buffer
+   * @param value The value to be encoded
+   * @throws IndexOutOfBoundsException if the buffer if not big enough
+   * @throws NullPointerException if <code>buffer</code> or <code>value</code>
+   *         are <code>null</code>
+   */
+  public static void writeSwtObjectId(ChannelBuffer buffer, SWTObjectId value)
+      throws IndexOutOfBoundsException, NullPointerException {
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    if (value == null) {
+      throw new NullPointerException("value cannot be null");
+    }
+
+    buffer.ensureWritableBytes(4);
+    if (value.isValid()) {
+      buffer.writeInt(value.getId());
+    } else {
+      buffer.writeInt(-1);
+    }
+  }
+
+  /**
    * Reads an argument from the given channel.
    * <p>
    * The special case here is, that you don't know what kind of argument you
@@ -190,6 +245,7 @@ public class SWTProtocol {
       case ARG_INT:    return (buffer.readInt());
       case ARG_BYTE:   return (buffer.readByte());
       case ARG_BOOL:   return (readBoolean(buffer));
+      case ARG_SWTOBJ: return (readSwtObjectId(buffer));
       default: throw new SWTProtocolException("Invalid argument-type: " + type);
     }
   }
@@ -220,17 +276,21 @@ public class SWTProtocol {
       buffer.writeByte(ARG_STRING);
       writeString(buffer, (String)value);
     } else if (value instanceof Integer) {
-      buffer.ensureWritableBytes(1);
+      buffer.ensureWritableBytes(5);
       buffer.writeByte(ARG_INT);
       buffer.writeInt((Integer)value);
     } else if (value instanceof Byte) {
-      buffer.ensureWritableBytes(1);
+      buffer.ensureWritableBytes(2);
       buffer.writeByte(ARG_BYTE);
       buffer.writeByte((Byte)value);
     } else if (value instanceof Boolean) {
-      buffer.ensureWritableBytes(1);
+      buffer.ensureWritableBytes(2);
       buffer.writeByte(ARG_BOOL);
       buffer.writeByte((Boolean)value ? 1 : 0);
+    } else if (value instanceof SWTObjectId) {
+      buffer.ensureWritableBytes(5);
+      buffer.writeByte(ARG_SWTOBJ);
+      writeSwtObjectId(buffer, (SWTObjectId)value);
     } else {
       throw new SWTProtocolException(
           "Invalid argument of type " + value.getClass().getName());
