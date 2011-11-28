@@ -36,6 +36,7 @@ public class SWTMessageDecoder extends FrameDecoder {
       return (null);
     }
 
+    int readerIndexBefore = buffer.readerIndex();
     buffer.markReaderIndex();
 
     // Read the header
@@ -88,14 +89,16 @@ public class SWTMessageDecoder extends FrameDecoder {
       throw new Error("Should never be reached");
     }
 
-    if (buffer.readerIndex() < payloadLength + 8) {
+    int readerIndexAfter = buffer.readerIndex();
+
+    if ((readerIndexAfter - readerIndexBefore) < payloadLength + 8) {
       // The payload was not read completely
       throw new SWTProtocolException(
           "Data still in payload. Available: " + payloadLength +
           ", consumed: " + (buffer.readerIndex() - 8));
     }
 
-    if (buffer.readerIndex() > payloadLength + 8) {
+    if ((readerIndexAfter - readerIndexBefore) > payloadLength + 8) {
       // payload-overflow. More data read then available
       throw new SWTProtocolException(
           "Payload-overflow. Available: " + payloadLength +
