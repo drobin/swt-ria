@@ -19,6 +19,8 @@ public class SWTClient {
 
     SWTClientEnvironment env = new SWTClientEnvironment(display);
 
+    SWTObjectMap objMap = new SWTObjectMap();
+
     ChannelFactory factory = new NioClientSocketChannelFactory(
         Executors.newCachedThreadPool(),
         Executors.newCachedThreadPool());
