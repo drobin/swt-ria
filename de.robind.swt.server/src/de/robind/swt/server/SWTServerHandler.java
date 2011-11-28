@@ -26,7 +26,7 @@ public class SWTServerHandler extends SimpleChannelHandler {
 
     logger.debug("Connected: " + ctx.getChannel());
 
-    SWTApplication application = new SWTApplication();
+    SWTApplication application = new SWTApplication(ctx.getChannel());
     application.start();
 
     ctx.setAttachment(application);
