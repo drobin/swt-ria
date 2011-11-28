@@ -44,11 +44,15 @@ public class SWTClientHandler extends SimpleChannelHandler {
 
     // The request-message from server
     if (e.getMessage() instanceof SWTRequest) {
+      // You cannot evaluate the request here. It needs to be performed in the
+      // thread, where the SWT-event-loop runs. So, put it into the
+      // request-queue. Now the SWT-event-loop can evaluate the message.
       SWTRequest request = (SWTRequest)e.getMessage();
       logger.debug("Request:" + request);
 
-      // Schedule message, so it can be handles within the SWT-loop.
       env.requestQueue.offer(request);
+
+      // If the loop "sleeps", wake it up. We have something to do!
       env.display.wake();
     } else {
       throw new Exception(
