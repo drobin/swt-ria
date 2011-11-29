@@ -4,7 +4,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.events.TypedListener;
+import org.eclipse.swt.server.Singleton;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTObjectId;
 
@@ -330,7 +332,10 @@ public class Widget extends SWTObject {
   protected SWTNewRequest createNewRequest() {
     SWTObjectId parentId =
         (this.parent != null) ? this.parent.getId() : SWTObjectId.undefined();
-    return (new SWTNewRequest(getId().getId(), getClass(), parentId, this.style));
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    SWTNewRequest request = factory.createNewRequest
+        (getId().getId(), getClass(), parentId, this.style);
+    return (request);
   }
 
   /**

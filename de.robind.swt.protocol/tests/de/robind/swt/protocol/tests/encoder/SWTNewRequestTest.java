@@ -17,7 +17,7 @@ public class SWTNewRequestTest extends AbstractEncoderTest<SWTNewRequest>{
 
   @Test
   public void noArguments() throws Exception {
-    SWTNewRequest msg = new SWTNewRequest(4711, Integer.class);
+    SWTNewRequest msg = this.factory.createNewRequest(4711, Integer.class);
 
     ChannelBuffer buffer = encodeMessage(msg, 24);
     assertThat(buffer.readInt(), is(4711));
@@ -27,7 +27,7 @@ public class SWTNewRequestTest extends AbstractEncoderTest<SWTNewRequest>{
 
   @Test
   public void withArguments() throws Exception {
-    SWTNewRequest msg = new SWTNewRequest(4711, Integer.class, 42, true);
+    SWTNewRequest msg = this.factory.createNewRequest(4711, Integer.class, 42, true);
 
     ChannelBuffer buffer = encodeMessage(msg, 31);
     assertThat(buffer.readInt(), is(4711));

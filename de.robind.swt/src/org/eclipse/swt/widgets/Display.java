@@ -7,7 +7,9 @@ import org.eclipse.swt.graphics.DeviceData;
 import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
+import org.eclipse.swt.server.Singleton;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
@@ -35,7 +37,8 @@ public class Display extends Device {
     DisplayPool.getInstance().addDisplay(this);
 
     // TODO Evaluate the response
-    SWTNewRequest request = new SWTNewRequest(getId().getId(), Display.class);
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    SWTNewRequest request = factory.createNewRequest(getId().getId(), Display.class);
     sendMessage(request);
   }
 

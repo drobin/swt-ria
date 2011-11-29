@@ -1,6 +1,7 @@
 package de.robind.swt.msg;
 
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
+import de.robind.swt.msg.impl.SWTNewRequestImpl;
 
 
 /**
@@ -39,5 +40,23 @@ public class SWTMessageFactory {
     }
 
     return (new SWTCallRequestImpl(destObj, method, arguments));
+  }
+
+  /**
+   * Creates a new {@link SWTNewRequest}-instance.
+   *
+   * @param objId The id of the object
+   * @param objClass The class to be instanciated
+   * @param arguments The arguments to the constructor
+   * @throws NullPointerException if <code>objClass</code> is <code>null</code>
+   */
+  public SWTNewRequest createNewRequest(int objId, Class<?> objClass,
+      Object... arguments) throws NullPointerException {
+
+    if (objClass == null) {
+      throw new NullPointerException("objClass cannot be null");
+    }
+
+    return (new SWTNewRequestImpl(objId, objClass, arguments));
   }
 }

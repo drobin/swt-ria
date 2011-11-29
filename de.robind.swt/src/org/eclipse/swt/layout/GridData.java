@@ -1,8 +1,10 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.server.Singleton;
 import org.eclipse.swt.widgets.Control;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 
 /**
@@ -383,7 +385,8 @@ public class GridData extends LayoutData {
    * Constructs a new instance of GridData using default values.
    */
   public GridData() {
-    this.createRequest = new SWTNewRequest(getId().getId(), getClass());
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    this.createRequest = factory.createNewRequest(getId().getId(), getClass());
   }
 
   /**
@@ -392,7 +395,9 @@ public class GridData extends LayoutData {
    * @param style
    */
   public GridData(int style) {
-    this.createRequest = new SWTNewRequest(getId().getId(), getClass(), style);
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    this.createRequest = factory.createNewRequest(
+        getId().getId(), getClass(), style);
 
     if ((style & VERTICAL_ALIGN_BEGINNING) != 0) {
       verticalAlignment = BEGINNING;
@@ -439,8 +444,9 @@ public class GridData extends LayoutData {
    * @param height a minimum height for the row
    */
   public GridData(int width, int height) {
-    this.createRequest =
-        new SWTNewRequest(getId().getId(), getClass(), width, height);
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    this.createRequest = factory.createNewRequest(
+        getId().getId(), getClass(), width, height);
 
     this.widthHint = width;
     this.heightHint = height;
@@ -490,7 +496,8 @@ public class GridData extends LayoutData {
       boolean grabExcessHorizontalSpace, boolean grabExcessVerticalSpace,
       int horizontalSpan, int verticalSpan) {
 
-    this.createRequest = new SWTNewRequest(getId().getId(), getClass(),
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    this.createRequest = factory.createNewRequest(getId().getId(), getClass(),
         horizontalAlignment, verticalAlignment,
         grabExcessHorizontalSpace, grabExcessVerticalSpace,
         horizontalSpan, verticalSpan);

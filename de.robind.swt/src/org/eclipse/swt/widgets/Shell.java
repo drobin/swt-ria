@@ -222,7 +222,10 @@ public class Shell extends Decorations {
     // TODO Pass parent Display to ctor
     SWTObjectId displayId =
         getDisplay() != null ? getDisplay().getId() : SWTObjectId.undefined();
-    return (new SWTNewRequest(getId().getId(), Shell.class, displayId));
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    SWTNewRequest request = factory.createNewRequest(
+        getId().getId(), Shell.class, displayId);
+    return (request);
   }
 
   /* (non-Javadoc)

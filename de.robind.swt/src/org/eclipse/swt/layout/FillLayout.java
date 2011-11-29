@@ -1,8 +1,10 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.server.Singleton;
 import org.eclipse.swt.widgets.Layout;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 
 /**
@@ -46,6 +48,7 @@ public class FillLayout extends Layout {
    * @see org.eclipse.swt.widgets.Layout#getNewRequest()
    */
   protected SWTNewRequest getNewRequest() {
-    return (new SWTNewRequest(getId().getId(), getClass(), type));
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    return (factory.createNewRequest(getId().getId(), getClass(), type));
   }
 }

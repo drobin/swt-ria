@@ -2,8 +2,10 @@ package org.eclipse.swt.layout;
 
 import java.awt.Composite;
 
+import org.eclipse.swt.server.Singleton;
 import org.eclipse.swt.widgets.Layout;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 
 /**
@@ -106,7 +108,8 @@ public class GridLayout extends Layout {
    * Constructs a new instance of this class.
    */
   public GridLayout() {
-    this.createRequest = new SWTNewRequest(getId().getId(), getClass());
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    this.createRequest = factory.createNewRequest(getId().getId(), getClass());
   }
 
   /**
@@ -123,7 +126,8 @@ public class GridLayout extends Layout {
     this.numColumns = numColumns;
     this.makeColumnsEqualWidth = makeColumnsEqualWidth;
 
-    this.createRequest = new SWTNewRequest(getId().getId(), getClass(),
+    SWTMessageFactory factory = Singleton.getMessageFactory();
+    this.createRequest = factory.createNewRequest(getId().getId(), getClass(),
         numColumns, makeColumnsEqualWidth);
   }
 

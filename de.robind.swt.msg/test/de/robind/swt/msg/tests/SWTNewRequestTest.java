@@ -16,53 +16,38 @@ import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 import de.robind.swt.msg.SWTTrap;
 
-public class SWTNewRequestTest {
+public class SWTNewRequestTest extends AbstractMessageTest {
   @Test
   public void isSWTMessage() {
-    SWTNewRequest msg = new SWTNewRequest(0, Object.class);
+    SWTNewRequest msg = this.factory.createNewRequest(0, Object.class);
     assertThat(msg, is(instanceOf(SWTMessage.class)));
   }
 
   @Test
   public void isSWTRequest() {
-    SWTNewRequest msg = new SWTNewRequest(0, Object.class);
+    SWTNewRequest msg = this.factory.createNewRequest(0, Object.class);
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
     assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
-  @Test(expected = NullPointerException.class)
-  public void nullClassName() throws ClassNotFoundException {
-    new SWTNewRequest(0, (String)null);
-  }
-
-  @Test(expected = ClassNotFoundException.class)
-  public void illegalClassName() throws ClassNotFoundException {
-    new SWTNewRequest(0, "blubber");
-  }
-
-  @Test(expected = NullPointerException.class)
+  @Test
   public void nullClass() {
-    new SWTNewRequest(0, (Class<?>)null);
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("objClass cannot be null");
+
+    this.factory.createNewRequest(0, (Class<?>)null);
   }
 
   @Test
   public void getId() {
-    SWTNewRequest msg = new SWTNewRequest(4711, Object.class);
+    SWTNewRequest msg = this.factory.createNewRequest(4711, Object.class);
     assertThat(msg.getId(), is(4711));
   }
 
   @Test
   public void getObjectClass() {
-    SWTNewRequest msg = new SWTNewRequest(0, Integer.class);
-    if (!msg.getObjClass().equals(Integer.class)) {
-      Assert.fail("getObjClass() is not an Integer");
-    }
-  }
-
-  @Test
-  public void getObjectClassFromString() throws ClassNotFoundException {
-    SWTNewRequest msg = new SWTNewRequest(0, "java.lang.Integer");
+    SWTNewRequest msg = this.factory.createNewRequest(0, Integer.class);
     if (!msg.getObjClass().equals(Integer.class)) {
       Assert.fail("getObjClass() is not an Integer");
     }
@@ -70,14 +55,14 @@ public class SWTNewRequestTest {
 
   @Test
   public void noArguments() {
-    SWTNewRequest msg = new SWTNewRequest(0, Object.class);
+    SWTNewRequest msg = this.factory.createNewRequest(0, Object.class);
     assertThat(msg.getArguments().length, is(0));
   }
 
   @Test
   public void getArguments() {
     Object obj = new Object();
-    SWTNewRequest msg = new SWTNewRequest(0, Object.class, "foo", 4711, obj);
+    SWTNewRequest msg = this.factory.createNewRequest(0, Object.class, "foo", 4711, obj);
     assertThat(msg.getArguments().length, is(3));
     assertThat((String)msg.getArguments()[0], is(equalTo("foo")));
     assertThat((Integer)msg.getArguments()[1], is(4711));
