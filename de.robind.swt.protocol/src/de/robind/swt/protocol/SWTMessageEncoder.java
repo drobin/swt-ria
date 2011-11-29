@@ -9,6 +9,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
+import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
@@ -45,6 +46,9 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
     if (e.getMessage() instanceof SWTRequest) {
       operation = encodeRequestMessage((SWTRequest)e.getMessage(), buffer);
       type = SWTProtocol.TYPE_REQ;
+    } else if (e.getMessage() instanceof SWTException) {
+      operation = encodeExceptionMessage((SWTException)e.getMessage(), buffer);
+      type = SWTProtocol.TYPE_EXC;
     } else if (e.getMessage() instanceof SWTResponse) {
       operation = encodeResponseMessage((SWTResponse)e.getMessage(), buffer);
       type = SWTProtocol.TYPE_RSP;
@@ -144,5 +148,27 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
 
     throw new SWTProtocolException(
         "Response not supported: " + msg.getClass().getName());
+  }
+
+  /**
+   * Encodes an {@link SWTException exception-message} into the given buffer.
+   *
+   * @param msg The message to be encoded
+   * @param buffer The destination buffer
+   * @return The operation (one of the SWTProtocol.OP_*-values).
+   * @throws SWTProtocolException if encoding failed
+   */
+  private byte encodeExceptionMessage(SWTException msg, ChannelBuffer buffer)
+      throws SWTProtocolException {
+
+    String message = msg.getCause().getMessage();
+    if (message == null) {
+      message = "";
+    }
+
+    SWTProtocol.writeString(buffer, msg.getCause().getClass().getName());
+    SWTProtocol.writeString(buffer, message);
+
+    return (SWTProtocol.OP_CALL); // Ignored by the exception-message-type
   }
 }
