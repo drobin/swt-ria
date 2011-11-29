@@ -26,7 +26,7 @@ public class SWTRegRequestTest extends AbstractDecoderTest<SWTRegRequest> {
     SWTRegRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.getDestinationObject().getId(), is(4711));
+    assertThat(msg.getObjId(), is(4711));
     assertThat(msg.getEventType(), is(555));
     assertThat(msg.enable(), is(true));
   }

@@ -11,9 +11,8 @@ public interface SWTRegRequest extends SWTRequest {
    * enabled/disabled.
    *
    * @return The destination object, where the operation should be applied.
-   * TODO Maybe it is enough to specify an int here
    */
-  SWTObjectId getDestinationObject();
+  int getObjId();
 
   /**
    * Returns the event-type, where the event-handling should be

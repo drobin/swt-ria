@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.junit.Test;
 
-import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRegRequest;
 import de.robind.swt.protocol.SWTProtocol;
 
@@ -17,8 +16,7 @@ public class SWTRegRequestTest extends AbstractEncoderTest<SWTRegRequest>{
 
   @Test
   public void request() {
-    SWTRegRequest msg =
-        this.factory.createRegRequest(new SWTObjectId(1), 4711, true);
+    SWTRegRequest msg = this.factory.createRegRequest(1, 4711, true);
 
     ChannelBuffer buffer = encodeMessage(msg, 9);
     assertThat(buffer.readInt(), is(1));

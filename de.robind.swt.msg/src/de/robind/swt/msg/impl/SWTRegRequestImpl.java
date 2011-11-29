@@ -1,6 +1,5 @@
 package de.robind.swt.msg.impl;
 
-import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRegRequest;
 
 /**
@@ -9,11 +8,11 @@ import de.robind.swt.msg.SWTRegRequest;
  * @author Robin Doer
  */
 public class SWTRegRequestImpl implements SWTRegRequest {
-  private SWTObjectId objId = null;
+  private int objId;
   private int eventType;
   private boolean enable;
 
-  public SWTRegRequestImpl(SWTObjectId objId, int eventType, boolean enable) {
+  public SWTRegRequestImpl(int objId, int eventType, boolean enable) {
     this.objId = objId;
     this.eventType = eventType;
     this.enable = enable;
@@ -22,7 +21,7 @@ public class SWTRegRequestImpl implements SWTRegRequest {
   /* (non-Javadoc)
    * @see de.robind.swt.msg.SWTRegRequest#getDestinationObject()
    */
-  public SWTObjectId getDestinationObject() {
+  public int getObjId() {
     return (this.objId);
   }
 

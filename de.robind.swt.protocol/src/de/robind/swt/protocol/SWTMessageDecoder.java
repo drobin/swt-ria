@@ -7,7 +7,6 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -183,8 +182,7 @@ public class SWTMessageDecoder extends FrameDecoder {
       int eventType = buffer.readInt();
       boolean enable = SWTProtocol.readBoolean(buffer);
 
-      return (this.factory.createRegRequest(
-          new SWTObjectId(objId), eventType, enable));
+      return (this.factory.createRegRequest(objId, eventType, enable));
     } else {
       return (null);
     }

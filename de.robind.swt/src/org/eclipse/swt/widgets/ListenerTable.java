@@ -9,7 +9,6 @@ import org.eclipse.swt.events.TypedListener;
 import org.eclipse.swt.server.Singleton;
 
 import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRegRequest;
 
 class ListenerTable {
@@ -41,7 +40,7 @@ class ListenerTable {
       // TODO Evaluat answer
       SWTMessageFactory factory = Singleton.getMessageFactory();
       SWTRegRequest request = factory.createRegRequest(
-          new SWTObjectId(widget.getId()), eventType, true);
+          widget.getId(), eventType, true);
       this.widget.getDisplay().sendMessage(request);
     }
 
@@ -63,7 +62,7 @@ class ListenerTable {
       // TODO Evaluate answer
       SWTMessageFactory factory = Singleton.getMessageFactory();
       SWTRegRequest request = factory.createRegRequest(
-          new SWTObjectId(widget.getId()), eventType, false);
+          widget.getId(), eventType, false);
       this.widget.getDisplay().sendMessage(request);
     }
   }
