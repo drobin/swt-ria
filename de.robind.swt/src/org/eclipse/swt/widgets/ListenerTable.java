@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.events.TypedListener;
+import org.eclipse.swt.server.Singleton;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTRegRequest;
 
 class ListenerTable {
@@ -36,8 +38,9 @@ class ListenerTable {
 
     if (list.isEmpty()) {
       // TODO Evaluat answer
-      SWTRegRequest request =
-          new SWTRegRequest(this.widget.getId(), eventType, true);
+      SWTMessageFactory factory = Singleton.getMessageFactory();
+      SWTRegRequest request = factory.createRegRequest(
+          this.widget.getId(), eventType, true);
       this.widget.getDisplay().sendMessage(request);
     }
 
@@ -57,8 +60,9 @@ class ListenerTable {
 
     if (list.isEmpty()) {
       // TODO Evaluate answer
-      SWTRegRequest request =
-          new SWTRegRequest(this.widget.getId(), eventType, false);
+      SWTMessageFactory factory = Singleton.getMessageFactory();
+      SWTRegRequest request = factory.createRegRequest(
+          this.widget.getId(), eventType, false);
       this.widget.getDisplay().sendMessage(request);
     }
   }

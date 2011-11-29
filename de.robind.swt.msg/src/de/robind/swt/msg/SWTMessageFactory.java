@@ -2,6 +2,7 @@ package de.robind.swt.msg;
 
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
 import de.robind.swt.msg.impl.SWTNewRequestImpl;
+import de.robind.swt.msg.impl.SWTRegRequestImpl;
 
 
 /**
@@ -58,5 +59,25 @@ public class SWTMessageFactory {
     }
 
     return (new SWTNewRequestImpl(objId, objClass, arguments));
+  }
+
+  /**
+   * Creates a new {@link SWTRegRequest}-instance.
+   *
+   * @param objId The id of the destination object
+   * @param eventType Th event-type to en-/disable
+   * @param enable if set to <code>true</code>, the event-handling is
+   *               enabled, otherwise it is disabled.
+   *
+   * @throws NullPointerException if <code>objId</code> is <code>null</code>
+   */
+  public SWTRegRequest createRegRequest(SWTObjectId objId, int eventType,
+      boolean enable) throws NullPointerException {
+
+    if (objId == null) {
+      throw new NullPointerException("objId cannot be null");
+    }
+
+    return (new SWTRegRequestImpl(objId, eventType, enable));
   }
 }

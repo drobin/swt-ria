@@ -15,37 +15,43 @@ import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 import de.robind.swt.msg.SWTTrap;
 
-public class SWTRegRequestTest {
+public class SWTRegRequestTest extends AbstractMessageTest {
   @Test
   public void isSWTMessage() {
-    SWTRegRequest msg = new SWTRegRequest(SWTObjectId.undefined(), 0, true);
+    SWTRegRequest msg =
+        this.factory.createRegRequest(SWTObjectId.undefined(), 0, true);
     assertThat(msg, is(instanceOf(SWTMessage.class)));
   }
 
   @Test
   public void isSWTRequest() {
-    SWTRegRequest msg = new SWTRegRequest(SWTObjectId.undefined(), 0, true);
+    SWTRegRequest msg =
+        this.factory.createRegRequest(SWTObjectId.undefined(), 0, true);
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
     assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void nullObjId() {
-    new SWTRegRequest(null, 0, true);
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("objId cannot be null");
+
+    this.factory.createRegRequest(null, 0, true);
   }
 
   @Test
   public void getDestinationObject() {
     SWTObjectId objId = new SWTObjectId(4711);
-    SWTRegRequest msg = new SWTRegRequest(objId, 0, true);
+    SWTRegRequest msg = this.factory.createRegRequest(objId, 0, true);
 
     assertThat(msg.getDestinationObject(), is(sameInstance(objId)));
   }
 
   @Test
   public void getEventType() {
-    SWTRegRequest msg = new SWTRegRequest(SWTObjectId.undefined(), 4711, true);
+    SWTRegRequest msg =
+        this.factory.createRegRequest(SWTObjectId.undefined(), 4711, true);
     assertThat(msg.getEventType(), is(4711));
   }
 
@@ -53,10 +59,10 @@ public class SWTRegRequestTest {
   public void enable() {
     SWTRegRequest msg;
 
-    msg = new SWTRegRequest(SWTObjectId.undefined(), 4711, true);
+    msg = this.factory.createRegRequest(SWTObjectId.undefined(), 4711, true);
     assertThat(msg.enable(), is(true));
 
-    msg = new SWTRegRequest(SWTObjectId.undefined(), 4711, false);
+    msg = this.factory.createRegRequest(SWTObjectId.undefined(), 4711, false);
     assertThat(msg.enable(), is(false));
   }
 }
