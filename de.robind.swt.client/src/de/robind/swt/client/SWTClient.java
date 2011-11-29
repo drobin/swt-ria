@@ -14,6 +14,7 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTRequest;
@@ -29,13 +30,14 @@ public class SWTClient {
     SWTClientEnvironment env = new SWTClientEnvironment(display);
 
     SWTObjectMap objMap = new SWTObjectMap();
+    SWTMessageFactory messageFactory = new SWTMessageFactory();
 
-    ChannelFactory factory = new NioClientSocketChannelFactory(
+    ChannelFactory channelFactory = new NioClientSocketChannelFactory(
         Executors.newCachedThreadPool(),
         Executors.newCachedThreadPool());
 
-    ClientBootstrap bootstrap = new ClientBootstrap(factory);
-    bootstrap.setPipelineFactory(new PipelineFactory(env));
+    ClientBootstrap bootstrap = new ClientBootstrap(channelFactory);
+    bootstrap.setPipelineFactory(new PipelineFactory(env, messageFactory));
     bootstrap.setOption("tcpNoDelay", true);
     bootstrap.setOption("keepAlive", true);
 
@@ -71,7 +73,7 @@ public class SWTClient {
     future.getChannel().close();
 
     future.getChannel().getCloseFuture().awaitUninterruptibly();
-    factory.releaseExternalResources();
+    channelFactory.releaseExternalResources();
   }
 
   private static SWTResponse handleRequest(
