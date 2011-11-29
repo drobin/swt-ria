@@ -7,36 +7,16 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessage;
-import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 import de.robind.swt.msg.SWTTrap;
 
-public class SWTCallRequestTest {
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
-  private SWTMessageFactory factory = null;
-
-  @Before
-  public void setup() {
-    this.factory = new SWTMessageFactory();
-  }
-
-  @After
-  public void teardown() {
-    this.factory = null;
-  }
-
+public class SWTCallRequestTest extends AbstractMessageTest {
   @Test
   public void isSWTMessage() {
     SWTCallRequest msg = this.factory.createCallRequest(new SWTObjectId(1), "xxx");
