@@ -1,12 +1,11 @@
 package de.robind.swt.msg;
 
+import de.robind.swt.msg.impl.EmptyPayloadMessage;
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
 import de.robind.swt.msg.impl.SWTCallResponseImpl;
 import de.robind.swt.msg.impl.SWTExceptionImpl;
 import de.robind.swt.msg.impl.SWTNewRequestImpl;
-import de.robind.swt.msg.impl.SWTNewResponseImpl;
 import de.robind.swt.msg.impl.SWTRegRequestImpl;
-import de.robind.swt.msg.impl.SWTRegResponseImpl;
 
 
 /**
@@ -80,7 +79,7 @@ public class SWTMessageFactory {
    * @return The new {@link SWTNewResponse}-instance
    */
   public SWTNewResponse createNewResponse() {
-    return (new SWTNewResponseImpl());
+    return (new EmptyPayloadMessage(SWTNewResponse.class.getSimpleName()));
   }
 
   /**
@@ -109,7 +108,7 @@ public class SWTMessageFactory {
    * @return A new {@link SWTRegResponse}-instance
    */
   public SWTRegResponse createRegResponse() {
-    return (new SWTRegResponseImpl());
+    return (new EmptyPayloadMessage(SWTRegResponse.class.getSimpleName()));
   }
 
   /**
