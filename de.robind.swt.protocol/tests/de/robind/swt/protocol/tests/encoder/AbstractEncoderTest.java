@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.protocol.SWTMessageEncoder;
 import de.robind.swt.protocol.SWTProtocol;
 
@@ -21,17 +22,20 @@ public class AbstractEncoderTest<T extends SWTMessage> {
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
+  protected SWTMessageFactory factory = null;
   private SWTMessageEncoder encoder = null;
-  EncoderEmbedder<ChannelBuffer> embedder = null;
+  private EncoderEmbedder<ChannelBuffer> embedder = null;
 
   @Before
   public void setup() {
+    this.factory = new SWTMessageFactory();
     this.encoder = new SWTMessageEncoder();
     this.embedder = new EncoderEmbedder<ChannelBuffer>(this.encoder);
   }
 
   @After
   public void teardown() {
+    this.factory = null;
     this.embedder = null;
     this.encoder = null;
   }

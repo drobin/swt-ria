@@ -7,75 +7,109 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 import de.robind.swt.msg.SWTTrap;
 
 public class SWTCallRequestTest {
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
+
+  private SWTMessageFactory factory = null;
+
+  @Before
+  public void setup() {
+    this.factory = new SWTMessageFactory();
+  }
+
+  @After
+  public void teardown() {
+    this.factory = null;
+  }
+
   @Test
   public void isSWTMessage() {
-    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
+    SWTCallRequest msg = this.factory.createCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg, is(instanceOf(SWTMessage.class)));
   }
 
   @Test
   public void isSWTRequest() {
-    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
+    SWTCallRequest msg = this.factory.createCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
     assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void nullObjId() {
-    new SWTCallRequest(null, "xxx");
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("destObj cannot be null");
+
+    this.factory.createCallRequest(null, "xxx");
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void undefinedObjId() {
-    new SWTCallRequest(SWTObjectId.undefined(), "xxx");
+    exception.expect(IllegalArgumentException.class);
+    exception.expectMessage("destObj cannot be invalid");
+
+    this.factory.createCallRequest(SWTObjectId.undefined(), "xxx");
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void nullMethod() {
-    new SWTCallRequest(new SWTObjectId(1), null);
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("method cannot be null");
+
+    this.factory.createCallRequest(new SWTObjectId(1), null);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void emptyMethod() {
-    new SWTCallRequest(SWTObjectId.undefined(), "");
+    exception.expect(IllegalArgumentException.class);
+    exception.expectMessage("method cannot be an empty string");
+
+    this.factory.createCallRequest(new SWTObjectId(1), "");
   }
 
   @Test
   public void getDestinationObject() {
     SWTObjectId objId = new SWTObjectId(4711);
-    SWTCallRequest msg = new SWTCallRequest(objId, "xxx");
+    SWTCallRequest msg = this.factory.createCallRequest(objId, "xxx");
     assertThat(msg.getDestinationObject(), is(sameInstance(objId)));
   }
 
   @Test
   public void getMethod() {
-    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
+    SWTCallRequest msg =
+        this.factory.createCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg.getMethod(), is(equalTo("xxx")));
   }
 
   @Test
   public void noArguments() {
-    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx");
+    SWTCallRequest msg =
+        this.factory.createCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg.getArguments().length, is(0));
   }
 
   @Test
   public void getArguments() {
     Object obj = new Object();
+    SWTCallRequest msg = this.factory.createCallRequest(
+        new SWTObjectId(1), "xxx", "foo", 4711, obj);
 
-    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(1), "xxx",
-        "foo", 4711, obj);
     assertThat(msg.getArguments().length, is(3));
     assertThat(msg.getArguments()[0], is(instanceOf(String.class)));
     assertThat((String)msg.getArguments()[0], is(equalTo("foo")));

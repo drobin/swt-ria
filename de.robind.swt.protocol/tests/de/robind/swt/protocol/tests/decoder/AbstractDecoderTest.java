@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
 
@@ -24,7 +25,7 @@ public class AbstractDecoderTest<T extends SWTMessage> {
 
   @Before
   public void setup() {
-    this.decoder = new SWTMessageDecoder();
+    this.decoder = new SWTMessageDecoder(new SWTMessageFactory());
     this.embedder = new DecoderEmbedder<T>(this.decoder);
   }
 

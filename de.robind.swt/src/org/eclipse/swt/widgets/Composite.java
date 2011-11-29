@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 
 import de.robind.swt.msg.SWTCallRequest;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 
 /**
@@ -63,8 +64,10 @@ public class Composite extends Scrollable {
     getDisplay().sendMessage(createRequest);
 
     // TODO Evaluate the response
-    SWTCallRequest callRequest = new SWTCallRequest(getId(), "setLayout", layout.getId());
-    getDisplay().sendMessage(callRequest);
+    Display display = getDisplay();
+    SWTMessageFactory factory = display.getMessageFactory();
+    SWTCallRequest callRequest = factory.createCallRequest(getId(), "setLayout", layout.getId());
+    display.sendMessage(callRequest);
 
     this.layout = layout;
   }

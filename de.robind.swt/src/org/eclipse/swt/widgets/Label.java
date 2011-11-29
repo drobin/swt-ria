@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 
 import de.robind.swt.msg.SWTCallRequest;
+import de.robind.swt.msg.SWTMessageFactory;
 
 /**
  * Instances of this class represent a non-selectable user interface objec
@@ -97,8 +98,10 @@ public class Label extends Control {
     // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
 
     // TODO Evaluate answer
-    SWTCallRequest request = new SWTCallRequest(getId(), "setText", string);
-    getDisplay().sendMessage(request);
+    Display display = getDisplay();
+    SWTMessageFactory factory = display.getMessageFactory();
+    SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
+    display.sendMessage(request);
 
     this.text = string;
   }

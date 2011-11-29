@@ -6,6 +6,7 @@ import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
 
 import de.robind.swt.msg.SWTCallRequest;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 
 /**
@@ -71,8 +72,10 @@ public abstract class Control extends Widget implements Drawable {
     getDisplay().sendMessage(createRequest);
 
     // TODO Evaluate the response
-    SWTCallRequest callRequest = new SWTCallRequest(getId(), "setLayoutData", data.getId());
-    getDisplay().sendMessage(callRequest);
+    Display display = getDisplay();
+    SWTMessageFactory factory = display.getMessageFactory();
+    SWTCallRequest callRequest = factory.createCallRequest(getId(), "setLayoutData", data.getId());
+    display.sendMessage(callRequest);
 
     this.layoutData = layoutData;
   }

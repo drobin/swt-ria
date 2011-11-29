@@ -5,9 +5,9 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
-import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTObjectId;
@@ -23,6 +23,27 @@ import de.robind.swt.msg.SWTResponse;
  * @author Robin Doer
  */
 public class SWTMessageDecoder extends FrameDecoder {
+  /**
+   * Factory used to create messages.
+   */
+  private SWTMessageFactory factory = null;
+
+  /**
+   * Creates a new {@link SWTMessageDecoder}.
+   *
+   * @param factory The factory is used to create {@link SWTMessage}-instances
+   * @throws NullPointerException if <code>factory</code> is <code>null</code>
+   */
+  public SWTMessageDecoder(SWTMessageFactory factory)
+      throws NullPointerException {
+
+    if (factory == null) {
+      throw new NullPointerException("factory cannot be null");
+    }
+
+    this.factory = factory;
+  }
+
   /* (non-Javadoc)
    * @see org.jboss.netty.handler.codec.frame.FrameDecoder#decode(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.Channel, org.jboss.netty.buffer.ChannelBuffer)
    */
@@ -161,7 +182,8 @@ public class SWTMessageDecoder extends FrameDecoder {
         args[i] = SWTProtocol.readArgument(buffer);
       }
 
-      return (new SWTCallRequest(new SWTObjectId(destObj), method, args));
+      return (this.factory.createCallRequest(
+          new SWTObjectId(destObj), method, args));
     } else if (operation == SWTProtocol.OP_REG) {
       int objId = buffer.readInt();
       int eventType = buffer.readInt();

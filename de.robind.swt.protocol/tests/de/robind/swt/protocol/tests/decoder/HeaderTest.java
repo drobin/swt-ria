@@ -15,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.protocol.SWTMessageDecoder;
 import de.robind.swt.protocol.SWTProtocol;
 import de.robind.swt.protocol.SWTProtocolException;
@@ -28,7 +29,7 @@ public class HeaderTest {
 
   @Before
   public void setup() {
-    this.decoder = new SWTMessageDecoder();
+    this.decoder = new SWTMessageDecoder(new SWTMessageFactory());
     this.embedder = new DecoderEmbedder<Object>(this.decoder);
   }
 

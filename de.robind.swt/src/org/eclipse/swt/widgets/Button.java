@@ -5,6 +5,7 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionListener;
 
 import de.robind.swt.msg.SWTCallRequest;
+import de.robind.swt.msg.SWTMessageFactory;
 
 /**
  * TODO Needs to be implemented!!
@@ -156,7 +157,9 @@ public class Button extends Control {
     // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
 
     // TODO Evaluate answer
-    SWTCallRequest request = new SWTCallRequest(getId(), "setText", string);
-    getDisplay().sendMessage(request);
+    Display display = getDisplay();
+    SWTMessageFactory factory = display.getMessageFactory();
+    SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
+    display.sendMessage(request);
   }
 }

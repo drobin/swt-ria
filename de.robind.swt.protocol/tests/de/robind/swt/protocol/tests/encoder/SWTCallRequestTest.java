@@ -18,7 +18,8 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
 
   @Test
   public void noArguments() throws Exception {
-    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(4711), "foo");
+    SWTCallRequest msg =
+        this.factory.createCallRequest(new SWTObjectId(4711), "foo");
 
     ChannelBuffer buffer = encodeMessage(msg, 10);
     assertThat(buffer.readInt(), is(4711));
@@ -28,7 +29,8 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
 
   @Test
   public void withArguments() throws Exception {
-    SWTCallRequest msg = new SWTCallRequest(new SWTObjectId(4711), "foo", 1, true);
+    SWTCallRequest msg =
+        this.factory.createCallRequest(new SWTObjectId(4711), "foo", 1, true);
 
     ChannelBuffer buffer = encodeMessage(msg, 17);
     assertThat(buffer.readInt(), is(4711));

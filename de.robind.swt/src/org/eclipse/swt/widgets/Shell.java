@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 
 import de.robind.swt.msg.SWTCallRequest;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTObjectId;
 
@@ -207,8 +208,10 @@ public class Shell extends Decorations {
    */
   public void open() throws SWTException {
     // TODO Evaluate the response
-    SWTCallRequest request = new SWTCallRequest(getId(), "open");
-    getDisplay().sendMessage(request);
+    Display display = getDisplay();
+    SWTMessageFactory factory = display.getMessageFactory();
+    SWTCallRequest request = factory.createCallRequest(getId(), "open");
+    display.sendMessage(request);
   }
 
   /* (non-Javadoc)
