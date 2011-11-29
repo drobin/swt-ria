@@ -6,6 +6,7 @@ import de.robind.swt.msg.impl.SWTExceptionImpl;
 import de.robind.swt.msg.impl.SWTNewRequestImpl;
 import de.robind.swt.msg.impl.SWTNewResponseImpl;
 import de.robind.swt.msg.impl.SWTRegRequestImpl;
+import de.robind.swt.msg.impl.SWTRegResponseImpl;
 
 
 /**
@@ -102,6 +103,14 @@ public class SWTMessageFactory {
     return (new SWTRegRequestImpl(objId, eventType, enable));
   }
 
+  /**
+   * Creates a new {@link SWTRegResponse}-instance
+   *
+   * @return A new {@link SWTRegResponse}-instance
+   */
+  public SWTRegResponse createRegResponse() {
+    return (new SWTRegResponseImpl());
+  }
 
   /**
    * Creates a new {@link SWTExceptionImpl}-message.
