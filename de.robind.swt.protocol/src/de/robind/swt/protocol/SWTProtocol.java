@@ -44,6 +44,11 @@ public class SWTProtocol {
   public static final byte TYPE_RSP = 0x01;
 
   /**
+   * An exception-message.
+   */
+  public static final byte TYPE_EXC = 0x02;
+
+  /**
    * A string-argument
    */
   public static final byte ARG_STRING = 1;

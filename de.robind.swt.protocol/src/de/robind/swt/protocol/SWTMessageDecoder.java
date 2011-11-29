@@ -1,10 +1,13 @@
 package de.robind.swt.protocol;
 
+import java.lang.reflect.Constructor;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
+import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTRequest;
@@ -72,7 +75,9 @@ public class SWTMessageDecoder extends FrameDecoder {
       throw new SWTProtocolException("Invalid operation: " + operation);
     }
 
-    if (type != SWTProtocol.TYPE_REQ && type != SWTProtocol.TYPE_RSP) {
+    if (type != SWTProtocol.TYPE_REQ && type != SWTProtocol.TYPE_RSP &&
+        type != SWTProtocol.TYPE_EXC) {
+
       buffer.resetReaderIndex();
       throw new SWTProtocolException("Invalid message-type: " + type);
     }
@@ -98,6 +103,9 @@ public class SWTMessageDecoder extends FrameDecoder {
       case SWTProtocol.TYPE_RSP:
        message = decodeResponseMessage(operation, buffer, payloadLength);
        break;
+      case SWTProtocol.TYPE_EXC:
+        message = decodeExceptionMessage(buffer);
+        break;
     }
 
     if (message == null) {
@@ -214,6 +222,32 @@ public class SWTMessageDecoder extends FrameDecoder {
       return (this.factory.createRegResponse());
     } else {
       return (null);
+    }
+  }
+
+  /**
+   * Decodes a {@link SWTException}-message.
+   *
+   * @param buffer The buffer with source-data
+   * @return the decoded exception-message
+   * @throws SWTProtocolException if decoding has failed
+   */
+  private SWTException decodeExceptionMessage(ChannelBuffer buffer)
+      throws SWTProtocolException {
+
+    String className = SWTProtocol.readString(buffer);
+    String message = SWTProtocol.readString(buffer);
+
+    try {
+      Class<? extends Throwable> excClass =
+          Class.forName(className).asSubclass(Throwable.class);
+      Constructor<? extends Throwable> ctor =
+          excClass.getConstructor(String.class);
+      Throwable exc = ctor.newInstance(message);
+
+      return (this.factory.createException(exc));
+    } catch (Exception e) {
+      throw new SWTProtocolException("Failed to create exception", e);
     }
   }
 }
