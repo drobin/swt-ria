@@ -13,7 +13,6 @@ import org.junit.Test;
 import de.robind.swt.msg.SWTAttrRequest;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTObjectId;
-import de.robind.swt.msg.SWTOpAttr;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 import de.robind.swt.msg.SWTTrap;
@@ -31,12 +30,6 @@ public class SWTAttrRequestTest {
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
     assertThat(msg, is(not(instanceOf(SWTTrap.class))));
-  }
-
-  @Test
-  public void isSWTOpAttr() {
-    SWTAttrRequest msg = new SWTAttrRequest(SWTObjectId.undefined(), "xxx", null);
-    assertThat(msg, is(instanceOf(SWTOpAttr.class)));
   }
 
   @Test(expected = NullPointerException.class)

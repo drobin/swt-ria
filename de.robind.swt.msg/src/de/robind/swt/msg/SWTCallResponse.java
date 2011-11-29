@@ -6,7 +6,7 @@ package de.robind.swt.msg;
  *
  * @author Robin Doer
  */
-public class SWTCallResponse implements SWTOpCall, SWTResponse {
+public class SWTCallResponse implements SWTResponse {
   private Object result = null;
 
   private SWTCallResponse() {

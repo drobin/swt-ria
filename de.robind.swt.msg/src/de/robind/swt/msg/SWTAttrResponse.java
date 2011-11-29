@@ -5,7 +5,7 @@ package de.robind.swt.msg;
  *
  * @author Robin Doer
  */
-public class SWTAttrResponse implements SWTOpAttr, SWTResponse {
+public class SWTAttrResponse implements SWTResponse {
   private String excClass = null;
   private String excMessage = null;
 

@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import de.robind.swt.msg.SWTAttrResponse;
 import de.robind.swt.msg.SWTMessage;
-import de.robind.swt.msg.SWTOpAttr;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 import de.robind.swt.msg.SWTTrap;
@@ -29,12 +28,6 @@ public class SWTAttrResponseTest {
     assertThat(msg, is(instanceOf(SWTResponse.class)));
     assertThat(msg, is(not(instanceOf(SWTRequest.class))));
     assertThat(msg, is(not(instanceOf(SWTTrap.class))));
-  }
-
-  @Test
-  public void isOpCall() {
-    SWTAttrResponse msg = SWTAttrResponse.success();
-    assertThat(msg, is(instanceOf(SWTOpAttr.class)));
   }
 
   @Test(expected = NullPointerException.class)

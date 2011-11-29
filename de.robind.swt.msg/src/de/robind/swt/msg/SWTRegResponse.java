@@ -5,7 +5,7 @@ package de.robind.swt.msg;
  *
  * @author Robin Doer
  */
-public class SWTRegResponse implements SWTOpReg, SWTResponse {
+public class SWTRegResponse implements SWTResponse {
   private String excClass = null;
   private String excMessage = null;
 

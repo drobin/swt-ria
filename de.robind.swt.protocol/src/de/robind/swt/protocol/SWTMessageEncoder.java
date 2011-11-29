@@ -12,9 +12,6 @@ import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
-import de.robind.swt.msg.SWTOpCall;
-import de.robind.swt.msg.SWTOpNew;
-import de.robind.swt.msg.SWTOpReg;
 import de.robind.swt.msg.SWTRegRequest;
 import de.robind.swt.msg.SWTRegResponse;
 import de.robind.swt.msg.SWTRequest;
@@ -82,7 +79,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
   private byte encodeRequestMessage(SWTRequest msg, ChannelBuffer buffer)
       throws SWTProtocolException {
 
-    if (msg instanceof SWTOpCall) {
+    if (msg instanceof SWTCallRequest) {
       SWTCallRequest request = (SWTCallRequest)msg;
 
       buffer.writeInt(request.getDestinationObject().getId());
@@ -94,7 +91,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       }
 
       return (SWTProtocol.OP_CALL);
-    } else if (msg instanceof SWTOpNew) {
+    } else if (msg instanceof SWTNewRequest) {
       SWTNewRequest request = (SWTNewRequest)msg;
 
       buffer.writeInt(request.getId());
@@ -106,7 +103,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       }
 
       return (SWTProtocol.OP_NEW);
-    } else if (msg instanceof SWTOpReg) {
+    } else if (msg instanceof SWTRegRequest) {
       SWTRegRequest request = (SWTRegRequest)msg;
 
       buffer.writeInt(request.getDestinationObject().getId());
@@ -131,7 +128,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
   private byte encodeResponseMessage(SWTResponse msg, ChannelBuffer buffer)
       throws SWTProtocolException {
 
-    if (msg instanceof SWTOpCall) {
+    if (msg instanceof SWTCallResponse) {
       SWTCallResponse response = (SWTCallResponse)msg;
 
       if (!response.isVoid()) {
@@ -139,7 +136,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       }
 
       return (SWTProtocol.OP_CALL);
-    } else if (msg instanceof SWTOpNew) {
+    } else if (msg instanceof SWTNewResponse) {
       SWTNewResponse response = (SWTNewResponse)msg;
 
       if (!response.isSuccessful()) {
@@ -148,7 +145,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       }
 
       return (SWTProtocol.OP_NEW);
-    } else if (msg instanceof SWTOpReg) {
+    } else if (msg instanceof SWTRegResponse) {
       SWTRegResponse response = (SWTRegResponse)msg;
 
       if (!response.isSuccessful()) {

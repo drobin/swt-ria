@@ -10,7 +10,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import de.robind.swt.msg.SWTMessage;
-import de.robind.swt.msg.SWTOpReg;
 import de.robind.swt.msg.SWTRegResponse;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
@@ -29,12 +28,6 @@ public class SWTRegResponseTest {
     assertThat(msg, is(instanceOf(SWTResponse.class)));
     assertThat(msg, is(not(instanceOf(SWTRequest.class))));
     assertThat(msg, is(not(instanceOf(SWTTrap.class))));
-  }
-
-  @Test
-  public void isSWTOpReg() {
-    SWTRegResponse msg = SWTRegResponse.success();
-    assertThat(msg, is(instanceOf(SWTOpReg.class)));
   }
 
   @Test(expected = NullPointerException.class)

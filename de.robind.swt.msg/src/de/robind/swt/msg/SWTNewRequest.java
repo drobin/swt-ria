@@ -8,7 +8,7 @@ import java.util.Arrays;
  *
  * @author Robin Doer
  */
-public class SWTNewRequest implements SWTOpNew, SWTRequest {
+public class SWTNewRequest implements SWTRequest {
   private int objId;
   private Class<?> objClass = null;
   private Object arguments[] = {};

@@ -5,6 +5,6 @@ package de.robind.swt.msg;
  *
  * @author Robin Doer
  */
-public class SWTEvent implements SWTOpEvent, SWTTrap {
+public class SWTEvent implements SWTTrap {
 
 }

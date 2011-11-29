@@ -16,8 +16,6 @@ import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
-import de.robind.swt.msg.SWTOpCall;
-import de.robind.swt.msg.SWTOpNew;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -54,7 +52,7 @@ public class SWTClient {
       while ((request = env.requestQueue.poll()) != null) {
         SWTResponse response = null;
 
-        if (request instanceof SWTOpNew &&
+        if (request instanceof SWTNewRequest &&
             ((SWTNewRequest)request).getObjClass().equals(Display.class)) {
 
           // Creating a Display is a special task because you already have a
@@ -79,9 +77,9 @@ public class SWTClient {
   private static SWTResponse handleRequest(
       SWTObjectMap objMap, SWTRequest request) {
 
-    if (request instanceof SWTOpNew) {
+    if (request instanceof SWTNewRequest) {
       return (handleNewRequest(objMap, (SWTNewRequest)request));
-    } else if (request instanceof SWTOpCall) {
+    } else if (request instanceof SWTCallRequest) {
       return (handleCallRequest(objMap, (SWTCallRequest)request));
     } else {
       return (null);

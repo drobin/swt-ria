@@ -5,7 +5,7 @@ package de.robind.swt.msg;
  *
  * @author Robin Doer
  */
-public class SWTRegRequest implements SWTOpReg, SWTRequest {
+public class SWTRegRequest implements SWTRequest {
   private SWTObjectId objId = null;
   private int eventType;
   private boolean enable;

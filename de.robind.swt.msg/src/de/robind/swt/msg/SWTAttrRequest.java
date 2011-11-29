@@ -6,7 +6,7 @@ package de.robind.swt.msg;
  *
  * @author Robin Doer
  */
-public class SWTAttrRequest implements SWTOpAttr, SWTRequest {
+public class SWTAttrRequest implements SWTRequest {
   private SWTObjectId objId = null;
   private String name = null;
   private Object value = null;

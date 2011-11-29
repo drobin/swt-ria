@@ -8,7 +8,7 @@ import java.util.Arrays;
  *
  * @author Robin Doer
  */
-public class SWTCallRequest implements SWTOpCall, SWTRequest {
+public class SWTCallRequest implements SWTRequest {
   private SWTObjectId destObj;
   private String method;
   private Object arguments[];

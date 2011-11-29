@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTMessage;
-import de.robind.swt.msg.SWTOpEvent;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 import de.robind.swt.msg.SWTTrap;
@@ -27,11 +26,5 @@ public class SWTEventTest {
     assertThat(msg, is(not(instanceOf(SWTRequest.class))));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
     assertThat(msg, is(instanceOf(SWTTrap.class)));
-  }
-
-  @Test
-  public void isSWTOpEvent() {
-    SWTEvent msg = new SWTEvent();
-    assertThat(msg, is(instanceOf(SWTOpEvent.class)));
   }
 }
