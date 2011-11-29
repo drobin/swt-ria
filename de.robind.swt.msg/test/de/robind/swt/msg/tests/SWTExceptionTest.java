@@ -14,19 +14,19 @@ import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
-public class SWTExceptionTest {
+public class SWTExceptionTest extends AbstractMessageTest {
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
   @Test
   public void isSWTMessage() {
-    SWTException msg = new SWTException(new Exception());
+    SWTException msg = this.factory.createException(new Exception());
     assertThat(msg, is(instanceOf(SWTMessage.class)));
   }
 
   @Test
   public void isSWTResponse() {
-    SWTException msg = new SWTException(new Exception());
+    SWTException msg = this.factory.createException(new Exception());
     assertThat(msg, is(instanceOf(SWTResponse.class)));
     assertThat(msg, is(not(instanceOf(SWTRequest.class))));
   }
@@ -36,13 +36,13 @@ public class SWTExceptionTest {
     exception.expect(NullPointerException.class);
     exception.expectMessage("cause cannot be null");
 
-    new SWTException(null);
+    this.factory.createException(null);
   }
 
   @Test
   public void withException() {
     Throwable cause = new IndexOutOfBoundsException();
-    SWTException msg = new SWTException(cause);
+    SWTException msg = this.factory.createException(cause);
     assertThat(msg.getCause(), is(cause));
   }
 }

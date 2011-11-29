@@ -1,6 +1,7 @@
 package de.robind.swt.msg;
 
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
+import de.robind.swt.msg.impl.SWTExceptionImpl;
 import de.robind.swt.msg.impl.SWTNewRequestImpl;
 import de.robind.swt.msg.impl.SWTRegRequestImpl;
 
@@ -79,5 +80,22 @@ public class SWTMessageFactory {
     }
 
     return (new SWTRegRequestImpl(objId, eventType, enable));
+  }
+
+
+  /**
+   * Creates a new {@link SWTExceptionImpl}-message.
+   *
+   * @param cause The cause exception
+   * @throws NullPointerException if <code>cause</code> is <code>null</code>
+   */
+  public SWTException createException(Throwable cause)
+      throws NullPointerException {
+
+    if (cause == null) {
+      throw new NullPointerException("cause cannot be null");
+    }
+
+    return (new SWTExceptionImpl(cause));
   }
 }
