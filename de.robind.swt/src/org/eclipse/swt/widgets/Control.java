@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
+import org.eclipse.swt.server.Singleton;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
@@ -72,10 +73,9 @@ public abstract class Control extends Widget implements Drawable {
     getDisplay().sendMessage(createRequest);
 
     // TODO Evaluate the response
-    Display display = getDisplay();
-    SWTMessageFactory factory = display.getMessageFactory();
+    SWTMessageFactory factory = Singleton.getMessageFactory();
     SWTCallRequest callRequest = factory.createCallRequest(getId(), "setLayoutData", data.getId());
-    display.sendMessage(callRequest);
+    getDisplay().sendMessage(callRequest);
 
     this.layoutData = layoutData;
   }

@@ -2,6 +2,7 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.server.Singleton;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
@@ -208,10 +209,9 @@ public class Shell extends Decorations {
    */
   public void open() throws SWTException {
     // TODO Evaluate the response
-    Display display = getDisplay();
-    SWTMessageFactory factory = display.getMessageFactory();
+    SWTMessageFactory factory = Singleton.getMessageFactory();
     SWTCallRequest request = factory.createCallRequest(getId(), "open");
-    display.sendMessage(request);
+    getDisplay().sendMessage(request);
   }
 
   /* (non-Javadoc)

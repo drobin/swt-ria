@@ -2,6 +2,7 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.server.Singleton;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
@@ -69,10 +70,9 @@ public class Text extends Scrollable {
     // TODO Check for ERROR_THREAD_INVALID_ACCESS, ERROR_DEVICE_DISPOSED
 
     // TODO Evaluate answers
-    Display display = getDisplay();
-    SWTMessageFactory factory = display.getMessageFactory();
+    SWTMessageFactory factory = Singleton.getMessageFactory();
     SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
-    display.sendMessage(request);
+    getDisplay().sendMessage(request);
 
     this.text = string;
   }

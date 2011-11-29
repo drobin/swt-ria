@@ -8,8 +8,6 @@ import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 
-import de.robind.swt.msg.SWTMessage;
-import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
@@ -18,11 +16,6 @@ import de.robind.swt.msg.SWTResponse;
  * TODO Needs to be implemented!!
  */
 public class Display extends Device {
-  /**
-   * Factory used to create {@link SWTMessage}-instances.
-   */
-  private SWTMessageFactory factory = new SWTMessageFactory();
-
   /**
    * The assigned key.
    */
@@ -104,15 +97,6 @@ public class Display extends Device {
 
   public void setKey(Key key) {
     this.key = key;
-  }
-
-  /**
-   * Returns the factory used to create {@link SWTMessage}-instances.
-   *
-   * @return The {@link SWTMessage}-factory
-   */
-  SWTMessageFactory getMessageFactory() {
-    return (this.factory);
   }
 
   /**
