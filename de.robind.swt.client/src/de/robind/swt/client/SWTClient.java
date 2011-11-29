@@ -105,8 +105,7 @@ public class SWTClient {
       SWTObjectMap objMap, SWTCallRequest request) {
 
     try {
-      Object result = SWTObject.callMethod(objMap,
-          request.getDestinationObject().getId(),
+      Object result = SWTObject.callMethod(objMap, request.getObjId(),
           request.getMethod(), request.getArguments());
 
       return (factory.createCallResponse(result));

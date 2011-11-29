@@ -11,38 +11,21 @@ import org.junit.Test;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessage;
-import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
 public class SWTCallRequestTest extends AbstractMessageTest {
   @Test
   public void isSWTMessage() {
-    SWTCallRequest msg = this.factory.createCallRequest(new SWTObjectId(1), "xxx");
+    SWTCallRequest msg = this.factory.createCallRequest(1, "xxx");
     assertThat(msg, is(instanceOf(SWTMessage.class)));
   }
 
   @Test
   public void isSWTRequest() {
-    SWTCallRequest msg = this.factory.createCallRequest(new SWTObjectId(1), "xxx");
+    SWTCallRequest msg = this.factory.createCallRequest(1, "xxx");
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
-  }
-
-  @Test
-  public void nullObjId() {
-    exception.expect(NullPointerException.class);
-    exception.expectMessage("destObj cannot be null");
-
-    this.factory.createCallRequest(null, "xxx");
-  }
-
-  @Test
-  public void undefinedObjId() {
-    exception.expect(IllegalArgumentException.class);
-    exception.expectMessage("destObj cannot be invalid");
-
-    this.factory.createCallRequest(SWTObjectId.undefined(), "xxx");
   }
 
   @Test
@@ -50,7 +33,7 @@ public class SWTCallRequestTest extends AbstractMessageTest {
     exception.expect(NullPointerException.class);
     exception.expectMessage("method cannot be null");
 
-    this.factory.createCallRequest(new SWTObjectId(1), null);
+    this.factory.createCallRequest(1, null);
   }
 
   @Test
@@ -58,27 +41,25 @@ public class SWTCallRequestTest extends AbstractMessageTest {
     exception.expect(IllegalArgumentException.class);
     exception.expectMessage("method cannot be an empty string");
 
-    this.factory.createCallRequest(new SWTObjectId(1), "");
+    this.factory.createCallRequest(1, "");
   }
 
   @Test
-  public void getDestinationObject() {
-    SWTObjectId objId = new SWTObjectId(4711);
-    SWTCallRequest msg = this.factory.createCallRequest(objId, "xxx");
-    assertThat(msg.getDestinationObject(), is(sameInstance(objId)));
+  public void getObjId() {
+    SWTCallRequest msg = this.factory.createCallRequest(4711, "xxx");
+    assertThat(msg.getObjId(), is(4711));
   }
 
   @Test
   public void getMethod() {
     SWTCallRequest msg =
-        this.factory.createCallRequest(new SWTObjectId(1), "xxx");
+        this.factory.createCallRequest(1, "xxx");
     assertThat(msg.getMethod(), is(equalTo("xxx")));
   }
 
   @Test
   public void noArguments() {
-    SWTCallRequest msg =
-        this.factory.createCallRequest(new SWTObjectId(1), "xxx");
+    SWTCallRequest msg = this.factory.createCallRequest(1, "xxx");
     assertThat(msg.getArguments().length, is(0));
   }
 
@@ -86,7 +67,7 @@ public class SWTCallRequestTest extends AbstractMessageTest {
   public void getArguments() {
     Object obj = new Object();
     SWTCallRequest msg = this.factory.createCallRequest(
-        new SWTObjectId(1), "xxx", "foo", 4711, obj);
+        1, "xxx", "foo", 4711, obj);
 
     assertThat(msg.getArguments().length, is(3));
     assertThat(msg.getArguments()[0], is(instanceOf(String.class)));

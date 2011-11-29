@@ -3,7 +3,7 @@ package de.robind.swt.msg;
 /**
  * Message requests the invocation of a mathod.
  * <p>
- * The object is identified by the {@link #getDestinationObject() id}. The
+ * The object is identified by the {@link #getObjId() id}. The
  * {@link #getMethod()}-method is invoked with the given
  * {@link #getArguments() arguments}.
  *
@@ -15,9 +15,8 @@ public interface SWTCallRequest extends SWTRequest {
    * be invoked.
    *
    * @return Object-id of destination object
-   * TODO Maybe it is enough to specify an int here.
    */
-  SWTObjectId getDestinationObject();
+  int getObjId();
 
   /**
    * Returns the method-name which should be invoked on the

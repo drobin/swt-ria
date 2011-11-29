@@ -7,7 +7,6 @@ import org.eclipse.swt.server.Singleton;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
-import de.robind.swt.msg.SWTObjectId;
 
 /**
  * TODO Needs to be implemented!!
@@ -67,7 +66,7 @@ public class Composite extends Scrollable {
 
     // TODO Evaluate the response
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest callRequest = factory.createCallRequest(new SWTObjectId(getId()), "setLayout", layout.getId());
+    SWTCallRequest callRequest = factory.createCallRequest(getId(), "setLayout", layout.getId());
     getDisplay().sendMessage(callRequest);
 
     this.layout = layout;

@@ -82,7 +82,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
     if (msg instanceof SWTCallRequest) {
       SWTCallRequest request = (SWTCallRequest)msg;
 
-      buffer.writeInt(request.getDestinationObject().getId());
+      buffer.writeInt(request.getObjId());
       SWTProtocol.writeString(buffer, request.getMethod());
       buffer.writeByte(request.getArguments().length);
 
@@ -111,10 +111,10 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       SWTProtocol.writeBoolean(buffer, request.enable());
 
       return (SWTProtocol.OP_REG);
-    } else {
-      throw new SWTProtocolException(
-          "Request not supported: " + msg.getClass().getName());
     }
+
+    throw new SWTProtocolException(
+        "Request not supported: " + msg.getClass().getName());
   }
 
   /**
@@ -140,9 +140,9 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       return (SWTProtocol.OP_NEW);
     } else if (msg instanceof SWTRegResponse) {
       return (SWTProtocol.OP_REG);
-    } else {
-      throw new SWTProtocolException(
-          "Response not supported: " + msg.getClass().getName());
     }
+
+    throw new SWTProtocolException(
+        "Response not supported: " + msg.getClass().getName());
   }
 }

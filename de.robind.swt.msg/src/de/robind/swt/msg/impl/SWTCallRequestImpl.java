@@ -3,7 +3,6 @@ package de.robind.swt.msg.impl;
 import java.util.Arrays;
 
 import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTObjectId;
 
 /**
  * A message for the {@link SWTProtocol#OP_CALL}-operation of type
@@ -12,23 +11,23 @@ import de.robind.swt.msg.SWTObjectId;
  * @author Robin Doer
  */
 public class SWTCallRequestImpl implements SWTCallRequest {
-  private SWTObjectId destObj;
+  private int objId;
   private String method;
   private Object arguments[];
 
-  public SWTCallRequestImpl(SWTObjectId destObj, String method,
+  public SWTCallRequestImpl(int objId, String method,
       Object... arguments) {
 
-    this.destObj = destObj;
+    this.objId = objId;
     this.method = method;
     this.arguments = arguments;
   }
 
   /* (non-Javadoc)
-   * @see de.robind.swt.msg.SWTCallRequest#getDestinationObject()
+   * @see de.robind.swt.msg.SWTCallRequest#getObjId()
    */
-  public SWTObjectId getDestinationObject() {
-    return (this.destObj);
+  public int getObjId() {
+    return (this.objId);
   }
 
   /* (non-Javadoc)
@@ -50,7 +49,7 @@ public class SWTCallRequestImpl implements SWTCallRequest {
    */
   @Override
   public String toString() {
-    return (getClass().getSimpleName() + "(" + getDestinationObject() + ", " +
+    return (getClass().getSimpleName() + "(" + getObjId() + ", " +
         getMethod() + "," + Arrays.toString(getArguments()) + ")");
   }
 }

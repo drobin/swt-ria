@@ -53,7 +53,7 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
     SWTCallRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.getDestinationObject().getId(), is(4711));
+    assertThat(msg.getObjId(), is(4711));
     assertThat(msg.getMethod(), is(equalTo("foo")));
     assertThat(msg.getArguments().length, is(0));
   }
@@ -70,7 +70,7 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
     SWTCallRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.getDestinationObject().getId(), is(4711));
+    assertThat(msg.getObjId(), is(4711));
     assertThat(msg.getMethod(), is(equalTo("foo")));
     assertThat(msg.getArguments().length, is(2));
     assertThat((Integer)msg.getArguments()[0], is(4711));

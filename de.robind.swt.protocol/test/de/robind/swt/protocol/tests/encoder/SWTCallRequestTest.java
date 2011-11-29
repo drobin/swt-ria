@@ -8,7 +8,6 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.junit.Test;
 
 import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.protocol.SWTProtocol;
 
 public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
@@ -18,8 +17,7 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
 
   @Test
   public void noArguments() throws Exception {
-    SWTCallRequest msg =
-        this.factory.createCallRequest(new SWTObjectId(4711), "foo");
+    SWTCallRequest msg = this.factory.createCallRequest(4711, "foo");
 
     ChannelBuffer buffer = encodeMessage(msg, 10);
     assertThat(buffer.readInt(), is(4711));
@@ -30,7 +28,7 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
   @Test
   public void withArguments() throws Exception {
     SWTCallRequest msg =
-        this.factory.createCallRequest(new SWTObjectId(4711), "foo", 1, true);
+        this.factory.createCallRequest(4711, "foo", 1, true);
 
     ChannelBuffer buffer = encodeMessage(msg, 17);
     assertThat(buffer.readInt(), is(4711));

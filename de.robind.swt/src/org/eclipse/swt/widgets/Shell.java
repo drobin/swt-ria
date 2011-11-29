@@ -210,7 +210,7 @@ public class Shell extends Decorations {
   public void open() throws SWTException {
     // TODO Evaluate the response
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(new SWTObjectId(getId()), "open");
+    SWTCallRequest request = factory.createCallRequest(getId(), "open");
     getDisplay().sendMessage(request);
   }
 

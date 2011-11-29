@@ -159,7 +159,7 @@ public class SWTMessageDecoder extends FrameDecoder {
 
       return (this.factory.createNewRequest(objId, objClass, args));
     } else if (operation == SWTProtocol.OP_CALL) {
-      int destObj = buffer.readInt();
+      int objId = buffer.readInt();
       String method = SWTProtocol.readString(buffer);
       byte numArgs = buffer.readByte();
 
@@ -177,8 +177,7 @@ public class SWTMessageDecoder extends FrameDecoder {
         args[i] = SWTProtocol.readArgument(buffer);
       }
 
-      return (this.factory.createCallRequest(
-          new SWTObjectId(destObj), method, args));
+      return (this.factory.createCallRequest(objId, method, args));
     } else if (operation == SWTProtocol.OP_REG) {
       int objId = buffer.readInt();
       int eventType = buffer.readInt();
