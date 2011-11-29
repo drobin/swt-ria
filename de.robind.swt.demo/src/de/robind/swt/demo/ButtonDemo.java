@@ -16,15 +16,14 @@ public class ButtonDemo {
     Shell shell = new Shell(display);
     shell.setText("Button Demo");
 
-    GridLayout layout = new GridLayout();
-    layout.numColumns = 2;
+    GridLayout layout = new GridLayout(2, false);
     shell.setLayout(layout);
 
     Button button = new Button (shell, SWT.PUSH);
     button.setText("Click me");
     button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 
-    Label label = new Label(shell, SWT.BORDER);
+    Label label = new Label(shell, SWT.LEAD);
     label.setText("# of clicks:");
     label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 
