@@ -386,7 +386,7 @@ public class GridData extends LayoutData {
    */
   public GridData() {
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId().getId(), getClass());
+    this.createRequest = factory.createNewRequest(getId(), getClass());
   }
 
   /**
@@ -396,8 +396,7 @@ public class GridData extends LayoutData {
    */
   public GridData(int style) {
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(
-        getId().getId(), getClass(), style);
+    this.createRequest = factory.createNewRequest(getId(), getClass(), style);
 
     if ((style & VERTICAL_ALIGN_BEGINNING) != 0) {
       verticalAlignment = BEGINNING;
@@ -445,8 +444,8 @@ public class GridData extends LayoutData {
    */
   public GridData(int width, int height) {
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(
-        getId().getId(), getClass(), width, height);
+    this.createRequest = factory.createNewRequest(getId(), getClass(),
+        width, height);
 
     this.widthHint = width;
     this.heightHint = height;
@@ -497,7 +496,7 @@ public class GridData extends LayoutData {
       int horizontalSpan, int verticalSpan) {
 
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId().getId(), getClass(),
+    this.createRequest = factory.createNewRequest(getId(), getClass(),
         horizontalAlignment, verticalAlignment,
         grabExcessHorizontalSpace, grabExcessVerticalSpace,
         horizontalSpan, verticalSpan);

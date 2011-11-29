@@ -210,7 +210,7 @@ public class Shell extends Decorations {
   public void open() throws SWTException {
     // TODO Evaluate the response
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(getId(), "open");
+    SWTCallRequest request = factory.createCallRequest(new SWTObjectId(getId()), "open");
     getDisplay().sendMessage(request);
   }
 
@@ -221,10 +221,10 @@ public class Shell extends Decorations {
   protected SWTNewRequest createNewRequest() {
     // TODO Pass parent Display to ctor
     SWTObjectId displayId =
-        getDisplay() != null ? getDisplay().getId() : SWTObjectId.undefined();
+        getDisplay() != null ? new SWTObjectId(getDisplay().getId()) : SWTObjectId.undefined();
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTNewRequest request = factory.createNewRequest(
-        getId().getId(), Shell.class, displayId);
+    SWTNewRequest request = factory.createNewRequest(getId(),
+        Shell.class, displayId);
     return (request);
   }
 

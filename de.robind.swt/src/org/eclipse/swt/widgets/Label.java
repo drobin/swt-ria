@@ -6,6 +6,7 @@ import org.eclipse.swt.server.Singleton;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
+import de.robind.swt.msg.SWTObjectId;
 
 /**
  * Instances of this class represent a non-selectable user interface objec
@@ -100,7 +101,7 @@ public class Label extends Control {
 
     // TODO Evaluate answer
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
+    SWTCallRequest request = factory.createCallRequest(new SWTObjectId(getId()), "setText", string);
     getDisplay().sendMessage(request);
 
     this.text = string;

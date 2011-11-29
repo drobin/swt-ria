@@ -6,6 +6,7 @@ import org.eclipse.swt.server.Singleton;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
+import de.robind.swt.msg.SWTObjectId;
 
 /**
  * TODO Needs to be implemented!!
@@ -71,7 +72,7 @@ public class Text extends Scrollable {
 
     // TODO Evaluate answers
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
+    SWTCallRequest request = factory.createCallRequest(new SWTObjectId(getId()), "setText", string);
     getDisplay().sendMessage(request);
 
     this.text = string;

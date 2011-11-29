@@ -109,7 +109,7 @@ public class GridLayout extends Layout {
    */
   public GridLayout() {
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId().getId(), getClass());
+    this.createRequest = factory.createNewRequest(getId(), getClass());
   }
 
   /**
@@ -127,7 +127,7 @@ public class GridLayout extends Layout {
     this.makeColumnsEqualWidth = makeColumnsEqualWidth;
 
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId().getId(), getClass(),
+    this.createRequest = factory.createNewRequest(getId(), getClass(),
         numColumns, makeColumnsEqualWidth);
   }
 

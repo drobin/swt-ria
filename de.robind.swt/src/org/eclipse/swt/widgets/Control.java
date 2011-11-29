@@ -9,6 +9,7 @@ import org.eclipse.swt.server.Singleton;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
+import de.robind.swt.msg.SWTObjectId;
 
 /**
  * TODO Needs to be implemented!!
@@ -74,7 +75,7 @@ public abstract class Control extends Widget implements Drawable {
 
     // TODO Evaluate the response
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest callRequest = factory.createCallRequest(getId(), "setLayoutData", data.getId());
+    SWTCallRequest callRequest = factory.createCallRequest(new SWTObjectId(getId()), "setLayoutData", data.getId());
     getDisplay().sendMessage(callRequest);
 
     this.layoutData = layoutData;

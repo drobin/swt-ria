@@ -331,10 +331,10 @@ public class Widget extends SWTObject {
    */
   protected SWTNewRequest createNewRequest() {
     SWTObjectId parentId =
-        (this.parent != null) ? this.parent.getId() : SWTObjectId.undefined();
+        (this.parent != null) ? new SWTObjectId(parent.getId()) : SWTObjectId.undefined();
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTNewRequest request = factory.createNewRequest
-        (getId().getId(), getClass(), parentId, this.style);
+    SWTNewRequest request = factory.createNewRequest(getId(), getClass(),
+        parentId, this.style);
     return (request);
   }
 

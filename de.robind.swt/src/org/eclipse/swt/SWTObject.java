@@ -1,6 +1,5 @@
 package org.eclipse.swt;
 
-import de.robind.swt.msg.SWTObjectId;
 
 
 /**
@@ -16,10 +15,10 @@ public class SWTObject {
    */
   private static int nextId = 0;
 
-  private SWTObjectId id;
+  private int id;
 
   protected SWTObject() {
-    this.id = new SWTObjectId(generateId());
+    this.id = generateId();
   }
 
   /**
@@ -27,7 +26,7 @@ public class SWTObject {
    *
    * @return The id of the object
    */
-  public SWTObjectId getId() {
+  public int getId() {
     return (this.id);
   }
 

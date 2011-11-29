@@ -38,7 +38,7 @@ public class Display extends Device {
 
     // TODO Evaluate the response
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTNewRequest request = factory.createNewRequest(getId().getId(), Display.class);
+    SWTNewRequest request = factory.createNewRequest(getId(), Display.class);
     sendMessage(request);
   }
 

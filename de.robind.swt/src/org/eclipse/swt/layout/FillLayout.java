@@ -49,6 +49,6 @@ public class FillLayout extends Layout {
    */
   protected SWTNewRequest getNewRequest() {
     SWTMessageFactory factory = Singleton.getMessageFactory();
-    return (factory.createNewRequest(getId().getId(), getClass(), type));
+    return (factory.createNewRequest(getId(), getClass(), type));
   }
 }
