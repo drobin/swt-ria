@@ -14,48 +14,30 @@ import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
-public class SWTCallResponseTest {
+public class SWTCallResponseTest extends AbstractMessageTest {
   @Test
   public void isSWTMessage() {
-    SWTCallResponse msg = new SWTCallResponse(0);
+    SWTCallResponse msg = this.factory.createCallResponse(0);
     assertThat(msg, is(instanceOf(SWTMessage.class)));
   }
 
   @Test
   public void isSWTResponse() {
-    SWTCallResponse msg = new SWTCallResponse(0);
+    SWTCallResponse msg = this.factory.createCallResponse(0);
     assertThat(msg, is(instanceOf(SWTResponse.class)));
     assertThat(msg, is(not(instanceOf(SWTRequest.class))));
   }
 
-  @Test(expected = NullPointerException.class)
-  public void nullResult() {
-    new SWTCallResponse(null);
-  }
-
   @Test
-  public void voidResult() {
-    SWTCallResponse msg = SWTCallResponse.voidResult();
-    assertThat(msg.isVoid(), is(true));
-    assertThat(msg.isException(), is(false));
+  public void nullResult() {
+    SWTCallResponse msg = this.factory.createCallResponse(null);
     assertThat(msg.getResult(), is(nullValue()));
   }
 
   @Test
-  public void exceptionResult() {
-    Object exc = new NullPointerException();
-    SWTCallResponse msg = new SWTCallResponse(exc);
-    assertThat(msg.isVoid(), is(false));
-    assertThat(msg.isException(), is(true));
-    assertThat(msg.getResult(), is(sameInstance(exc)));
-  }
-
-  @Test
-  public void regularResult() {
+  public void nonNullResult() {
     Object result = 4711;
-    SWTCallResponse msg = new SWTCallResponse(result);
-    assertThat(msg.isVoid(), is(false));
-    assertThat(msg.isException(), is(false));
+    SWTCallResponse msg = this.factory.createCallResponse(result);
     assertThat(msg.getResult(), is(sameInstance(result)));
   }
 }

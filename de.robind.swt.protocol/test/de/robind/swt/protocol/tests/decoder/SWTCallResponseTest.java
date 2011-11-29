@@ -1,6 +1,7 @@
 package de.robind.swt.protocol.tests.decoder;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -23,7 +24,7 @@ public class SWTCallResponseTest extends AbstractDecoderTest<SWTCallResponse> {
     SWTCallResponse msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.isVoid(), is(true));
+    assertThat(msg.getResult(), is(nullValue()));
   }
 
   @Test
@@ -34,7 +35,6 @@ public class SWTCallResponseTest extends AbstractDecoderTest<SWTCallResponse> {
     SWTCallResponse msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.isVoid(), is(false));
     assertThat((Integer)msg.getResult(), is(4711));
   }
 

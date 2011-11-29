@@ -131,7 +131,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
     if (msg instanceof SWTCallResponse) {
       SWTCallResponse response = (SWTCallResponse)msg;
 
-      if (!response.isVoid()) {
+      if (response.getResult() != null) {
         SWTProtocol.writeArgument(buffer, response.getResult());
       }
 

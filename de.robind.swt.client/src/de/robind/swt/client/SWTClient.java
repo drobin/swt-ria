@@ -13,7 +13,6 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
@@ -62,7 +61,7 @@ public class SWTClient {
           objMap.put(((SWTNewRequest)request).getId(), display);
           response = SWTNewResponse.success();
         } else {
-          response = handleRequest(objMap, request);
+          response = handleRequest(messageFactory, objMap, request);
         }
 
         Channels.write(future.getChannel(), response);
@@ -76,13 +75,13 @@ public class SWTClient {
     channelFactory.releaseExternalResources();
   }
 
-  private static SWTResponse handleRequest(
+  private static SWTResponse handleRequest(SWTMessageFactory factory,
       SWTObjectMap objMap, SWTRequest request) {
 
     if (request instanceof SWTNewRequest) {
       return (handleNewRequest(objMap, (SWTNewRequest)request));
     } else if (request instanceof SWTCallRequest) {
-      return (handleCallRequest(objMap, (SWTCallRequest)request));
+      return (handleCallRequest(factory, objMap, (SWTCallRequest)request));
     } else {
       return (null);
     }
@@ -105,7 +104,7 @@ public class SWTClient {
     }
   }
 
-  private static SWTCallResponse handleCallRequest(
+  private static SWTResponse handleCallRequest(SWTMessageFactory factory,
       SWTObjectMap objMap, SWTCallRequest request) {
 
     try {
@@ -113,15 +112,11 @@ public class SWTClient {
           request.getDestinationObject().getId(),
           request.getMethod(), request.getArguments());
 
-      if (result == null) {
-        return (SWTCallResponse.voidResult());
-      } else {
-        return (new SWTCallResponse(result));
-      }
+      return (factory.createCallResponse(result));
     } catch (InvocationTargetException e) {
-      return (new SWTCallResponse(e.getCause()));
+      return (factory.createException(e.getCause()));
     } catch (Exception e) {
-      return (new SWTCallResponse(e));
+      return (factory.createException(e));
     }
   }
 }

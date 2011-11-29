@@ -16,13 +16,13 @@ public class SWTCallResponseTest extends AbstractEncoderTest<SWTCallResponse> {
 
   @Test
   public void voidResult() {
-    SWTCallResponse msg = SWTCallResponse.voidResult();
+    SWTCallResponse msg = this.factory.createCallResponse(null);
     encodeMessage(msg, 0);
   }
 
   @Test
   public void withResult() throws Exception {
-    SWTCallResponse msg = new SWTCallResponse(4711);
+    SWTCallResponse msg = this.factory.createCallResponse(4711);
 
     ChannelBuffer buffer = encodeMessage(msg, 5);
     assertThat((Integer)SWTProtocol.readArgument(buffer), is(4711));

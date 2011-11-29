@@ -1,6 +1,7 @@
 package de.robind.swt.msg;
 
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
+import de.robind.swt.msg.impl.SWTCallResponseImpl;
 import de.robind.swt.msg.impl.SWTExceptionImpl;
 import de.robind.swt.msg.impl.SWTNewRequestImpl;
 import de.robind.swt.msg.impl.SWTRegRequestImpl;
@@ -42,6 +43,15 @@ public class SWTMessageFactory {
     }
 
     return (new SWTCallRequestImpl(destObj, method, arguments));
+  }
+
+  /**
+   * Returns a new {@link SWTCallResponse}-instance
+   *
+   * @param result The result of the method-invocation
+   */
+  public SWTCallResponse createCallResponse(Object result) {
+    return (new SWTCallResponseImpl(result));
   }
 
   /**
