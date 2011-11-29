@@ -137,13 +137,6 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
 
       return (SWTProtocol.OP_CALL);
     } else if (msg instanceof SWTNewResponse) {
-      SWTNewResponse response = (SWTNewResponse)msg;
-
-      if (!response.isSuccessful()) {
-        SWTProtocol.writeString(buffer, response.getExceptionClass());
-        SWTProtocol.writeString(buffer, response.getExceptionMessage());
-      }
-
       return (SWTProtocol.OP_NEW);
     } else if (msg instanceof SWTRegResponse) {
       SWTRegResponse response = (SWTRegResponse)msg;

@@ -15,7 +15,6 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
-import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -59,7 +58,7 @@ public class SWTClient {
           // Creating a Display is a special task because you already have a
           // Display. But we assign the object-id to our display.
           objMap.put(((SWTNewRequest)request).getId(), display);
-          response = SWTNewResponse.success();
+          response = messageFactory.createNewResponse();
         } else {
           response = handleRequest(messageFactory, objMap, request);
         }
@@ -79,7 +78,7 @@ public class SWTClient {
       SWTObjectMap objMap, SWTRequest request) {
 
     if (request instanceof SWTNewRequest) {
-      return (handleNewRequest(objMap, (SWTNewRequest)request));
+      return (handleNewRequest(factory, objMap, (SWTNewRequest)request));
     } else if (request instanceof SWTCallRequest) {
       return (handleCallRequest(factory, objMap, (SWTCallRequest)request));
     } else {
@@ -87,20 +86,18 @@ public class SWTClient {
     }
   }
 
-  private static SWTNewResponse handleNewRequest(
+  private static SWTResponse handleNewRequest(SWTMessageFactory factory,
       SWTObjectMap objMap, SWTNewRequest request) {
 
     try {
       SWTObject.createObject(objMap, request.getId(), request.getObjClass(),
           request.getArguments());
 
-      return (SWTNewResponse.success());
+      return (factory.createNewResponse());
     } catch (InvocationTargetException e) {
-      Throwable cause = e.getCause();
-      return (new SWTNewResponse(
-          cause.getClass().getName(), cause.getMessage()));
+      return (factory.createException(e.getCause()));
     } catch (Exception e) {
-      return (new SWTNewResponse(e.getClass().getName(), e.getMessage()));
+      return factory.createException(e);
     }
   }
 

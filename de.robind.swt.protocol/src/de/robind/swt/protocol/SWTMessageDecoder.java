@@ -7,7 +7,6 @@ import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRegResponse;
 import de.robind.swt.msg.SWTRequest;
@@ -207,18 +206,7 @@ public class SWTMessageDecoder extends FrameDecoder {
           throws SWTProtocolException {
 
     if (operation == SWTProtocol.OP_NEW) {
-      if (payloadLength > 0) {
-        String className = SWTProtocol.readString(buffer);
-        String message = SWTProtocol.readString(buffer);
-
-        if (className.length() == 0) {
-          throw new SWTProtocolException("Class-name cannot be empty");
-        }
-
-        return (new SWTNewResponse(className, message));
-      } else {
-        return (SWTNewResponse.success());
-      }
+      return (this.factory.createNewResponse());
     } else if (operation == SWTProtocol.OP_CALL) {
       if (payloadLength > 0) {
         Object result = SWTProtocol.readArgument(buffer);
