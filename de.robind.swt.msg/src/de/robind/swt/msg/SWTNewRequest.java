@@ -17,7 +17,7 @@ public interface SWTNewRequest extends SWTRequest {
    *
    * @return The object-id
    */
-  int getId();
+  int getObjId();
 
   /**
    * Returns the class to be instanciated.

@@ -68,7 +68,7 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
     SWTNewRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.getId(), is(4711));
+    assertThat(msg.getObjId(), is(4711));
     assertThat(msg.getObjClass().getName(), is(equalTo("java.lang.Object")));
     assertThat(msg.getArguments().length, is(0));
   }
@@ -85,7 +85,7 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
     SWTNewRequest msg = decodeMessage(buffer);
 
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.getId(), is(4711));
+    assertThat(msg.getObjId(), is(4711));
     assertThat(msg.getObjClass().getName(), is(equalTo("java.lang.Object")));
     assertThat(msg.getArguments().length, is(2));
     assertThat((Integer)msg.getArguments()[0], is(4711));

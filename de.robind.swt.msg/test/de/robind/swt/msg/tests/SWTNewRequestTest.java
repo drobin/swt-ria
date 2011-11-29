@@ -40,7 +40,7 @@ public class SWTNewRequestTest extends AbstractMessageTest {
   @Test
   public void getId() {
     SWTNewRequest msg = this.factory.createNewRequest(4711, Object.class);
-    assertThat(msg.getId(), is(4711));
+    assertThat(msg.getObjId(), is(4711));
   }
 
   @Test

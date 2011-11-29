@@ -94,7 +94,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
     } else if (msg instanceof SWTNewRequest) {
       SWTNewRequest request = (SWTNewRequest)msg;
 
-      buffer.writeInt(request.getId());
+      buffer.writeInt(request.getObjId());
       SWTProtocol.writeString(buffer, request.getObjClass().getName());
       buffer.writeByte(request.getArguments().length);
 

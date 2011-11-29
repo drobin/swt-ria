@@ -57,7 +57,7 @@ public class SWTClient {
 
           // Creating a Display is a special task because you already have a
           // Display. But we assign the object-id to our display.
-          objMap.put(((SWTNewRequest)request).getId(), display);
+          objMap.put(((SWTNewRequest)request).getObjId(), display);
           response = messageFactory.createNewResponse();
         } else {
           response = handleRequest(messageFactory, objMap, request);
@@ -90,7 +90,7 @@ public class SWTClient {
       SWTObjectMap objMap, SWTNewRequest request) {
 
     try {
-      SWTObject.createObject(objMap, request.getId(), request.getObjClass(),
+      SWTObject.createObject(objMap, request.getObjId(), request.getObjClass(),
           request.getArguments());
 
       return (factory.createNewResponse());

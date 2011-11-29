@@ -21,9 +21,9 @@ public class SWTNewRequestImpl implements SWTNewRequest {
   }
 
   /* (non-Javadoc)
-   * @see de.robind.swt.msg.SWTNewRequest#getId()
+   * @see de.robind.swt.msg.SWTNewRequest#getObjId()
    */
-  public int getId() {
+  public int getObjId() {
     return (this.objId);
   }
 
@@ -46,7 +46,7 @@ public class SWTNewRequestImpl implements SWTNewRequest {
    */
   @Override
   public String toString() {
-    return (getClass().getSimpleName() + "(" + getId() + ", " +
+    return (getClass().getSimpleName() + "(" + getObjId() + ", " +
         getObjClass().getName() + "," + Arrays.toString(getArguments()) + ")");
   }
 }
