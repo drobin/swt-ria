@@ -29,6 +29,7 @@ public class SWTExceptionImpl implements SWTException {
    */
   @Override
   public String toString() {
-    return "SWTExceptionImpl [cause=" + cause.getClass().getName() + "]";
+    return "SWTExceptionImpl [cause=" + cause.getClass().getName() +
+        ", msg=" + cause.getMessage() + "]";
   }
 }
