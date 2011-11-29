@@ -13,7 +13,6 @@ import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
-import de.robind.swt.msg.SWTTrap;
 
 public class SWTCallResponseTest {
   @Test
@@ -27,7 +26,6 @@ public class SWTCallResponseTest {
     SWTCallResponse msg = new SWTCallResponse(0);
     assertThat(msg, is(instanceOf(SWTResponse.class)));
     assertThat(msg, is(not(instanceOf(SWTRequest.class))));
-    assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
   @Test(expected = NullPointerException.class)

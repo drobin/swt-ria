@@ -14,7 +14,6 @@ import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
-import de.robind.swt.msg.SWTTrap;
 
 public class SWTNewRequestTest extends AbstractMessageTest {
   @Test
@@ -28,7 +27,6 @@ public class SWTNewRequestTest extends AbstractMessageTest {
     SWTNewRequest msg = this.factory.createNewRequest(0, Object.class);
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
-    assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
   @Test

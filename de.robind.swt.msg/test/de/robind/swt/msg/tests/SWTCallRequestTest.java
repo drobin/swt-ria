@@ -14,7 +14,6 @@ import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
-import de.robind.swt.msg.SWTTrap;
 
 public class SWTCallRequestTest extends AbstractMessageTest {
   @Test
@@ -28,7 +27,6 @@ public class SWTCallRequestTest extends AbstractMessageTest {
     SWTCallRequest msg = this.factory.createCallRequest(new SWTObjectId(1), "xxx");
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
-    assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
   @Test

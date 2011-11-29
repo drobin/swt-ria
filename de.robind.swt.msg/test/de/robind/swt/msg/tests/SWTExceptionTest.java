@@ -13,7 +13,6 @@ import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
-import de.robind.swt.msg.SWTTrap;
 
 public class SWTExceptionTest {
   @Rule
@@ -30,7 +29,6 @@ public class SWTExceptionTest {
     SWTException msg = new SWTException(new Exception());
     assertThat(msg, is(instanceOf(SWTResponse.class)));
     assertThat(msg, is(not(instanceOf(SWTRequest.class))));
-    assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
   @Test

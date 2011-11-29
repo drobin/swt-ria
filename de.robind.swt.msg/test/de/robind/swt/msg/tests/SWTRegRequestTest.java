@@ -13,7 +13,6 @@ import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRegRequest;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
-import de.robind.swt.msg.SWTTrap;
 
 public class SWTRegRequestTest extends AbstractMessageTest {
   @Test
@@ -29,7 +28,6 @@ public class SWTRegRequestTest extends AbstractMessageTest {
         this.factory.createRegRequest(SWTObjectId.undefined(), 0, true);
     assertThat(msg, is(instanceOf(SWTRequest.class)));
     assertThat(msg, is(not(instanceOf(SWTResponse.class))));
-    assertThat(msg, is(not(instanceOf(SWTTrap.class))));
   }
 
   @Test
