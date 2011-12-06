@@ -322,7 +322,7 @@ public class Widget extends SWTObject {
    * to the constructor.
    */
   protected void createObject() {
-    getDisplay().createObject(getId(), getClass(), this.parent);
+    getDisplay().createObject(getId(), getClass(), this.parent, this.style);
   }
 
   /**
