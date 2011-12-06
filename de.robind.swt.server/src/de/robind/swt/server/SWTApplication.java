@@ -47,9 +47,11 @@ public class SWTApplication extends Thread {
   /**
    * Creates a new {@link SWTApplication}.
    *
+   * @param messageFactory the message-factory used by the application
    * @param channel The related channel
    */
-  public SWTApplication(Channel channel) {
+  public SWTApplication(SWTMessageFactory messageFactory, Channel channel) {
+    this.messageFactory = messageFactory;
     this.channel = channel;
   }
 

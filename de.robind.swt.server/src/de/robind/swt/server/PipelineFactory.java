@@ -25,7 +25,7 @@ public class PipelineFactory implements ChannelPipelineFactory {
 
     pipeline.addLast("encoder", new SWTMessageEncoder());
     pipeline.addLast("decoder", new SWTMessageDecoder(factory));
-    pipeline.addLast("application", new SWTServerHandler());
+    pipeline.addLast("application", new SWTServerHandler(factory));
 
     return (pipeline);
   }

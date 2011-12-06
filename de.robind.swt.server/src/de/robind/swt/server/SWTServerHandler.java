@@ -8,6 +8,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
 import de.robind.swt.msg.SWTMessage;
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTResponse;
 
 /**
@@ -21,6 +22,20 @@ public class SWTServerHandler extends SimpleChannelHandler {
    */
   private static final Logger logger = Logger.getLogger(SWTServerHandler.class);
 
+  /**
+   * The message-factory used to create messages.
+   */
+  private SWTMessageFactory messageFactory = null;
+
+  /**
+   * Creates a new {@link SWTServerHandler}.
+   *
+   * @param messageFactory The message-factory used by the applications
+   */
+  public SWTServerHandler(SWTMessageFactory messageFactory) {
+    this.messageFactory = messageFactory;
+  }
+
   /* (non-Javadoc)
    * @see org.jboss.netty.channel.SimpleChannelHandler#channelConnected(org.jboss.netty.channel.ChannelHandlerContext, org.jboss.netty.channel.ChannelStateEvent)
    */
@@ -30,7 +45,8 @@ public class SWTServerHandler extends SimpleChannelHandler {
 
     logger.debug("Connected: " + ctx.getChannel());
 
-    SWTApplication application = new SWTApplication(ctx.getChannel());
+    SWTApplication application =
+        new SWTApplication(this.messageFactory, ctx.getChannel());
     application.start();
 
     ctx.setAttachment(application);
