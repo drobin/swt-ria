@@ -2,11 +2,10 @@ package org.eclipse.swt.layout;
 
 import java.awt.Composite;
 
-import org.eclipse.swt.server.Singleton;
+import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DisplayPool;
+import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Layout;
-
-import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewRequest;
 
 /**
  * Instances of this class lay out the control children of a {@link Composite}
@@ -35,9 +34,10 @@ import de.robind.swt.msg.SWTNewRequest;
  */
 public class GridLayout extends Layout {
   /**
-   * Message used to create the layout.
+   * Arguments passed to the creation-message.
+   * @see #createLayout(Key)
    */
-  private SWTNewRequest createRequest = null;
+  private Object createArguments[] = {};
 
   /**
    * horizontalSpacing specifies the number of pixels between the right edge of
@@ -108,8 +108,6 @@ public class GridLayout extends Layout {
    * Constructs a new instance of this class.
    */
   public GridLayout() {
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId(), getClass());
   }
 
   /**
@@ -126,17 +124,16 @@ public class GridLayout extends Layout {
     this.numColumns = numColumns;
     this.makeColumnsEqualWidth = makeColumnsEqualWidth;
 
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId(), getClass(),
-        numColumns, makeColumnsEqualWidth);
+    this.createArguments = new Object[] {numColumns, makeColumnsEqualWidth};
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.widgets.Layout#getNewRequest()
+   * @see org.eclipse.swt.widgets.Layout#createLayout(org.eclipse.swt.server.Key)
    */
   @Override
-  protected SWTNewRequest getNewRequest() {
-    return (this.createRequest);
+  protected void createLayout(Key key) throws Throwable {
+    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    clientTasks.createObject(key, getId(), getClass(), createArguments);
   }
 
   /**

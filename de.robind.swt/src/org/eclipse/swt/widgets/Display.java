@@ -7,12 +7,6 @@ import org.eclipse.swt.graphics.DeviceData;
 import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.eclipse.swt.server.Singleton;
-
-import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewRequest;
-import de.robind.swt.msg.SWTRequest;
-import de.robind.swt.msg.SWTResponse;
 
 /**
  * TODO Needs to be implemented!!
@@ -36,10 +30,13 @@ public class Display extends Device {
   public Display(DeviceData data) {
     DisplayPool.getInstance().addDisplay(this);
 
-    // TODO Evaluate the response
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTNewRequest request = factory.createNewRequest(getId(), Display.class);
-    sendMessage(request);
+    try {
+      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+      clientTasks.createObject(getKey(), getId(), getClass());
+    } catch (Throwable t) {
+      // TODO What should you do with the exception?
+      throw new Error(t);
+    }
   }
 
   /**
@@ -102,16 +99,45 @@ public class Display extends Device {
     this.key = key;
   }
 
-  /**
-   * Sends a request-message to the client.
-   * <p>
-   * The method blocks until the response arrived.
-   *
-   * @param request The message to be send
-   * @return The answer send back from the client
-   */
-  SWTResponse sendMessage(SWTRequest request) {
-    ClientTasks tasks = DisplayPool.getInstance().getClientTasks();
-    return (tasks.sendRequest(getKey(), request));
+  void createObject(int id, Class<?> objClass, Object... args)
+      throws SWTException {
+
+    try {
+      ClientTasks tasks = DisplayPool.getInstance().getClientTasks();
+      tasks.createObject(getKey(), id, objClass, args);
+    } catch (Throwable t) {
+      // TODO Do you need a special code for the exception?
+      SWTException e = new SWTException();
+      e.throwable = t;
+      throw e;
+    }
+  }
+
+  Object callMethod(int id, String method, Object... args)
+      throws SWTException {
+
+    try {
+      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+      return (clientTasks.callMethod(getKey(), id, method, args));
+    } catch (Throwable t) {
+      // TODO Do you need a special code for the exception?
+      SWTException e = new SWTException();
+      e.throwable = t;
+      throw e;
+    }
+  }
+
+  void registerEvent(int id, int eventType, boolean enable)
+      throws SWTException {
+
+    try {
+      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+      clientTasks.registerEvent(getKey(), id, eventType, enable);
+    } catch (Throwable t) {
+      // TODO Do you need a special code for the exception?
+      SWTException e = new SWTException();
+      e.throwable = t;
+      throw e;
+    }
   }
 }

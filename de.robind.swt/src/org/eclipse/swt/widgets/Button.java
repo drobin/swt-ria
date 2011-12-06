@@ -3,10 +3,6 @@ package org.eclipse.swt.widgets;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.server.Singleton;
-
-import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTMessageFactory;
 
 /**
  * TODO Needs to be implemented!!
@@ -157,9 +153,6 @@ public class Button extends Control {
     // TODO Test for ARROW
     // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
 
-    // TODO Evaluate answer
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
-    getDisplay().sendMessage(request);
+    getDisplay().callMethod(getId(), "setText", string);
   }
 }

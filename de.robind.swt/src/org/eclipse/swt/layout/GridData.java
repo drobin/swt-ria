@@ -1,11 +1,10 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.server.Singleton;
+import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DisplayPool;
+import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
-
-import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewRequest;
 
 /**
  * {@link GridData} is the layout data object associated with
@@ -45,9 +44,10 @@ import de.robind.swt.msg.SWTNewRequest;
  */
 public class GridData extends LayoutData {
   /**
-   * The request-message, that creates an instance of {@link GridData}.
+   * Arguments passed to the creation-message.
+   * @see #createLayout(Key)
    */
-  private SWTNewRequest createRequest = null;
+  private Object createArguments[] = {};
 
   /**
    * Value for horizontalAlignment or verticalAlignment. Position the control
@@ -385,8 +385,6 @@ public class GridData extends LayoutData {
    * Constructs a new instance of GridData using default values.
    */
   public GridData() {
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId(), getClass());
   }
 
   /**
@@ -395,8 +393,7 @@ public class GridData extends LayoutData {
    * @param style
    */
   public GridData(int style) {
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId(), getClass(), style);
+    this.createArguments = new Object[] {style};
 
     if ((style & VERTICAL_ALIGN_BEGINNING) != 0) {
       verticalAlignment = BEGINNING;
@@ -443,10 +440,7 @@ public class GridData extends LayoutData {
    * @param height a minimum height for the row
    */
   public GridData(int width, int height) {
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId(), getClass(),
-        width, height);
-
+    this.createArguments = new Object[] {width, height};
     this.widthHint = width;
     this.heightHint = height;
   }
@@ -495,11 +489,10 @@ public class GridData extends LayoutData {
       boolean grabExcessHorizontalSpace, boolean grabExcessVerticalSpace,
       int horizontalSpan, int verticalSpan) {
 
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    this.createRequest = factory.createNewRequest(getId(), getClass(),
+    this.createArguments = new Object[] {
         horizontalAlignment, verticalAlignment,
         grabExcessHorizontalSpace, grabExcessVerticalSpace,
-        horizontalSpan, verticalSpan);
+        horizontalSpan, verticalSpan};
 
     this.horizontalAlignment = horizontalAlignment;
     this.verticalAlignment = verticalAlignment;
@@ -507,6 +500,15 @@ public class GridData extends LayoutData {
     this.grabExcessVerticalSpace = grabExcessVerticalSpace;
     this.horizontalSpan = horizontalSpan;
     this.verticalSpan = verticalSpan;
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.layout.LayoutData#createLayoutData(org.eclipse.swt.server.Key)
+   */
+  @Override
+  public void createLayoutData(Key key) throws Throwable {
+    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    clientTasks.createObject(key, getId(), getClass(), this.createArguments);
   }
 
   /**
@@ -556,12 +558,5 @@ public class GridData extends LayoutData {
     string = string.trim();
     string += "}";
     return string;
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.layout.LayoutData#getNewRequest()
-   */
-  public SWTNewRequest getNewRequest() {
-    return (this.createRequest);
   }
 }

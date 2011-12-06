@@ -1,11 +1,10 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.server.Singleton;
+import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DisplayPool;
+import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Layout;
-
-import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewRequest;
 
 /**
  * TODO Needs to be implemented!!
@@ -45,10 +44,11 @@ public class FillLayout extends Layout {
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.widgets.Layout#getNewRequest()
+   * @see org.eclipse.swt.widgets.Layout#createLayout(org.eclipse.swt.server.Key)
    */
-  protected SWTNewRequest getNewRequest() {
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    return (factory.createNewRequest(getId(), getClass(), type));
+  @Override
+  protected void createLayout(Key key) throws Throwable {
+    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    clientTasks.createObject(key, getId(), getClass(), type);
   }
 }

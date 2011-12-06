@@ -4,11 +4,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
-import org.eclipse.swt.server.Singleton;
-
-import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewRequest;
+import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DisplayPool;
 
 /**
  * TODO Needs to be implemented!!
@@ -68,14 +65,19 @@ public abstract class Control extends Widget implements Drawable {
 
     LayoutData data = (LayoutData)layoutData;
 
-    // TODO Evaluate the response
-    SWTNewRequest createRequest = data.getNewRequest();
-    getDisplay().sendMessage(createRequest);
+    try {
+      // Create the layout-data
+      data.createLayoutData(getDisplay().getKey());
 
-    // TODO Evaluate the response
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest callRequest = factory.createCallRequest(getId(), "setLayoutData", data.getId());
-    getDisplay().sendMessage(callRequest);
+      // Assign the layout-data to this object
+      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+      clientTasks.callMethod(getDisplay().getKey(), getId(), "setLayoutData", data);
+    } catch (Throwable t) {
+      // TODO Need a special code?
+      SWTException e = new SWTException();
+      e.throwable = t;
+      throw e;
+    }
 
     this.layoutData = layoutData;
   }

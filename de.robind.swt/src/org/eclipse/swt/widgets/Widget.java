@@ -4,11 +4,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.events.TypedListener;
-import org.eclipse.swt.server.Singleton;
-
-import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewRequest;
-import de.robind.swt.msg.SWTObjectId;
 
 /**
  * TODO Needs to be implemented!!
@@ -257,7 +252,7 @@ public class Widget extends SWTObject {
     this.display = display;
 
     if (display != null) {
-      display.sendMessage(createNewRequest());
+      createObject();
     }
   }
 
@@ -319,23 +314,15 @@ public class Widget extends SWTObject {
   }
 
   /**
-   * Creates a new {@link SWTNewRequest}-message.
+   * Creates the {@link Widget} at the client.
    * <p>
    * This method is called by {@link #setDisplay(Display)} to send the
    * creation-request to the client. You can overwrite the method if you need
    * another request-message. For example, you you need other arguments passed
    * to the constructor.
-   *
-   * @return A new {@link SWTNewRequest}, which creates a new instance of the
-   *         class.
    */
-  protected SWTNewRequest createNewRequest() {
-    SWTObjectId parentId =
-        (this.parent != null) ? new SWTObjectId(parent.getId()) : SWTObjectId.undefined();
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTNewRequest request = factory.createNewRequest(getId(), getClass(),
-        parentId, this.style);
-    return (request);
+  protected void createObject() {
+    getDisplay().createObject(getId(), getClass(), this.parent);
   }
 
   /**

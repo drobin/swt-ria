@@ -2,10 +2,6 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.server.Singleton;
-
-import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTMessageFactory;
 
 /**
  * Instances of this class represent a non-selectable user interface objec
@@ -98,10 +94,7 @@ public class Label extends Control {
 
     // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
 
-    // TODO Evaluate answer
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
-    getDisplay().sendMessage(request);
+    getDisplay().callMethod(getId(), "setText", string);
 
     this.text = string;
   }

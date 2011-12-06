@@ -2,10 +2,6 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.server.Singleton;
-
-import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTMessageFactory;
 
 /**
  * TODO Needs to be implemented!!
@@ -69,10 +65,7 @@ public class Text extends Scrollable {
 
     // TODO Check for ERROR_THREAD_INVALID_ACCESS, ERROR_DEVICE_DISPOSED
 
-    // TODO Evaluate answers
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(getId(), "setText", string);
-    getDisplay().sendMessage(request);
+    getDisplay().callMethod(getId(), "setText", string);
 
     this.text = string;
   }

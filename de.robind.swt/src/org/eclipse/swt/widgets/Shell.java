@@ -2,12 +2,6 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.server.Singleton;
-
-import de.robind.swt.msg.SWTCallRequest;
-import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTNewRequest;
-import de.robind.swt.msg.SWTObjectId;
 
 /**
  * TODO Needs to be implemented!!
@@ -208,24 +202,16 @@ public class Shell extends Decorations {
    * TODO Needs to be implemented!!
    */
   public void open() throws SWTException {
-    // TODO Evaluate the response
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTCallRequest request = factory.createCallRequest(getId(), "open");
-    getDisplay().sendMessage(request);
+    getDisplay().callMethod(getId(), "open");
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.widgets.Widget#createNewRequest()
+   * @see org.eclipse.swt.widgets.Widget#createObject()
    */
   @Override
-  protected SWTNewRequest createNewRequest() {
+  protected void createObject() {
     // TODO Pass parent Display to ctor
-    SWTObjectId displayId =
-        getDisplay() != null ? new SWTObjectId(getDisplay().getId()) : SWTObjectId.undefined();
-    SWTMessageFactory factory = Singleton.getMessageFactory();
-    SWTNewRequest request = factory.createNewRequest(getId(),
-        Shell.class, displayId);
-    return (request);
+    getDisplay().createObject(getId(), getClass(), getDisplay());
   }
 
   /* (non-Javadoc)
