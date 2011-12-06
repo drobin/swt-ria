@@ -9,6 +9,7 @@ import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.jboss.netty.channel.Channel;
 
+import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTResponse;
 
 /**
@@ -21,6 +22,11 @@ public class SWTApplication extends Thread {
    * Logger of the class
    */
   private static final Logger logger = Logger.getLogger(SWTApplication.class);
+
+  /**
+   * The message-factory used to create messages.
+   */
+  private SWTMessageFactory messageFactory = null;
 
   /**
    * The channel used to send/receive messages.
@@ -45,6 +51,16 @@ public class SWTApplication extends Thread {
    */
   public SWTApplication(Channel channel) {
     this.channel = channel;
+  }
+
+  /**
+   * Returns the {@link SWTMessageFactory} assigned to the application.
+   * <p>
+   *
+   * @return the message-factory of the application
+   */
+  public SWTMessageFactory getMessageFactory() {
+    return (this.messageFactory);
   }
 
   /**
