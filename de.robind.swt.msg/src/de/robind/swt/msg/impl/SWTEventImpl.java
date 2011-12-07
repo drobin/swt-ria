@@ -8,5 +8,16 @@ import de.robind.swt.msg.SWTEvent;
  * @author Robin Doer
  */
 public class SWTEventImpl implements SWTEvent {
+  private int objId;
 
+  public SWTEventImpl(int objId) {
+    this.objId = objId;
+  }
+
+  /* (non-Javadoc)
+   * @see de.robind.swt.msg.SWTEvent#getObjId()
+   */
+  public int getObjId() {
+    return (this.objId);
+  }
 }

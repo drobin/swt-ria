@@ -118,9 +118,10 @@ public class SWTMessageFactory {
   /**
    * Creates a new {@link SWTEvent}-message.
    *
+   * @param objId The id of the source object
    * @return The new message
    */
-  public SWTEvent createEvent() {
-    return (new SWTEventImpl());
+  public SWTEvent createEvent(int objId) {
+    return (new SWTEventImpl(objId));
   }
 }

@@ -12,7 +12,13 @@ import de.robind.swt.msg.SWTMessage;
 public class SWTEventTest extends AbstractMessageTest {
   @Test
   public void isSWTMessage() {
-    SWTEvent msg = this.factory.createEvent();
+    SWTEvent msg = this.factory.createEvent(0);
     assertThat(msg, is(instanceOf(SWTMessage.class)));
+  }
+
+  @Test
+  public void getId() {
+    SWTEvent msg = this.factory.createEvent(4711);
+    assertThat(msg.getObjId(), is(4711));
   }
 }
