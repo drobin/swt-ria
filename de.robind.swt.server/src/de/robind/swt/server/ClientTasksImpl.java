@@ -11,6 +11,8 @@ import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
 import de.robind.swt.msg.SWTObjectId;
+import de.robind.swt.msg.SWTRegRequest;
+import de.robind.swt.msg.SWTRegResponse;
 import de.robind.swt.msg.SWTResponse;
 
 /**
@@ -75,7 +77,22 @@ public class ClientTasksImpl implements ClientTasks {
   public void registerEvent(Key key, int id, int eventType, boolean enable)
       throws Throwable {
 
-    throw new Error("Needs to be implemented");
+    SWTApplicationKey appKey = (SWTApplicationKey)key;
+    SWTApplication app = appKey.getApplication();
+    SWTRegRequest request = app.getMessageFactory().createRegRequest(
+        id, eventType, enable);
+
+    Channels.write(app.getChannel(), request);
+    SWTResponse response = app.getResponseQueue().take();
+
+    if (response instanceof SWTException) {
+      throw ((SWTException)response).getCause();
+    }
+
+    if (!(response instanceof SWTRegResponse)) {
+      throw new Exception("Illegal response of type " +
+          response.getClass().getName() + " received");
+    }
   }
 
   /**
