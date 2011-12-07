@@ -121,6 +121,13 @@ public class SWTClient {
 
   private static SWTResponse handleRegRequest(SWTMessageFactory factory,
       SWTObjectMap objMap, SWTRegRequest request) {
-    return (factory.createException(new Exception("Needs to be implemented")));
+
+    try {
+      SWTObject.registerEvent(objMap, request.getObjId(),
+          request.getEventType(), request.enable());
+      return (factory.createRegResponse());
+    } catch (Exception e) {
+      return (factory.createException(e));
+    }
   }
 }

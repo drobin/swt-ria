@@ -6,6 +6,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Widget;
 
 import de.robind.swt.msg.SWTObjectId;
 
@@ -81,6 +84,43 @@ public class SWTObject {
     Method method = findMethod(objMap, obj.getClass(), methodName, arguments);
 
     return (method.invoke(obj, arguments));
+  }
+
+  /**
+   * Enables event-handling for an object and a event-type.
+   *
+   * @param objMap The mapping between object-id and object.
+   * @param id The id of the object inside <code>objMap</code>
+   * @param eventType The event-type to be enabled resp. disabled
+   * @param enable If set to <code>true</code>, the event-handling should be
+   *               enabled. If it is set to <code>false</code>, it is disabled.
+   * @throws IllegalArgumentException if the destination object is not a
+   *         {@link Widget}. Only {@link Widget widgets} are receiver of
+   *         events.
+   */
+  public static void registerEvent(SWTObjectMap objMap, int id, int eventType,
+      boolean enable) throws IllegalArgumentException {
+
+    Object obj = objMap.get(id);
+
+    if (!(obj instanceof Widget)) {
+      throw new IllegalArgumentException(
+          "Widget expected, is " + obj.getClass().getName());
+    }
+
+    Widget widget = (Widget)obj;
+
+    if (enable) {
+      widget.addListener(eventType, new Listener() {
+        public void handleEvent(Event event) {
+          System.out.println("Do something");
+        }
+      });
+    } else {
+      for (Listener listener: widget.getListeners(eventType)) {
+        widget.removeListener(eventType, listener);
+      }
+    }
   }
 
   /**
