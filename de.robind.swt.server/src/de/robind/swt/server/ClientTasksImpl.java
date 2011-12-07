@@ -59,13 +59,13 @@ public class ClientTasksImpl implements ClientTasks {
     Channels.write(app.getChannel(), request);
     SWTResponse response = app.getResponseQueue().take();
 
+    if (response instanceof SWTException) {
+      throw ((SWTException)response).getCause();
+    }
+
     if (!(response instanceof SWTCallResponse)) {
       throw new Exception("Illegal response of type " +
           response.getClass().getName() + " received");
-    }
-
-    if (response instanceof SWTException) {
-      throw ((SWTException)response).getCause();
     }
 
     return (((SWTCallResponse)response).getResult());
