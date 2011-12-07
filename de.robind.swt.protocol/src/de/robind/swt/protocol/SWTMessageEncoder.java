@@ -9,6 +9,7 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
+import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTNewRequest;
@@ -52,6 +53,9 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
     } else if (e.getMessage() instanceof SWTResponse) {
       operation = encodeResponseMessage((SWTResponse)e.getMessage(), buffer);
       type = SWTProtocol.TYPE_RSP;
+    } else if (e.getMessage() instanceof SWTEvent) {
+      operation = encodeEventMessage((SWTEvent)e.getMessage(), buffer);
+      type = SWTProtocol.TYPE_EVT;
     } else {
       throw new Error("Should never be reached");
     }
@@ -170,5 +174,21 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
     SWTProtocol.writeString(buffer, message);
 
     return (SWTProtocol.OP_CALL); // Ignored by the exception-message-type
+  }
+
+  /**
+   * Encodes an {@link SWTEvent event-message} into the given buffer.
+   *
+   * @param msg The message to be encoded
+   * @param buffer The destination buffer
+   * @return The operation (one of the SWTProtocol.OP_*-values).
+   * @throws SWTProtocolException if encoding failed
+   */
+  private byte encodeEventMessage(SWTEvent msg, ChannelBuffer buffer)
+      throws SWTProtocolException {
+
+    buffer.writeInt(msg.getObjId());
+
+    return (SWTProtocol.OP_CALL); // Ignored by the event-message-type
   }
 }
