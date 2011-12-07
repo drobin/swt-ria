@@ -1,6 +1,8 @@
 package de.robind.swt.demo;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -27,8 +29,16 @@ public class ButtonDemo {
     label.setText("# of clicks:");
     label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 
-    Text text = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
+    final Text text = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
+    text.setText("0");
     text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+    button.addSelectionListener(new SelectionAdapter() {
+      public void widgetSelected(SelectionEvent e) {
+        int numClicked = Integer.valueOf(text.getText());
+        text.setText(Integer.toString(numClicked + 1));
+      }
+    });
 
     shell.open();
     while (!shell.isDisposed()) {
