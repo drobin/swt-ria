@@ -7,6 +7,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
+import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTMessageFactory;
@@ -76,7 +77,7 @@ public class SWTMessageDecoder extends FrameDecoder {
     }
 
     if (type != SWTProtocol.TYPE_REQ && type != SWTProtocol.TYPE_RSP &&
-        type != SWTProtocol.TYPE_EXC) {
+        type != SWTProtocol.TYPE_EXC && type != SWTProtocol.TYPE_EVT) {
 
       buffer.resetReaderIndex();
       throw new SWTProtocolException("Invalid message-type: " + type);
@@ -105,6 +106,9 @@ public class SWTMessageDecoder extends FrameDecoder {
        break;
       case SWTProtocol.TYPE_EXC:
         message = decodeExceptionMessage(buffer);
+        break;
+      case SWTProtocol.TYPE_EVT:
+        message = decodeEventMessage(buffer);
         break;
     }
 
@@ -249,5 +253,19 @@ public class SWTMessageDecoder extends FrameDecoder {
     } catch (Exception e) {
       throw new SWTProtocolException("Failed to create exception", e);
     }
+  }
+
+  /**
+   * Decodes a {@link SWTEvent}-message.
+   *
+   * @param buffer The buffer with source-data
+   * @return the decoded event-message
+   * @throws SWTProtocolException if decoding has failed
+   */
+  private SWTEvent decodeEventMessage(ChannelBuffer buffer)
+      throws SWTProtocolException {
+
+    int objId = buffer.readInt();
+    return (this.factory.createEvent(objId));
   }
 }

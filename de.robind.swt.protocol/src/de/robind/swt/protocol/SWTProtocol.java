@@ -49,6 +49,11 @@ public class SWTProtocol {
   public static final byte TYPE_EXC = 0x02;
 
   /**
+   * An event-message
+   */
+  public static final byte TYPE_EVT = 0x03;
+
+  /**
    * A string-argument
    */
   public static final byte ARG_STRING = 1;
