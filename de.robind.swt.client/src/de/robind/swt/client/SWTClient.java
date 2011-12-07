@@ -15,6 +15,7 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
+import de.robind.swt.msg.SWTRegRequest;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -81,6 +82,8 @@ public class SWTClient {
       return (handleNewRequest(factory, objMap, (SWTNewRequest)request));
     } else if (request instanceof SWTCallRequest) {
       return (handleCallRequest(factory, objMap, (SWTCallRequest)request));
+    } else if (request instanceof SWTRegRequest) {
+      return (handleRegRequest(factory, objMap, (SWTRegRequest)request));
     } else {
       return (null);
     }
@@ -114,5 +117,10 @@ public class SWTClient {
     } catch (Exception e) {
       return (factory.createException(e));
     }
+  }
+
+  private static SWTResponse handleRegRequest(SWTMessageFactory factory,
+      SWTObjectMap objMap, SWTRegRequest request) {
+    return (factory.createException(new Exception("Needs to be implemented")));
   }
 }
