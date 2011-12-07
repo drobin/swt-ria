@@ -2,6 +2,7 @@ package de.robind.swt.msg;
 
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
 import de.robind.swt.msg.impl.SWTCallResponseImpl;
+import de.robind.swt.msg.impl.SWTEventImpl;
 import de.robind.swt.msg.impl.SWTExceptionImpl;
 import de.robind.swt.msg.impl.SWTNewRequestImpl;
 import de.robind.swt.msg.impl.SWTNewResponseImpl;
@@ -112,5 +113,14 @@ public class SWTMessageFactory {
     }
 
     return (new SWTExceptionImpl(cause));
+  }
+
+  /**
+   * Creates a new {@link SWTEvent}-message.
+   *
+   * @return The new message
+   */
+  public SWTEvent createEvent() {
+    return (new SWTEventImpl());
   }
 }
