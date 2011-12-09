@@ -4,7 +4,6 @@ import java.nio.channels.Channel;
 
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Widget;
 
 import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTMessageFactory;
@@ -29,14 +28,14 @@ public class SWTEventListener implements Listener {
   private SWTMessageFactory messageFactory = null;
 
   /**
-   * The widget where the event is triggered
+   * The id of the source-object
    */
-  private Widget widget = null;
+  private int objId;
 
-  public SWTEventListener(Channel channel, SWTMessageFactory messageFactory, Widget widget) {
+  public SWTEventListener(int objId, Channel channel, SWTMessageFactory messageFactory) {
+    this.objId = objId;
     this.channel = channel;
     this.messageFactory = messageFactory;
-    this.widget = widget;
   }
 
   /* (non-Javadoc)
