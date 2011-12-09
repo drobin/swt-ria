@@ -1,9 +1,13 @@
 package de.robind.swt.client;
 
-import java.nio.channels.Channel;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.Channels;
 
 import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTMessageFactory;
@@ -41,7 +45,25 @@ public class SWTEventListener implements Listener {
   /* (non-Javadoc)
    * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
    */
-  public void handleEvent(Event event) {
-    System.out.println("Do something");
+  public void handleEvent(Event e) {
+    Map<String, Object> attributes = new HashMap<String, Object>();
+    attributes.put("swtObjectId", this.objId);
+
+    switch (e.type) {
+      case SWT.Selection:
+        attributes.put("item", e.item);
+        attributes.put("x", e.x);
+        attributes.put("y", e.y);
+        attributes.put("width", e.width);
+        attributes.put("height", e.height);
+        attributes.put("detail", e.detail);
+        attributes.put("stateMask", e.stateMask);
+        attributes.put("text", e.text);
+        attributes.put("doit", e.doit);
+        break;
+    }
+
+    SWTEvent event = this.messageFactory.createEvent(this.objId, attributes);
+    Channels.write(this.channel, event);
   }
 }
