@@ -1,6 +1,7 @@
 package de.robind.swt.client;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -34,5 +35,24 @@ public class SWTObjectMap {
     synchronized (obj) {
      this.objMap.put(id, obj);
     }
+  }
+
+  /**
+   * Searches for the id of the given object.
+   * @param obj The object you are looking for
+   * @return The if if the object
+   */
+  public int getId(Object obj) {
+    Iterator<Integer> it = this.objMap.keySet().iterator();
+    while (it.hasNext()) {
+      int id = it.next();
+      Object value = this.objMap.get(id);
+
+      if (value == obj) {
+        return (id);
+      }
+    }
+
+    return (-1);
   }
 }
