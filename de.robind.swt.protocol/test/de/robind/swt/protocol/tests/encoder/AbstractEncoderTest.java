@@ -4,6 +4,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.handler.codec.embedder.CodecEmbedderException;
 import org.jboss.netty.handler.codec.embedder.EncoderEmbedder;
 import org.junit.After;
 import org.junit.Before;
@@ -45,15 +46,21 @@ public class AbstractEncoderTest<T extends SWTMessage> {
     this.type = type;
   }
 
-  protected ChannelBuffer encodeMessage(T msg, int payloadLength) {
-    this.embedder.offer(msg);
-    ChannelBuffer buffer = this.embedder.poll();
+  protected ChannelBuffer encodeMessage(T msg, int payloadLength)
+      throws Throwable {
 
-    assertThat(buffer.readShort(), is(SWTProtocol.MAGIC));
-    assertThat(buffer.readByte(), is(this.operation));
-    assertThat(buffer.readByte(), is(this.type));
-    assertThat(buffer.readInt(), is(payloadLength));
+    try {
+      this.embedder.offer(msg);
+      ChannelBuffer buffer = this.embedder.poll();
 
-    return (buffer);
+      assertThat(buffer.readShort(), is(SWTProtocol.MAGIC));
+      assertThat(buffer.readByte(), is(this.operation));
+      assertThat(buffer.readByte(), is(this.type));
+      assertThat(buffer.readInt(), is(payloadLength));
+
+      return (buffer);
+    } catch (CodecEmbedderException e) {
+      throw e.getCause();
+    }
   }
 }

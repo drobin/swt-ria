@@ -16,7 +16,7 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
   }
 
   @Test
-  public void noArguments() throws Exception {
+  public void noArguments() throws Throwable {
     SWTCallRequest msg = this.factory.createCallRequest(4711, "foo");
 
     ChannelBuffer buffer = encodeMessage(msg, 10);
@@ -26,7 +26,7 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
   }
 
   @Test
-  public void withArguments() throws Exception {
+  public void withArguments() throws Throwable {
     SWTCallRequest msg =
         this.factory.createCallRequest(4711, "foo", 1, true);
 

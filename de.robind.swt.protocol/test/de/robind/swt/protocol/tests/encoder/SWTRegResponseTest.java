@@ -11,7 +11,7 @@ public class SWTRegResponseTest extends AbstractEncoderTest<SWTRegResponse> {
   }
 
   @Test
-  public void success() {
+  public void success() throws Throwable {
     SWTRegResponse msg = this.factory.createRegResponse();
     encodeMessage(msg, 0);
   }

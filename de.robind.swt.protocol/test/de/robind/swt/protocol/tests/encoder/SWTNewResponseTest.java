@@ -11,7 +11,7 @@ public class SWTNewResponseTest extends AbstractEncoderTest<SWTNewResponse>{
   }
 
   @Test
-  public void success() {
+  public void success() throws Throwable {
     SWTNewResponse msg = this.factory.createNewResponse();
     encodeMessage(msg, 0);
   }

@@ -15,13 +15,13 @@ public class SWTCallResponseTest extends AbstractEncoderTest<SWTCallResponse> {
   }
 
   @Test
-  public void voidResult() {
+  public void voidResult() throws Throwable {
     SWTCallResponse msg = this.factory.createCallResponse(null);
     encodeMessage(msg, 0);
   }
 
   @Test
-  public void withResult() throws Exception {
+  public void withResult() throws Throwable {
     SWTCallResponse msg = this.factory.createCallResponse(4711);
 
     ChannelBuffer buffer = encodeMessage(msg, 5);

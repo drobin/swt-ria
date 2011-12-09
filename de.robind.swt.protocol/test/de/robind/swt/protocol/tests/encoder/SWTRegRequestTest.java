@@ -15,7 +15,7 @@ public class SWTRegRequestTest extends AbstractEncoderTest<SWTRegRequest>{
   }
 
   @Test
-  public void request() {
+  public void request() throws Throwable {
     SWTRegRequest msg = this.factory.createRegRequest(1, 4711, true);
 
     ChannelBuffer buffer = encodeMessage(msg, 9);

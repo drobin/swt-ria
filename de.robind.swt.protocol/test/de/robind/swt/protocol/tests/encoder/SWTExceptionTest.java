@@ -17,7 +17,7 @@ public class SWTExceptionTest extends AbstractEncoderTest<SWTException> {
   }
 
   @Test
-  public void regularException() throws Exception {
+  public void regularException() throws Throwable {
     IndexOutOfBoundsException exc = new IndexOutOfBoundsException("foo");
     SWTException msg = this.factory.createException(exc);
     ChannelBuffer buffer = encodeMessage(msg, 42);
@@ -27,7 +27,7 @@ public class SWTExceptionTest extends AbstractEncoderTest<SWTException> {
   }
 
   @Test
-  public void nullMessage() throws Exception {
+  public void nullMessage() throws Throwable {
     IndexOutOfBoundsException exc = new IndexOutOfBoundsException();
     SWTException msg = this.factory.createException(exc);
     ChannelBuffer buffer = encodeMessage(msg, 39);
@@ -38,7 +38,7 @@ public class SWTExceptionTest extends AbstractEncoderTest<SWTException> {
   }
 
   @Test
-  public void emptyMessage() throws Exception {
+  public void emptyMessage() throws Throwable {
     IndexOutOfBoundsException exc = new IndexOutOfBoundsException("");
     SWTException msg = this.factory.createException(exc);
     ChannelBuffer buffer = encodeMessage(msg, 39);

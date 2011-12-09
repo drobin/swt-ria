@@ -1,7 +1,5 @@
 package de.robind.swt.protocol.tests.encoder;
 
-import static de.robind.swt.protocol.tests.CauseMatcher.causeClass;
-import static de.robind.swt.protocol.tests.CauseMatcher.causeMsg;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -22,21 +20,21 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
   }
 
   @Test
-  public void tooManyAttributes() {
+  public void tooManyAttributes() throws Throwable {
     Map<String, Object> attributes = new HashMap<String, Object>();
     for (int i = 0; i < Byte.MAX_VALUE + 1; i++) {
       attributes.put(Integer.toBinaryString(i), i);
     }
 
-    exception.expect(causeClass(SWTProtocolException.class));
-    exception.expect(causeMsg("Number of attributes cannot be greater than 127"));
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Number of attributes cannot be greater than 127");
 
     SWTEvent msg = this.factory.createEvent(attributes);
     encodeMessage(msg, 0);
   }
 
   @Test
-  public void noAttributes() throws Exception {
+  public void noAttributes() throws Throwable {
     SWTEvent msg = this.factory.createEvent(new HashMap<String, Object>());
     ChannelBuffer buffer = encodeMessage(msg, 1);
 
@@ -44,7 +42,7 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
   }
 
   @Test
-  public void withAttributes() throws Exception {
+  public void withAttributes() throws Throwable {
     Map<String, Object> attributes = new HashMap<String, Object>();
     attributes.put("foo", 4711);
     attributes.put("bar", "xxx");
