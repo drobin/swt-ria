@@ -268,6 +268,8 @@ public class SWTMessageDecoder extends FrameDecoder {
       throws SWTProtocolException {
 
     Map<String, Object> attributes = new HashMap<String, Object>();
+
+    int objId = buffer.readInt();
     byte numAttributes = buffer.readByte();
 
     if (numAttributes < 0) {
@@ -281,6 +283,6 @@ public class SWTMessageDecoder extends FrameDecoder {
       attributes.put(key, value);
     }
 
-    return (this.factory.createEvent(0, attributes));
+    return (this.factory.createEvent(objId, attributes));
   }
 }
