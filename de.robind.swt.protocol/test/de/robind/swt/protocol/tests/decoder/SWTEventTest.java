@@ -8,6 +8,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.junit.Test;
 
 import de.robind.swt.msg.SWTEvent;
+import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.protocol.SWTProtocol;
 import de.robind.swt.protocol.SWTProtocolException;
 
@@ -23,7 +24,7 @@ public class SWTEventTest extends AbstractDecoderTest<SWTEvent> {
 
     SWTEvent msg = decodeMessage(buffer);
     assertThat(msg, is(notNullValue()));
-    assertThat(msg.getObjId(), is(4711));
+    assertThat(((SWTObjectId)msg.getAttributeValue("widget")).getId(), is(4711));
   }
 
   @Test

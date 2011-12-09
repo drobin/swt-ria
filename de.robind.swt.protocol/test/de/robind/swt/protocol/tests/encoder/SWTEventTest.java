@@ -3,6 +3,9 @@ package de.robind.swt.protocol.tests.encoder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.junit.Test;
 
@@ -16,7 +19,9 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
 
   @Test
   public void regularEvent() throws Exception {
-    SWTEvent msg = this.factory.createEvent(4711);
+    Map<String, Object> attributes = new HashMap<String, Object>();
+    attributes.put("widget", 4711);
+    SWTEvent msg = this.factory.createEvent(attributes);
     ChannelBuffer buffer = encodeMessage(msg, 4);
 
     assertThat(buffer.readInt(), is(4711));

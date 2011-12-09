@@ -9,9 +9,20 @@ package de.robind.swt.msg;
  */
 public interface SWTEvent extends SWTMessage {
   /**
-   * Returns the id of the object, where the event has occured.
+   * Returns an array with the names of all attributes inside the event.
    *
-   * @return Object-id of source object
+   * @return An array with all attribute-names
    */
-  int getObjId();
+  String[] getAttributes();
+
+  /**
+   * Returns the value of a specific attribute.
+   *
+   * @param attr The name of the attribute. This is one returned by
+   *             {@link #getAttributes()}.
+   * @return The value of the attribute
+   * @throws NullPointerException if <code>attr</code> is <code>null</code> or
+   *                              if <code>attr</code> does not exist
+   */
+  Object getAttributeValue(String attr) throws NullPointerException;
 }

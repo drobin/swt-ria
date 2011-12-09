@@ -187,7 +187,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
   private byte encodeEventMessage(SWTEvent msg, ChannelBuffer buffer)
       throws SWTProtocolException {
 
-    buffer.writeInt(msg.getObjId());
+    buffer.writeInt(Integer.valueOf(msg.getAttributeValue("widget").toString()));
 
     return (SWTProtocol.OP_CALL); // Ignored by the event-message-type
   }

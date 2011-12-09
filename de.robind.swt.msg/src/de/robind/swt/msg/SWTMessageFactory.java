@@ -1,5 +1,7 @@
 package de.robind.swt.msg;
 
+import java.util.Map;
+
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
 import de.robind.swt.msg.impl.SWTCallResponseImpl;
 import de.robind.swt.msg.impl.SWTEventImpl;
@@ -121,7 +123,7 @@ public class SWTMessageFactory {
    * @param objId The id of the source object
    * @return The new message
    */
-  public SWTEvent createEvent(int objId) {
-    return (new SWTEventImpl(objId));
+  public SWTEvent createEvent(Map<String, Object> attributes) {
+    return (new SWTEventImpl(attributes));
   }
 }

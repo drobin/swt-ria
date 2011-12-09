@@ -1,6 +1,8 @@
 package de.robind.swt.protocol;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
@@ -11,6 +13,7 @@ import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTMessageFactory;
+import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -265,7 +268,9 @@ public class SWTMessageDecoder extends FrameDecoder {
   private SWTEvent decodeEventMessage(ChannelBuffer buffer)
       throws SWTProtocolException {
 
-    int objId = buffer.readInt();
-    return (this.factory.createEvent(objId));
+    Map<String, Object> attributes = new HashMap<String, Object>();
+    attributes.put("widget", new SWTObjectId(buffer.readInt()));
+
+    return (this.factory.createEvent(attributes));
   }
 }
