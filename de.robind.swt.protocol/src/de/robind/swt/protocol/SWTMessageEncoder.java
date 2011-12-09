@@ -187,7 +187,17 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
   private byte encodeEventMessage(SWTEvent msg, ChannelBuffer buffer)
       throws SWTProtocolException {
 
-    buffer.writeInt(Integer.valueOf(msg.getAttributeValue("widget").toString()));
+    if (msg.getAttributes().length > Byte.MAX_VALUE) {
+      throw new SWTProtocolException(
+          "Number of attributes cannot be greater than " + Byte.MAX_VALUE);
+    }
+
+    buffer.writeByte(msg.getAttributes().length);
+
+    for (String attribute: msg.getAttributes()) {
+      SWTProtocol.writeString(buffer, attribute);
+      SWTProtocol.writeArgument(buffer, msg.getAttributeValue(attribute));
+    }
 
     return (SWTProtocol.OP_CALL); // Ignored by the event-message-type
   }
