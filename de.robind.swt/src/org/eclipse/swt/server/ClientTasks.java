@@ -50,6 +50,7 @@ public interface ClientTasks {
    *
    * @return The event received from the client
    * @throws InterruptedException if the current thread was interrupted
+   * @throws Exception failed to receive the event
    */
-  Event waitForEvent(Key key) throws InterruptedException;
+  Event waitForEvent(Key key) throws Exception;
 }

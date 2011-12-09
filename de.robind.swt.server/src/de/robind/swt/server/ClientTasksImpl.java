@@ -1,5 +1,7 @@
 package de.robind.swt.server;
 
+import java.lang.reflect.Field;
+
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.Key;
@@ -8,6 +10,7 @@ import org.jboss.netty.channel.Channels;
 
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
+import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTNewRequest;
 import de.robind.swt.msg.SWTNewResponse;
@@ -99,8 +102,18 @@ public class ClientTasksImpl implements ClientTasks {
   /* (non-Javadoc)
    * @see org.eclipse.swt.server.ClientTasks#waitForEvent(org.eclipse.swt.server.Key)
    */
-  public Event waitForEvent(Key key) throws InterruptedException {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public Event waitForEvent(Key key) throws Exception, InterruptedException {
+    SWTApplicationKey appKey = (SWTApplicationKey)key;
+    SWTApplication app = appKey.getApplication();
+    SWTEvent swtEvent = app.getEventQueue().take();
+
+    Event event = new Event();
+    for (String attribute: swtEvent.getAttributes()) {
+      Field f = Event.class.getField(attribute);
+      f.set(event, swtEvent.getAttributeValue(attribute));
+    }
+
+    return (event);
   }
 
   /**
