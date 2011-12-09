@@ -44,6 +44,9 @@ public class SWTClient {
         bootstrap.connect(new InetSocketAddress("localhost", 4711));
     future.awaitUninterruptibly();
 
+    SWTEventListenerFactory listenerFactory =
+        new SWTEventListenerFactory(future.getChannel(), messageFactory);
+
     while (future.getChannel().isConnected() && !shell.isDisposed()) {
       if (!display.readAndDispatch()) {
         display.sleep();
@@ -61,7 +64,8 @@ public class SWTClient {
           objMap.put(((SWTNewRequest)request).getObjId(), display);
           response = messageFactory.createNewResponse();
         } else {
-          response = handleRequest(messageFactory, objMap, request);
+          response =
+              handleRequest(messageFactory, listenerFactory, objMap, request);
         }
 
         Channels.write(future.getChannel(), response);
@@ -75,15 +79,17 @@ public class SWTClient {
     channelFactory.releaseExternalResources();
   }
 
-  private static SWTResponse handleRequest(SWTMessageFactory factory,
-      SWTObjectMap objMap, SWTRequest request) {
+  private static SWTResponse handleRequest(SWTMessageFactory messageFactory,
+      SWTEventListenerFactory listenerFactory, SWTObjectMap objMap,
+      SWTRequest request) {
 
     if (request instanceof SWTNewRequest) {
-      return (handleNewRequest(factory, objMap, (SWTNewRequest)request));
+      return (handleNewRequest(messageFactory, objMap, (SWTNewRequest)request));
     } else if (request instanceof SWTCallRequest) {
-      return (handleCallRequest(factory, objMap, (SWTCallRequest)request));
+      return (handleCallRequest(messageFactory, objMap, (SWTCallRequest)request));
     } else if (request instanceof SWTRegRequest) {
-      return (handleRegRequest(factory, objMap, (SWTRegRequest)request));
+      return (handleRegRequest(messageFactory, listenerFactory, objMap,
+          (SWTRegRequest)request));
     } else {
       return (null);
     }
@@ -119,15 +125,16 @@ public class SWTClient {
     }
   }
 
-  private static SWTResponse handleRegRequest(SWTMessageFactory factory,
+  private static SWTResponse handleRegRequest(SWTMessageFactory messageFactory,
+      SWTEventListenerFactory listenerFactory,
       SWTObjectMap objMap, SWTRegRequest request) {
 
     try {
-      SWTObject.registerEvent(objMap, request.getObjId(),
+      SWTObject.registerEvent(objMap, listenerFactory, request.getObjId(),
           request.getEventType(), request.enable());
-      return (factory.createRegResponse());
+      return (messageFactory.createRegResponse());
     } catch (Exception e) {
-      return (factory.createException(e));
+      return (messageFactory.createException(e));
     }
   }
 }

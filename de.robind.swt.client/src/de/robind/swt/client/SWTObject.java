@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
@@ -90,6 +89,8 @@ public class SWTObject {
    * Enables event-handling for an object and a event-type.
    *
    * @param objMap The mapping between object-id and object.
+   * @param listenerFactory Factory used to create listern (which are used to
+   *                        send events to the server).
    * @param id The id of the object inside <code>objMap</code>
    * @param eventType The event-type to be enabled resp. disabled
    * @param enable If set to <code>true</code>, the event-handling should be
@@ -98,7 +99,8 @@ public class SWTObject {
    *         {@link Widget}. Only {@link Widget widgets} are receiver of
    *         events.
    */
-  public static void registerEvent(SWTObjectMap objMap, int id, int eventType,
+  public static void registerEvent(SWTObjectMap objMap,
+      SWTEventListenerFactory listenerFactory, int id, int eventType,
       boolean enable) throws IllegalArgumentException {
 
     Object obj = objMap.get(id);
@@ -111,11 +113,8 @@ public class SWTObject {
     Widget widget = (Widget)obj;
 
     if (enable) {
-      widget.addListener(eventType, new Listener() {
-        public void handleEvent(Event event) {
-          System.out.println("Do something");
-        }
-      });
+      SWTEventListener listener = listenerFactory.createListener(id);
+      widget.addListener(eventType, listener);
     } else {
       for (Listener listener: widget.getListeners(eventType)) {
         widget.removeListener(eventType, listener);
