@@ -35,9 +35,10 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
 
   @Test
   public void noAttributes() throws Throwable {
-    SWTEvent msg = this.factory.createEvent(0, new HashMap<String, Object>());
-    ChannelBuffer buffer = encodeMessage(msg, 1);
+    SWTEvent msg = this.factory.createEvent(4711, new HashMap<String, Object>());
+    ChannelBuffer buffer = encodeMessage(msg, 5);
 
+    assertThat(buffer.readInt(), is(4711));
     assertThat(buffer.readByte(), is((byte)0));
   }
 
@@ -47,9 +48,10 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
     attributes.put("foo", 4711);
     attributes.put("bar", "xxx");
 
-    SWTEvent msg = this.factory.createEvent(0, attributes);
-    ChannelBuffer buffer = encodeMessage(msg, 22);
+    SWTEvent msg = this.factory.createEvent(4711, attributes);
+    ChannelBuffer buffer = encodeMessage(msg, 26);
 
+    assertThat(buffer.readInt(), is(4711));
     assertThat(buffer.readByte(), is((byte)2));
     assertThat(SWTProtocol.readString(buffer), is(equalTo("foo")));
     assertThat((Integer)SWTProtocol.readArgument(buffer), is(4711));

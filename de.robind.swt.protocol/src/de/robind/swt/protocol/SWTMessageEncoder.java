@@ -192,6 +192,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
           "Number of attributes cannot be greater than " + Byte.MAX_VALUE);
     }
 
+    buffer.writeInt(msg.getObjId());
     buffer.writeByte(msg.getAttributes().length);
 
     for (String attribute: msg.getAttributes()) {
