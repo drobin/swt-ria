@@ -9,6 +9,7 @@ import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.jboss.netty.channel.Channel;
 
+import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTResponse;
 
@@ -43,6 +44,12 @@ public class SWTApplication extends Thread {
    */
   private BlockingQueue<SWTResponse> responseQueue =
       new LinkedBlockingQueue<SWTResponse>();
+
+  /**
+   * Queue holds events received from the client.
+   */
+  private BlockingQueue<SWTEvent> eventQueue =
+      new LinkedBlockingQueue<SWTEvent>();
 
   /**
    * Creates a new {@link SWTApplication}.
@@ -82,6 +89,15 @@ public class SWTApplication extends Thread {
    */
   public BlockingQueue<SWTResponse> getResponseQueue() {
     return (this.responseQueue);
+  }
+
+  /**
+   * Returns the queue, which holds events received from the connected client.
+   *
+   * @return Queue with events send by the client
+   */
+  public BlockingQueue<SWTEvent> getEventQueue() {
+    return (this.eventQueue);
   }
 
   /* (non-Javadoc)
