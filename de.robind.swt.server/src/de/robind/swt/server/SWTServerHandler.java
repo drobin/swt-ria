@@ -7,6 +7,7 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
+import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTResponse;
@@ -92,6 +93,9 @@ public class SWTServerHandler extends SimpleChannelHandler {
     if (e.getMessage() instanceof SWTResponse) {
       logger.debug("Response received: " + e.getMessage());
       app.getResponseQueue().put((SWTResponse)e.getMessage());
+    } else if (e.getMessage() instanceof SWTEvent) {
+      logger.debug("Event received: " + e.getMessage());
+      app.getEventQueue().put((SWTEvent)e.getMessage());
     } else {
       throw new Exception("Unexpected message of type " +
           e.getMessage().getClass().getName() + " received");
