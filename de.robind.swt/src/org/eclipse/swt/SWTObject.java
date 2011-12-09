@@ -1,5 +1,8 @@
 package org.eclipse.swt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 
 /**
@@ -15,10 +18,17 @@ public class SWTObject {
    */
   private static int nextId = 0;
 
+  /**
+   * Map collects all objects with their ids.
+   */
+  private static Map<Integer, SWTObject> objMap =
+      new HashMap<Integer, SWTObject>();
+
   private int id;
 
   protected SWTObject() {
     this.id = generateId();
+    SWTObject.objMap.put(this.id, this);
   }
 
   /**
@@ -28,6 +38,17 @@ public class SWTObject {
    */
   public int getId() {
     return (this.id);
+  }
+
+  /**
+   * Searches for the object with the given id.
+   *
+   * @param id The id you are looking for
+   * @return The object with the given id. If no such object exists,
+   *         <code>null</code> is returned.
+   */
+  public static SWTObject findObjectById(int id) {
+    return (SWTObject.objMap.get(id));
   }
 
   /**
