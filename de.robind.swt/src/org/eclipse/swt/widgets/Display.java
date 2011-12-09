@@ -18,6 +18,12 @@ public class Display extends Device {
   private Key key = null;
 
   /**
+   * Event received from the client.
+   * Needs to be handled.
+   */
+  private Event nextEvent = null;
+
+  /**
    * TODO Needs to be implemented!!
    */
   public Display() {
@@ -67,7 +73,14 @@ public class Display extends Device {
    *  </ul>
    */
   public boolean readAndDispatch() throws SWTException {
-    return (true);
+    if (this.nextEvent != null) {
+      Widget widget = this.nextEvent.widget;
+      widget.notifyListeners(this.nextEvent.type, this.nextEvent);
+
+      this.nextEvent = null;
+    }
+
+    return (false);
   }
 
   /**
@@ -88,7 +101,17 @@ public class Display extends Device {
    *  </ul>
    */
   public boolean sleep() throws SWTException {
-    return (false);
+    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    try {
+      this.nextEvent = clientTasks.waitForEvent(key);
+      return (this.nextEvent != null);
+    } catch (Exception e) {
+      // TODO What is the best fitting exception-code
+      SWTException exc = new SWTException();
+      exc.throwable = e;
+      throw exc;
+    }
   }
 
   public Key getKey() {
