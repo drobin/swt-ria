@@ -172,6 +172,55 @@ public class Widget extends SWTObject {
   }
 
   /**
+   * Returns an array of listeners who will be notified when an event of the
+   * given type occurs.
+   * The event type is one of the event constants defined in class
+   * <code>SWT</code>.
+   *
+   * @param eventType the type of event to listen for
+   * @return an array of listeners that will be notified when the event occurs
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public Listener[] getListeners(int eventType) throws SWTException {
+    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    return (this.listenerTable.getListener(eventType));
+  }
+
+  /**
+   * Notifies all of the receiver's listeners for events of the given type that
+   * one such event has occurred by invoking their
+   * {@link Listener#handleEvent(Event)} method.
+   * The event type is one of the event constants defined in class
+   * <code>SWT</code>.
+   *
+   * @param eventType the type of event which has occurred
+   * @param event the event data
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void notifyListeners(int eventType, Event event) throws SWTException {
+    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    for (Listener listener: getListeners(eventType)) {
+      listener.handleEvent(event);
+    }
+  }
+
+  /**
    * Returns <code>true</code> if there are any listeners for the specified
    * event type associated with the receiver, and <code>false</code> otherwise.
    * The event type is one of the event constants defined in class SWT.

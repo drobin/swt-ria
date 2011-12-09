@@ -91,6 +91,21 @@ class ListenerTable {
   }
 
   /**
+   * Returns an array with all listener of the given event-type.
+   *
+   * @param eventType The requested event-type
+   * @return An array with all requested listener
+   */
+  Listener[] getListener(int eventType) {
+    List<Listener> list = getListenerList(eventType);
+    Listener arr[] = new Listener[list.size()];
+
+    list.toArray(arr);
+
+    return (arr);
+  }
+
+  /**
    * Returns the list with all listener of the given event-type from
    * {@link #listenerMap}.
    * <p>
