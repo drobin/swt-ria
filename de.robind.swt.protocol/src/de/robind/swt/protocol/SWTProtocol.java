@@ -79,6 +79,11 @@ public class SWTProtocol {
   public static final byte ARG_SWTOBJ = 5;
 
   /**
+   * A null-argument.
+   */
+  public static final byte ARG_NULL = 6;
+
+  /**
    * Reads a string from the given buffer.
    * <p>
    * The string starts with a two-byte length, followed by the byte-data with
@@ -256,6 +261,7 @@ public class SWTProtocol {
       case ARG_BYTE:   return (buffer.readByte());
       case ARG_BOOL:   return (readBoolean(buffer));
       case ARG_SWTOBJ: return (readSwtObjectId(buffer));
+      case ARG_NULL:   return (null);
       default: throw new SWTProtocolException("Invalid argument-type: " + type);
     }
   }
@@ -267,7 +273,7 @@ public class SWTProtocol {
    * @param value The argument to be encoded
    * @throws SWTProtocolException if encoding has failed
    * @throws IndexOutOfBoundsException if the bufer is not big enough
-   * @throws NullPointerException if one of the arguments are <code>null</code>
+   * @throws NullPointerException if <code>buffer</code> is <code>null</code>
    */
   public static void writeArgument(ChannelBuffer buffer, Object value)
       throws SWTProtocolException, IndexOutOfBoundsException,
@@ -278,10 +284,9 @@ public class SWTProtocol {
     }
 
     if (value == null) {
-      throw new NullPointerException("value cannot be null");
-    }
-
-    if (value instanceof String) {
+      buffer.ensureWritableBytes(1);
+      buffer.writeByte(ARG_NULL);
+    } else if (value instanceof String) {
       buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_STRING);
       writeString(buffer, (String)value);

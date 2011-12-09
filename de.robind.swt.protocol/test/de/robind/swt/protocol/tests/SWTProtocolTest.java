@@ -1,5 +1,6 @@
 package de.robind.swt.protocol.tests;
 
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -372,6 +373,15 @@ public class SWTProtocolTest {
   }
 
   @Test
+  public void readArgumentNull() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(SWTProtocol.ARG_NULL);
+
+    Object value = SWTProtocol.readArgument(buffer);
+    assertThat(value, is(nullValue()));
+  }
+
+  @Test
   public void writeArgumentInvalidArgument() throws Exception {
     class Foo {
     }
@@ -538,5 +548,14 @@ public class SWTProtocolTest {
 
     assertThat(buffer.readByte(), is(SWTProtocol.ARG_SWTOBJ));
     assertThat(buffer.readInt(), is(-1));
+  }
+
+  @Test
+  public void writeArgumentNull() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, null);
+
+    assertThat(buffer.readByte(), is(SWTProtocol.ARG_NULL));
   }
 }
