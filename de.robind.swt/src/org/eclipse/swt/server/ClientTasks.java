@@ -1,5 +1,7 @@
 package org.eclipse.swt.server;
 
+import org.eclipse.swt.widgets.Event;
+
 public interface ClientTasks {
   /**
    * Asks the connected client to create an object.
@@ -40,4 +42,14 @@ public interface ClientTasks {
    */
   void registerEvent(Key key, int id, int eventType, boolean enable)
       throws Throwable;
+
+  /**
+   * Receives an event from the client.
+   * <p>
+   * The method blocks the calling thread until an event arrives.
+   *
+   * @return The event received from the client
+   * @throws InterruptedException if the current thread was interrupted
+   */
+  Event waitForEvent(Key key) throws InterruptedException;
 }

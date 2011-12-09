@@ -3,6 +3,7 @@ package de.robind.swt.server;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.Key;
+import org.eclipse.swt.widgets.Event;
 import org.jboss.netty.channel.Channels;
 
 import de.robind.swt.msg.SWTCallRequest;
@@ -93,6 +94,13 @@ public class ClientTasksImpl implements ClientTasks {
       throw new Exception("Illegal response of type " +
           response.getClass().getName() + " received");
     }
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.server.ClientTasks#waitForEvent(org.eclipse.swt.server.Key)
+   */
+  public Event waitForEvent(Key key) throws InterruptedException {
+    throw new UnsupportedOperationException("Not implemented yet");
   }
 
   /**
