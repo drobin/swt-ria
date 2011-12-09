@@ -13,7 +13,6 @@ import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTException;
 import de.robind.swt.msg.SWTMessage;
 import de.robind.swt.msg.SWTMessageFactory;
-import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
@@ -269,7 +268,18 @@ public class SWTMessageDecoder extends FrameDecoder {
       throws SWTProtocolException {
 
     Map<String, Object> attributes = new HashMap<String, Object>();
-    attributes.put("widget", new SWTObjectId(buffer.readInt()));
+    byte numAttributes = buffer.readByte();
+
+    if (numAttributes < 0) {
+      throw new SWTProtocolException("Number of attributes cannot be negative");
+    }
+
+    for (int i = 0; i < numAttributes; i++) {
+      String key = SWTProtocol.readString(buffer);
+      Object value = SWTProtocol.readArgument(buffer);
+
+      attributes.put(key, value);
+    }
 
     return (this.factory.createEvent(attributes));
   }
