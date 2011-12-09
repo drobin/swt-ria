@@ -29,13 +29,13 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Number of attributes cannot be greater than 127");
 
-    SWTEvent msg = this.factory.createEvent(attributes);
+    SWTEvent msg = this.factory.createEvent(0, attributes);
     encodeMessage(msg, 0);
   }
 
   @Test
   public void noAttributes() throws Throwable {
-    SWTEvent msg = this.factory.createEvent(new HashMap<String, Object>());
+    SWTEvent msg = this.factory.createEvent(0, new HashMap<String, Object>());
     ChannelBuffer buffer = encodeMessage(msg, 1);
 
     assertThat(buffer.readByte(), is((byte)0));
@@ -47,7 +47,7 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
     attributes.put("foo", 4711);
     attributes.put("bar", "xxx");
 
-    SWTEvent msg = this.factory.createEvent(attributes);
+    SWTEvent msg = this.factory.createEvent(0, attributes);
     ChannelBuffer buffer = encodeMessage(msg, 22);
 
     assertThat(buffer.readByte(), is((byte)2));

@@ -281,6 +281,6 @@ public class SWTMessageDecoder extends FrameDecoder {
       attributes.put(key, value);
     }
 
-    return (this.factory.createEvent(attributes));
+    return (this.factory.createEvent(0, attributes));
   }
 }

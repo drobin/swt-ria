@@ -9,6 +9,13 @@ package de.robind.swt.msg;
  */
 public interface SWTEvent extends SWTMessage {
   /**
+   * Returns the id of the object, where the event occured.
+   *
+   * @return Object-id of source object
+   */
+  int getObjId();
+
+  /**
    * Returns an array with the names of all attributes inside the event.
    *
    * @return An array with all attribute-names

@@ -12,14 +12,24 @@ import de.robind.swt.msg.SWTEvent;
  * @author Robin Doer
  */
 public class SWTEventImpl implements SWTEvent {
+  private int objId;
   private Map<String, Object> attributes;
 
-  public SWTEventImpl(Map<String, Object> attributes) {
+  public SWTEventImpl(int objId, Map<String, Object> attributes) {
+    this.objId = objId;
+
     if (attributes != null) {
       this.attributes = attributes;
     } else {
       this.attributes = new Hashtable<String, Object>();
     }
+  }
+
+  /* (non-Javadoc)
+   * @see de.robind.swt.msg.SWTEvent#getObjId()
+   */
+  public int getObjId() {
+    return (this.objId);
   }
 
   /* (non-Javadoc)
