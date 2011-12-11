@@ -19,6 +19,11 @@ public class Display extends Device {
   private Key key;
 
   /**
+   * The thread which has created the display
+   */
+  private Thread thread;
+
+  /**
    * Event received from the client.
    * Needs to be handled.
    */
@@ -91,6 +96,8 @@ public class Display extends Device {
    *  </ul>
    */
   public boolean readAndDispatch() throws SWTException {
+    checkDevice();
+    // TODO Check for ERROR_FAILED_EXEC
     if (this.nextEvent != null) {
       Widget widget = (Widget)SWTObject.findObjectById(this.nextEvent.swtObjectId);
       widget.notifyListeners(this.nextEvent.type, this.nextEvent);
@@ -119,7 +126,8 @@ public class Display extends Device {
    *  </ul>
    */
   public boolean sleep() throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkDevice();
+
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     try {
       this.nextEvent = clientTasks.waitForEvent(key);
@@ -132,16 +140,48 @@ public class Display extends Device {
     }
   }
 
-  public Key getKey() {
+  /**
+   * Returns the key assigned to the Display.
+   * @return The assigned key
+   *
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public Key getKey() throws SWTException {
+    checkDevice();
     return (this.key);
   }
 
-  public void setKey(Key key) {
+  /**
+   * Assigns a key to the Display-instance.
+   *
+   * @param key The key to be assigned
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if <code>key</code> is <code>null</code>
+   *    </li>
+   *  </ul>
+   */
+  public void setKey(Key key) throws SWTException {
+    if (key == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
     this.key = key;
   }
 
   void createObject(int id, Class<?> objClass, Object... args)
       throws SWTException {
+
+    checkDevice();
 
     try {
       ClientTasks tasks = DisplayPool.getInstance().getClientTasks();
@@ -157,6 +197,8 @@ public class Display extends Device {
   Object callMethod(int id, String method, Object... args)
       throws SWTException {
 
+    checkDevice();
+
     try {
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
       return (clientTasks.callMethod(getKey(), id, method, args));
@@ -171,6 +213,8 @@ public class Display extends Device {
   void registerEvent(int id, int eventType, boolean enable)
       throws SWTException {
 
+    checkDevice();
+
     try {
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
       clientTasks.registerEvent(getKey(), id, eventType, enable);
@@ -183,11 +227,28 @@ public class Display extends Device {
   }
 
   /* (non-Javadoc)
+   * @see org.eclipse.swt.graphics.Device#checkDevice()
+   */
+  @Override
+  protected void checkDevice() throws SWTException {
+    super.checkDevice();
+
+    if (this.thread == null) {
+      throw new SWTException(SWT.ERROR_WIDGET_DISPOSED);
+    }
+
+    if (this.thread != Thread.currentThread ()) {
+      throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
+    }
+  }
+
+  /* (non-Javadoc)
    * @see org.eclipse.swt.graphics.Device#create(org.eclipse.swt.graphics.DeviceData)
    */
   @Override
   protected void create(DeviceData data) {
     DisplayPool.getInstance().addDisplay(this);
+    this.thread = Thread.currentThread();
 
     try {
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
