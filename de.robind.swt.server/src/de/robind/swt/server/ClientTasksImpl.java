@@ -31,7 +31,7 @@ public class ClientTasksImpl implements ClientTasks {
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
       throws Throwable {
 
-    SWTApplicationKey appKey = (SWTApplicationKey)key;
+    SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
     SWTNewRequest request = app.getMessageFactory().createNewRequest(
         id, objClass, normalizeArguments(args));
@@ -55,7 +55,7 @@ public class ClientTasksImpl implements ClientTasks {
   public Object callMethod(Key key, int id, String method, Object... args)
       throws Throwable {
 
-    SWTApplicationKey appKey = (SWTApplicationKey)key;
+    SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
     SWTCallRequest request = app.getMessageFactory().createCallRequest(
         id, method, normalizeArguments(args));
@@ -81,7 +81,7 @@ public class ClientTasksImpl implements ClientTasks {
   public void registerEvent(Key key, int id, int eventType, boolean enable)
       throws Throwable {
 
-    SWTApplicationKey appKey = (SWTApplicationKey)key;
+    SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
     SWTRegRequest request = app.getMessageFactory().createRegRequest(
         id, eventType, enable);
@@ -103,7 +103,7 @@ public class ClientTasksImpl implements ClientTasks {
    * @see org.eclipse.swt.server.ClientTasks#waitForEvent(org.eclipse.swt.server.Key)
    */
   public Event waitForEvent(Key key) throws Exception, InterruptedException {
-    SWTApplicationKey appKey = (SWTApplicationKey)key;
+    SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
     SWTEvent swtEvent = app.getEventQueue().take();
 
@@ -144,5 +144,34 @@ public class ClientTasksImpl implements ClientTasks {
     }
 
     return (result);
+  }
+
+  /**
+   * Checks the given key.
+   * <p>
+   * The key cannot be null and must be an instance of
+   * {@link SWTApplicationKey}.
+   *
+   * @param key The key to check
+   * @return The value {@link SWTApplicationKey}
+   * @throws NullPointerException if <code>key</code> is <code>null</code>
+   * @throws IllegalArgumentException if <code>key</code> is not an instance
+   *         of {@link SWTApplicationKey}.
+   */
+  private SWTApplicationKey checkKey(Key key)
+      throws NullPointerException, IllegalArgumentException {
+
+    if (key == null) {
+      throw new NullPointerException("key cannot be null");
+    }
+
+    if (!(key instanceof SWTApplicationKey)) {
+      throw new IllegalArgumentException(
+          "Unsupported key received. Expected " +
+          SWTApplicationKey.class.getName() +
+          ", received " + key.getClass().getName());
+    }
+
+    return ((SWTApplicationKey)key);
   }
 }
