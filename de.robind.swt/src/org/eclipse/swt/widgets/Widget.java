@@ -55,7 +55,7 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   public Widget(Widget parent, int style) throws SWTException {
-    if (canHaveParent() && parent == null) {
+    if (parent == null && getClass() != Shell.class) {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
@@ -372,18 +372,5 @@ public class Widget extends SWTObject {
     if (display.thread != Thread.currentThread ()) {
       throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
     }
-  }
-
-  /**
-   * Checks whether this widget can have a parent.
-   * <p>
-   * If this method returns <code>true</code>, the constructor will check for
-   * a <code>null</code>-parent and raise an {@link SWTException}. If this
-   * method returns <code>false</code>, the check is not performed.
-   *
-   * @return <code>true</code> is returned, if this widget can have a parent.
-   */
-  boolean canHaveParent() {
-    return (true);
   }
 }

@@ -225,12 +225,4 @@ public class Shell extends Decorations {
   public void open() throws SWTException {
     getDisplay().callMethod(getId(), "open");
   }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.widgets.Widget#canHaveParent()
-   */
-  @Override
-  boolean canHaveParent() {
-    return (false);
-  }
 }
