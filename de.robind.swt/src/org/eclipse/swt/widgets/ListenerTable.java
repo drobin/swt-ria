@@ -100,9 +100,7 @@ class ListenerTable {
     List<Listener> list = getListenerList(eventType);
     Listener arr[] = new Listener[list.size()];
 
-    list.toArray(arr);
-
-    return (arr);
+    return (list.toArray(arr));
   }
 
   /**
