@@ -1,5 +1,8 @@
 package org.eclipse.swt.widgets;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TypedListener;
 
 /**
@@ -33,8 +36,18 @@ public class TypedListenerProxy implements Listener {
   /* (non-Javadoc)
    * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
    */
-  public void handleEvent(Event event) {
-    // TODO Needs to be implemented
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void handleEvent(Event e) {
+    switch (e.type) {
+      case SWT.Selection:
+        SelectionEvent event = new SelectionEvent(e);
+        ((SelectionListener)listener).widgetSelected(event);
+        e.x = event.x;
+        e.y = event.y;
+        e.doit = event.doit;
+        break;
+      default:
+        throw new UnsupportedOperationException(
+            "Event-type " + e.type + " not implemented yet");
+    }
   }
 }
