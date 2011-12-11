@@ -1,5 +1,6 @@
 package de.robind.swt.server;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -111,6 +112,8 @@ public class SWTApplication extends Thread {
       Class<?> appClass = Class.forName("de.robind.swt.demo.ButtonDemo");
       Method mainMethod = appClass.getMethod("main", String[].class);
       mainMethod.invoke(null, new Object[] { new String[] {} });
+    } catch (InvocationTargetException e) {
+      logger.error("Failed to run the application", e.getCause());
     } catch (Exception e) {
       logger.error("Failed to run the application", e);
     }

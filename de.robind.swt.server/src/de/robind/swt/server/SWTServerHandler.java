@@ -1,5 +1,7 @@
 package de.robind.swt.server;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
@@ -110,7 +112,13 @@ public class SWTServerHandler extends SimpleChannelHandler {
    */
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-    logger.error("Exception caught, closing channel", e.getCause());
+    Throwable cause = e.getCause();
+
+    if (cause instanceof InvocationTargetException) {
+      cause = cause.getCause();
+    }
+
+    logger.error("Exception caught, closing channel", cause);
     e.getChannel().close();
   }
 }
