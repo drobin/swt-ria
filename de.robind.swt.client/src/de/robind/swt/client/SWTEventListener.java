@@ -48,6 +48,7 @@ public class SWTEventListener implements Listener {
   public void handleEvent(Event e) {
     Map<String, Object> attributes = new HashMap<String, Object>();
     attributes.put("swtObjectId", this.objId);
+    attributes.put("type", e.type);
 
     switch (e.type) {
       case SWT.Selection:
