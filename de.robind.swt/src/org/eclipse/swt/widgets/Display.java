@@ -1,5 +1,8 @@
 package org.eclipse.swt.widgets;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
@@ -13,6 +16,11 @@ import org.eclipse.swt.server.Key;
  * TODO Needs to be implemented!!
  */
 public class Display extends Device {
+  /**
+   * List contains all created displays.
+   */
+  private static List<Display> displayList = new LinkedList<Display>();
+
   /**
    * The assigned key.
    */
@@ -175,7 +183,41 @@ public class Display extends Device {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    this.key = key;
+    synchronized (Device.class) {
+      this.key = key;
+    }
+  }
+
+  /**
+   * Returns the display which the given thread is the user-interface thread
+   * for, or <code>null</code> if the given thread is not a user-interface
+   * thread for any display. Specifying <code>null</code> as the thread will
+   * return <code>null</code> for the display.
+   *
+   * @param thread the user-interface thread
+   * @return the display for the given thread
+   */
+  public static Display findDisplay(Thread thread) {
+    synchronized (Device.class) {
+      for (Display display: Display.displayList) {
+        if (display.thread == thread) {
+          return (display);
+        }
+      }
+
+      return (null);
+    }
+  }
+
+  /**
+   * Returns the display which the currently running thread is the
+   * user-interface thread for, or <code>null</code> if the currently running
+   * thread is not a user-interface thread for any display.
+   *
+   * @return the current display
+   */
+  public static Display getCurrent() {
+    return (Display.findDisplay(Thread.currentThread()));
   }
 
   void createObject(int id, Class<?> objClass, Object... args)
@@ -249,6 +291,7 @@ public class Display extends Device {
   protected void create(DeviceData data) {
     DisplayPool.getInstance().addDisplay(this);
     this.thread = Thread.currentThread();
+    Display.displayList.add(this);
 
     try {
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
@@ -280,5 +323,8 @@ public class Display extends Device {
    */
   @Override
   protected void destroy() {
+    synchronized (Device.class) {
+      Display.displayList.remove(this);
+    }
   }
 }
