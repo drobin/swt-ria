@@ -56,4 +56,13 @@ public class SWTEventImpl implements SWTEvent {
 
     return (this.attributes.get(attr));
   }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    String attrStr = this.attributes.entrySet().toString();
+    return "SWTEvent [objId=" + objId + ", attributes=" + attrStr + "]";
+  }
 }
