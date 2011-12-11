@@ -10,11 +10,6 @@ import org.eclipse.swt.events.TypedListener;
  */
 public class Widget extends SWTObject {
   /**
-   * The top-level display
-   */
-  private Display display = null;
-
-  /**
    * The parent widget.
    */
   private Widget parent = null;
@@ -75,7 +70,11 @@ public class Widget extends SWTObject {
 
     this.parent = parent;
     this.style = style;
-    setDisplay((parent != null) ? parent.display : null);
+
+    Display display = getDisplay();
+    if (display != null) {
+      display.createObject(getId(), getClass(), this.parent, this.style);
+    }
   }
 
   /**
@@ -275,34 +274,8 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   public Display getDisplay() throws SWTException {
-    if (canDispose() && isDisposed()) {
-      throw new SWTException(SWT.ERROR_WIDGET_DISPOSED);
-    }
-
-    return (this.display);
-  }
-
-  /**
-   * Assigns a {@link Display} to the widget.
-   * <p>
-   * If assigned, you can also ask the display for a
-   * {@link Display#generateId() unique id}. Finally a message is generated,
-   * that the widget can be created on client-side.
-   *
-   * @param display The display to be assign
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_INVALID_MESSAGE} -
-   *      if an invalid protocol-message was generated
-   *    </li>
-   *  </ul>
-   */
-  void setDisplay(Display display) throws SWTException {
-    this.display = display;
-
-    if (display != null) {
-      createObject();
-    }
+    // TODO Check for ERROR_WIDGET_DISPOSED
+    return (this.parent.getDisplay());
   }
 
   /**
@@ -360,18 +333,6 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   protected void checkSubclass() throws SWTException {
-  }
-
-  /**
-   * Creates the {@link Widget} at the client.
-   * <p>
-   * This method is called by {@link #setDisplay(Display)} to send the
-   * creation-request to the client. You can overwrite the method if you need
-   * another request-message. For example, you you need other arguments passed
-   * to the constructor.
-   */
-  protected void createObject() {
-    getDisplay().createObject(getId(), getClass(), this.parent, this.style);
   }
 
   /**

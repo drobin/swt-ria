@@ -8,6 +8,11 @@ import org.eclipse.swt.SWTException;
  */
 public class Shell extends Decorations {
   /**
+   * The top-level display.
+   */
+  private Display display;
+
+  /**
    * Constructs a new instance of this class. This is equivalent to calling
    * <code>Shell((Display)null)</code>.
    *
@@ -22,7 +27,7 @@ public class Shell extends Decorations {
    *  </ul>
    */
   public Shell() throws SWTException {
-    this((Display)null);
+    this(Display.getCurrent());
   }
 
   /**
@@ -48,7 +53,7 @@ public class Shell extends Decorations {
    *  </ul>
    */
   public Shell(Display display) throws SWTException {
-    this (display, SWT.SHELL_TRIM);
+    this(display, SWT.SHELL_TRIM);
   }
 
   /**
@@ -83,7 +88,13 @@ public class Shell extends Decorations {
    */
   public Shell(Display display, int style) throws SWTException {
     super(null, style);
-    setDisplay(display);
+
+    if (display == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    this.display = display;
+    this.display.createObject(getId(), getClass(), this.display);
 
     // TODO Check for SWTException
   }
@@ -112,7 +123,7 @@ public class Shell extends Decorations {
    *  </ul>
    */
   public Shell(int style) throws SWTException {
-    this ((Display)null, style);
+    this((Display)null, style);
   }
 
   /**
@@ -179,8 +190,15 @@ public class Shell extends Decorations {
    */
   public Shell(Shell parent, int style) throws SWTException {
     super(parent, style);
+  }
 
-    setDisplay(parent.getDisplay());
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.widgets.Widget#getDisplay()
+   */
+  @Override
+  public Display getDisplay() throws SWTException {
+    // TODO Check for ERROR_WIDGET_DISPOSED
+    return (this.display);
   }
 
   /**
@@ -203,15 +221,6 @@ public class Shell extends Decorations {
    */
   public void open() throws SWTException {
     getDisplay().callMethod(getId(), "open");
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.widgets.Widget#createObject()
-   */
-  @Override
-  protected void createObject() {
-    // TODO Pass parent Display to ctor
-    getDisplay().createObject(getId(), getClass(), getDisplay());
   }
 
   /* (non-Javadoc)
