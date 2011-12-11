@@ -27,6 +27,11 @@ public class SWTEventListener implements Listener {
   private Channel channel = null;
 
   /**
+   * Mapping between object-id and {@link SWTObject}.
+   */
+  private SWTObjectMap objMap = null;
+
+  /**
    * Factory used to create messages.
    */
   private SWTMessageFactory messageFactory = null;
@@ -36,9 +41,12 @@ public class SWTEventListener implements Listener {
    */
   private int objId;
 
-  public SWTEventListener(int objId, Channel channel, SWTMessageFactory messageFactory) {
+  public SWTEventListener(int objId, Channel channel, SWTObjectMap objMap,
+      SWTMessageFactory messageFactory) {
+
     this.objId = objId;
     this.channel = channel;
+    this.objMap = objMap;
     this.messageFactory = messageFactory;
   }
 
@@ -49,6 +57,7 @@ public class SWTEventListener implements Listener {
     Map<String, Object> attributes = new HashMap<String, Object>();
     attributes.put("swtObjectId", this.objId);
     attributes.put("type", e.type);
+    attributes.put("widget", this.objMap.get(this.objId));
 
     switch (e.type) {
       case SWT.Selection:

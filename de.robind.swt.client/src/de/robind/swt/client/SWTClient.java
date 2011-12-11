@@ -44,8 +44,8 @@ public class SWTClient {
         bootstrap.connect(new InetSocketAddress("localhost", 4711));
     future.awaitUninterruptibly();
 
-    SWTEventListenerFactory listenerFactory =
-        new SWTEventListenerFactory(future.getChannel(), messageFactory);
+    SWTEventListenerFactory listenerFactory = new SWTEventListenerFactory(
+        future.getChannel(), objMap, messageFactory);
 
     while (future.getChannel().isConnected() && !shell.isDisposed()) {
       if (!display.readAndDispatch()) {
