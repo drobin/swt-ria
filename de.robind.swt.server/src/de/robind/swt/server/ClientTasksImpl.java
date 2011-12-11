@@ -110,7 +110,14 @@ public class ClientTasksImpl implements ClientTasks {
     Event event = new Event();
     for (String attribute: swtEvent.getAttributes()) {
       Field f = Event.class.getField(attribute);
-      f.set(event, swtEvent.getAttributeValue(attribute));
+      Object value = swtEvent.getAttributeValue(attribute);
+
+      if (value instanceof SWTObjectId) {
+        SWTObject obj = SWTObject.findObjectById(((SWTObjectId)value).getId());
+        f.set(event, obj);
+      } else {
+        f.set(event, value);
+      }
     }
 
     return (event);
