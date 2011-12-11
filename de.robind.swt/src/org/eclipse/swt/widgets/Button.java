@@ -54,7 +54,7 @@ public class Button extends Control {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
 
     TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
     addListener(SWT.Selection, listenerProxy);
@@ -86,7 +86,7 @@ public class Button extends Control {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
 
     removeTypedListener(SWT.Selection, listener);
     removeTypedListener(SWT.DefaultSelection, listener);
@@ -109,7 +109,7 @@ public class Button extends Control {
    */
   public String getText() throws SWTException {
     // TODO Test for ARROW
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
     return (this.text);
   }
 
@@ -151,8 +151,8 @@ public class Button extends Control {
     }
 
     // TODO Test for ARROW
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
-
+    checkWidget();
     getDisplay().callMethod(getId(), "setText", string);
+    this.text = string;
   }
 }

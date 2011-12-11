@@ -66,13 +66,15 @@ public class Widget extends SWTObject {
     // Will throw SWTException (with SWT.ERROR_INVALID_SUBCLASS) on failure
     checkSubclass();
 
-    // TODO Check for SWT.ERROR_THREAD_INVALID_ACCESS
-
     this.parent = parent;
     this.style = style;
 
     Display display = getDisplay();
     if (display != null) {
+      if (display.thread != Thread.currentThread()) {
+        throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
+      }
+
       display.createObject(getId(), getClass(), this.parent, this.style);
     }
   }
@@ -103,7 +105,7 @@ public class Widget extends SWTObject {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
 
     this.listenerTable.addListener(eventType, listener);
   }
@@ -135,7 +137,7 @@ public class Widget extends SWTObject {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
 
     this.listenerTable.removeListener(eventType, listener);
   }
@@ -165,7 +167,7 @@ public class Widget extends SWTObject {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
 
     this.listenerTable.removeListener(eventType, listener);
   }
@@ -189,7 +191,7 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   public Listener[] getListeners(int eventType) throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
     return (this.listenerTable.getListener(eventType));
   }
 
@@ -213,7 +215,7 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   public void notifyListeners(int eventType, Event event) throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
     for (Listener listener: getListeners(eventType)) {
       listener.handleEvent(event);
     }
@@ -237,8 +239,7 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   public boolean isListening(int eventType) throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
-
+    checkWidget();
     return (this.listenerTable.haveListener(eventType));
   }
 
@@ -274,7 +275,9 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   public Display getDisplay() throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED
+    if (isDisposed()) {
+      throw new SWTException(SWT.ERROR_DEVICE_DISPOSED);
+    }
     return (this.parent.getDisplay());
   }
 
@@ -301,7 +304,7 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   public int getStyle() throws SWTException {
-    // TODO Check for ERROR_THREAD_INVALID_ACCESS, ERROR_DEVICE_DISPOSED
+    checkWidget();
     return (this.style);
   }
 
@@ -333,6 +336,42 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   protected void checkSubclass() throws SWTException {
+  }
+
+  /**
+   * Throws an {@link SWTException} if the receiver can not be accessed by the
+   * caller. This may include both checks on the state of the receiver and more
+   * generally on the entire execution context. This method <i>should</i> be
+   * called by widget implementors to enforce the standard SWT invariants.
+   * <p>
+   * Currently, it is an error to invoke any method (other than
+   * {@link #isDisposed()}) on a widget that has had its dispose() method
+   * called. It is also an error to call widget methods from any thread that is
+   * different from the thread that created the widget.
+   * <p>
+   * In future releases of SWT, there may be more or fewer error checks and
+   * exceptions may be thrown for different reasons.
+   *
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  protected void checkWidget() throws SWTException {
+    Display display = getDisplay();
+
+    if (display == null || isDisposed()) {
+      throw new SWTException(SWT.ERROR_WIDGET_DISPOSED);
+    }
+
+    if (display.thread != Thread.currentThread ()) {
+      throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
+    }
   }
 
   /**

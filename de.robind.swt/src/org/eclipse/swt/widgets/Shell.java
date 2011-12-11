@@ -197,7 +197,10 @@ public class Shell extends Decorations {
    */
   @Override
   public Display getDisplay() throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED
+    if (isDisposed()) {
+      throw new SWTException(SWT.ERROR_WIDGET_DISPOSED);
+    }
+
     return (this.display);
   }
 

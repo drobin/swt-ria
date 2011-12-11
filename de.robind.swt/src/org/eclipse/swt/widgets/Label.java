@@ -92,10 +92,8 @@ public class Label extends Control {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
-
+    checkWidget();
     getDisplay().callMethod(getId(), "setText", string);
-
     this.text = string;
   }
 }

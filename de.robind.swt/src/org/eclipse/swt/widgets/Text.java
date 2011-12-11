@@ -34,7 +34,7 @@ public class Text extends Scrollable {
    *  </ul>
    */
   public String getText() throws SWTException {
-    // TODO Check for ERROR_THREAD_INVALID_ACCESS, ERROR_DEVICE_DISPOSED
+    checkWidget();
     return (this.text);
   }
 
@@ -63,10 +63,8 @@ public class Text extends Scrollable {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_THREAD_INVALID_ACCESS, ERROR_DEVICE_DISPOSED
-
+    checkWidget();
     getDisplay().callMethod(getId(), "setText", string);
-
     this.text = string;
   }
 }

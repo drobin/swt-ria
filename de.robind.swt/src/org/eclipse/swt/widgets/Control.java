@@ -35,7 +35,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public Object getLayoutData() throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
     return (this.layoutData);
   }
 
@@ -57,7 +57,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void setLayoutData(Object layoutData) throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
 
     if (!(layoutData instanceof LayoutData)) {
       throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);

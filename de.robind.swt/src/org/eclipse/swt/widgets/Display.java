@@ -29,7 +29,7 @@ public class Display extends Device {
   /**
    * The thread which has created the display
    */
-  private Thread thread;
+  Thread thread;
 
   /**
    * Event received from the client.

@@ -33,7 +33,7 @@ public class Decorations extends Canvas {
    *  </ul>
    */
   public String getText() throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
     return (this.text);
   }
 
@@ -61,10 +61,8 @@ public class Decorations extends Canvas {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
-
+    checkWidget();
     getDisplay().callMethod(getId(), "setText", string);
-
     this.text = string;
   }
 }

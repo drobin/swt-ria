@@ -34,7 +34,7 @@ public class Composite extends Scrollable {
    *  </ul>
    */
   public Layout getLayout() throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
     return (this.layout);
   }
 
@@ -54,7 +54,7 @@ public class Composite extends Scrollable {
    *  </ul>
    */
   public void setLayout(Layout layout) throws SWTException {
-    // TODO Check for ERROR_WIDGET_DISPOSED, ERROR_THREAD_INVALID_ACCESS
+    checkWidget();
     // TODO Make sure that layout can be null
 
     try {
