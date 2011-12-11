@@ -230,12 +230,4 @@ public class Shell extends Decorations {
   boolean canHaveParent() {
     return (false);
   }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.widgets.Widget#canDispose()
-   */
-  @Override
-  boolean canDispose() {
-    return (false);
-  }
 }

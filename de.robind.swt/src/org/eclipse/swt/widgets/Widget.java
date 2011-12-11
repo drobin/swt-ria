@@ -59,7 +59,7 @@ public class Widget extends SWTObject {
       throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
     }
 
-    if (parent != null && parent.canDispose() && parent.isDisposed()) {
+    if (parent != null && parent.isDisposed()) {
       throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
     }
 
@@ -345,21 +345,6 @@ public class Widget extends SWTObject {
    * @return <code>true</code> is returned, if this widget can have a parent.
    */
   boolean canHaveParent() {
-    return (true);
-  }
-
-  /**
-   * Checks whether this widget can be disposed.
-   * <p>
-   * The widget provides an {@link #isDisposed() disposed-state}. The
-   * constructor will check the disposed-state of the parent widget and raise
-   * a {@link SWTException}, if already disposed. Some widgets cannot have a
-   * disposed-state, if this method returns <code>false</code>, the check is
-   * not performed.
-   *
-   * @return <code>true</code> is returned, if the method can be disposed.
-   */
-  boolean canDispose() {
     return (true);
   }
 }
