@@ -16,7 +16,7 @@ public class Display extends Device {
   /**
    * The assigned key.
    */
-  private Key key = null;
+  private Key key;
 
   /**
    * Event received from the client.
@@ -25,25 +25,42 @@ public class Display extends Device {
   private Event nextEvent = null;
 
   /**
-   * TODO Needs to be implemented!!
+   * Constructs a new instance of this class.
+   * <p>
+   * Note: The resulting display is marked as the <i>current</i> display. If
+   * this is the first display which has been constructed since the application
+   * started, it is also marked as the default display.
+   *
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_INVALID_SUBCLASS} -
+   *      if this class is not an allowed subclass
+   *    </li>
+   *  </ul>
    */
-  public Display() {
+  public Display() throws SWTException {
     this(null);
   }
 
   /**
-   * TODO Needs to be implemented!!
+   * Constructs a new instance of this class using the parameter.
+   *
+   * @param data the device data
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_INVALID_SUBCLASS} -
+   *      if this class is not an allowed subclass
+   *    </li>
+   *  </ul>
    */
-  public Display(DeviceData data) {
-    DisplayPool.getInstance().addDisplay(this);
-
-    try {
-      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-      clientTasks.createObject(getKey(), getId(), getClass());
-    } catch (Throwable t) {
-      // TODO What should you do with the exception?
-      throw new Error(t);
-    }
+  public Display(DeviceData data) throws SWTException {
+    super(data);
   }
 
   /**
@@ -163,5 +180,44 @@ public class Display extends Device {
       e.throwable = t;
       throw e;
     }
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.graphics.Device#create(org.eclipse.swt.graphics.DeviceData)
+   */
+  @Override
+  protected void create(DeviceData data) {
+    DisplayPool.getInstance().addDisplay(this);
+
+    try {
+      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+      clientTasks.createObject(getKey(), getId(), getClass());
+    } catch (Throwable t) {
+      // TODO What should you do with the exception?
+      throw new Error(t);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.graphics.Device#init()
+   */
+  @Override
+  protected void init() {
+    super.init();
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.graphics.Device#release()
+   */
+  @Override
+  protected void release() {
+    super.release();
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.graphics.Device#destroy()
+   */
+  @Override
+  protected void destroy() {
   }
 }
