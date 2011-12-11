@@ -11,6 +11,7 @@ import org.jboss.netty.channel.Channels;
 
 import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTMessageFactory;
+import de.robind.swt.msg.SWTObjectId;
 
 /**
  * SWT-listener.
@@ -27,11 +28,6 @@ public class SWTEventListener implements Listener {
   private Channel channel = null;
 
   /**
-   * Mapping between object-id and {@link SWTObject}.
-   */
-  private SWTObjectMap objMap = null;
-
-  /**
    * Factory used to create messages.
    */
   private SWTMessageFactory messageFactory = null;
@@ -41,12 +37,11 @@ public class SWTEventListener implements Listener {
    */
   private int objId;
 
-  public SWTEventListener(int objId, Channel channel, SWTObjectMap objMap,
+  public SWTEventListener(int objId, Channel channel,
       SWTMessageFactory messageFactory) {
 
     this.objId = objId;
     this.channel = channel;
-    this.objMap = objMap;
     this.messageFactory = messageFactory;
   }
 
@@ -57,7 +52,7 @@ public class SWTEventListener implements Listener {
     Map<String, Object> attributes = new HashMap<String, Object>();
     attributes.put("swtObjectId", this.objId);
     attributes.put("type", e.type);
-    attributes.put("widget", this.objMap.get(this.objId));
+    attributes.put("widget", new SWTObjectId(this.objId));
 
     switch (e.type) {
       case SWT.Selection:

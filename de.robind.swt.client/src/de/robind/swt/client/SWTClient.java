@@ -45,7 +45,7 @@ public class SWTClient {
     future.awaitUninterruptibly();
 
     SWTEventListenerFactory listenerFactory = new SWTEventListenerFactory(
-        future.getChannel(), objMap, messageFactory);
+        future.getChannel(), messageFactory);
 
     while (future.getChannel().isConnected() && !shell.isDisposed()) {
       if (!display.readAndDispatch()) {
