@@ -1,5 +1,6 @@
 package org.eclipse.swt.widgets;
 
+import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 
@@ -13,6 +14,13 @@ import org.eclipse.swt.graphics.Rectangle;
  * unspecified.
  */
 public class Event {
+  /**
+   * HINT Extension of SWT-server.
+   * Contains the {@link SWTObject#getId() id} of the object, where the event
+   * was emitted.
+   */
+  public int swtObjectId;
+
   /**
    * the button that was pressed or released; 1 for the first button, 2 for the
    * second button, and 3 for the third button, etc.

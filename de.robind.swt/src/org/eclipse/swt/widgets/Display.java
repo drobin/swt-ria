@@ -2,6 +2,7 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.DeviceData;
 import org.eclipse.swt.server.ClientTasks;
@@ -74,7 +75,7 @@ public class Display extends Device {
    */
   public boolean readAndDispatch() throws SWTException {
     if (this.nextEvent != null) {
-      Widget widget = this.nextEvent.widget;
+      Widget widget = (Widget)SWTObject.findObjectById(this.nextEvent.swtObjectId);
       widget.notifyListeners(this.nextEvent.type, this.nextEvent);
 
       this.nextEvent = null;
