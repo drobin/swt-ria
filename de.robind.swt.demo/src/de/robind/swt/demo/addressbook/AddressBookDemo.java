@@ -1,4 +1,4 @@
-package de.robind.swt.demo;
+package de.robind.swt.demo.addressbook;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
