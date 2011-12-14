@@ -3,7 +3,6 @@ package de.robind.swt.demo.addressbook;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 public class AddressBookDemo {
@@ -19,10 +18,10 @@ public class AddressBookDemo {
     listViewer.setContentProvider(new AddressBookContentProvider());
     listViewer.setInput(new AddressBookModel());
 
-    Label label = new Label(shell, SWT.LEFT);
-    label.setText("Some content");
+    AddressBookDetailsWidget detailsWidget =
+        new AddressBookDetailsWidget(shell, SWT.NO_SCROLL);
 
-    SashBuilder.buildSash(shell, listViewer.getList(), label);
+    SashBuilder.buildSash(shell, listViewer.getList(), detailsWidget);
 
     shell.open();
     while (!shell.isDisposed()) {
