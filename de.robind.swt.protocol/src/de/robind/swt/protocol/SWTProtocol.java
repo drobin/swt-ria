@@ -79,9 +79,14 @@ public class SWTProtocol {
   public static final byte ARG_SWTOBJ = 5;
 
   /**
+   * The argument is an array.
+   */
+  public static final byte ARG_ARRAY = 6;
+
+  /**
    * A null-argument.
    */
-  public static final byte ARG_NULL = 6;
+  public static final byte ARG_NULL = 7;
 
   /**
    * Reads a string from the given buffer.
@@ -316,6 +321,7 @@ public class SWTProtocol {
       case ARG_BYTE:   return (buffer.readByte());
       case ARG_BOOL:   return (readBoolean(buffer));
       case ARG_SWTOBJ: return (readSwtObjectId(buffer));
+      case ARG_ARRAY:  return (readArray(buffer));
       case ARG_NULL:   return (null);
       default: throw new SWTProtocolException("Invalid argument-type: " + type);
     }
@@ -341,6 +347,9 @@ public class SWTProtocol {
     if (value == null) {
       buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_NULL);
+    } else if (value instanceof Object[]) {
+      buffer.writeByte(ARG_ARRAY);
+      writeArray(buffer, (Object[])value);
     } else if (value instanceof String) {
       buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_STRING);

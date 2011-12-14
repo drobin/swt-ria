@@ -485,6 +485,21 @@ public class SWTProtocolTest {
   }
 
   @Test
+  public void readArgumentArray() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(SWTProtocol.ARG_ARRAY);
+    buffer.writeByte(2);
+    SWTProtocol.writeArgument(buffer, "foo");
+    SWTProtocol.writeArgument(buffer, 4711);
+
+    Object value = SWTProtocol.readArgument(buffer);
+    Object array[] = (Object[])value;
+    assertThat(array.length, is(2));
+    assertThat((String)array[0], is(equalTo("foo")));
+    assertThat((Integer)array[1], is(4711));
+  }
+
+  @Test
   public void writeArgumentInvalidArgument() throws Exception {
     class Foo {
     }
@@ -660,5 +675,17 @@ public class SWTProtocolTest {
     SWTProtocol.writeArgument(buffer, null);
 
     assertThat(buffer.readByte(), is(SWTProtocol.ARG_NULL));
+  }
+
+  @Test
+  public void writeArgumentArray() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+
+    SWTProtocol.writeArgument(buffer, new Object[] {"foo", 4711});
+
+    assertThat(buffer.readByte(), is((byte)SWTProtocol.ARG_ARRAY));
+    assertThat(buffer.readByte(), is((byte)2));
+    assertThat((String)SWTProtocol.readArgument(buffer), is(equalTo("foo")));
+    assertThat((Integer)SWTProtocol.readArgument(buffer), is(4711));
   }
 }
