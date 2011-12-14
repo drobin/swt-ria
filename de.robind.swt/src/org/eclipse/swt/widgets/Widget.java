@@ -3,6 +3,7 @@ package org.eclipse.swt.widgets;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.TypedListener;
 
 /**
@@ -241,6 +242,71 @@ public class Widget extends SWTObject {
   public boolean isListening(int eventType) throws SWTException {
     checkWidget();
     return (this.listenerTable.haveListener(eventType));
+  }
+
+  /**
+   * Adds the listener to the collection of listeners who will be notified when
+   * the widget is disposed. When the widget is disposed, the listener is
+   * notified by sending it the
+   * {@link DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)}
+   * message.
+   *
+   * @param listener the listener which should be notified when the receiver
+   *                 is disposed
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void addDisposeListener(DisposeListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
+    addListener(SWT.Dispose, listenerProxy);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be
+   * notified when the widget is disposed.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void removeDisposeListener(DisposeListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.Dispose, listener);
   }
 
   /**
