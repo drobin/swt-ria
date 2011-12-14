@@ -50,4 +50,35 @@ public class List extends Scrollable {
   public List(Composite parent, int style) throws SWTException {
     super(parent, style);
   }
+
+  /**
+   * Returns the zero-relative indices of the items which are currently
+   * selected in the receiver. The order of the indices is unspecified. The
+   * array is empty if no items are selected.
+   * <p>
+   * Note: This is not the actual structure used by the receiver to maintain
+   * its selection, so modifying the array will not affect the receiver.
+   *
+   * @return the array of indices of the selected items
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public int[] getSelectionIndices() throws SWTException {
+    Object array[] = (Object[])getDisplay().callMethod(
+        getId(), "getSelectionIndices");
+
+    int result[] = new int[array.length];
+    for (int i = 0; i < array.length; i++) {
+      result[i] = (Integer)array[i];
+    }
+
+    return (result);
+  }
 }
