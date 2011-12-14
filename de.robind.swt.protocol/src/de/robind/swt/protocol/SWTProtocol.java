@@ -1,6 +1,7 @@
 package de.robind.swt.protocol;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 
@@ -273,27 +274,40 @@ public class SWTProtocol {
     return (result);
   }
 
-  public static void writeArray(ChannelBuffer buffer, Object array[])
+  /**
+   * Writes an array into the given buffer.
+   *
+   * @param buffer The destination buffer
+   * @param value The array to be encoded
+   * @throws IndexOutOfBoundsException if the buffer if not big enough
+   * @throws NullPointerException if <code>buffer</code> or <code>value</code>
+   *         are <code>null</code>
+   */
+  public static void writeArray(ChannelBuffer buffer, Object value)
       throws SWTProtocolException, IndexOutOfBoundsException,
-             NullPointerException{
+             NullPointerException, IllegalArgumentException {
 
     if (buffer == null) {
       throw new NullPointerException("buffer cannot be null");
     }
 
-    if (array == null) {
-      throw new NullPointerException("array cannot be null");
+    if (value == null) {
+      throw new NullPointerException("value cannot be null");
     }
 
-    if (array.length > Byte.MAX_VALUE) {
+    if (!value.getClass().isArray()) {
+      throw new IllegalArgumentException("value is not an array");
+    }
+
+    if (Array.getLength(value) > Byte.MAX_VALUE) {
       throw new SWTProtocolException(
           "Number of arguments cannot be greater than " + Byte.MAX_VALUE);
     }
 
-    buffer.writeByte(array.length);
+    buffer.writeByte(Array.getLength(value));
 
-    for (int i = 0; i < array.length; i++) {
-      writeArgument(buffer, array[i]);
+    for (int i = 0; i < Array.getLength(value); i++) {
+      writeArgument(buffer, Array.get(value, i));
     }
   }
 
@@ -347,9 +361,9 @@ public class SWTProtocol {
     if (value == null) {
       buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_NULL);
-    } else if (value instanceof Object[]) {
+    } else if (value.getClass().isArray()) {
       buffer.writeByte(ARG_ARRAY);
-      writeArray(buffer, (Object[])value);
+      writeArray(buffer, value);
     } else if (value instanceof String) {
       buffer.ensureWritableBytes(1);
       buffer.writeByte(ARG_STRING);

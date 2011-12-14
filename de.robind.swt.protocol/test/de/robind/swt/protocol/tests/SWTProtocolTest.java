@@ -342,11 +342,19 @@ public class SWTProtocolTest {
   }
 
   @Test
-  public void writeArrayNullArray() throws Exception {
+  public void writeArrayNullValue() throws Exception {
     exception.expect(NullPointerException.class);
-    exception.expectMessage("array cannot be null");
+    exception.expectMessage("value cannot be null");
 
     SWTProtocol.writeArray(ChannelBuffers.dynamicBuffer(), null);
+  }
+
+  @Test
+  public void writeArrayInvalidValue() throws Exception {
+    exception.expect(IllegalArgumentException.class);
+    exception.expectMessage("value is not an array");
+
+    SWTProtocol.writeArray(ChannelBuffers.dynamicBuffer(), 4711);
   }
 
   @Test
