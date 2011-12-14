@@ -1,5 +1,8 @@
 package de.robind.swt.demo.addressbook;
 
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -8,7 +11,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class AddressBookDetailsWidget extends Composite {
+public class AddressBookDetailsWidget extends Composite
+  implements ISelectionChangedListener {
+
   private Label firstNameLabel = null;
   private Text firstNameText = null;
   private Label lastNameLabel = null;
@@ -29,7 +34,6 @@ public class AddressBookDetailsWidget extends Composite {
     this.firstNameLabel.setLayoutData(firstNameLabelData);
 
     this.firstNameText = new Text(this, SWT.READ_ONLY);
-    this.firstNameText.setText("First name");
     FormData firstNameTextData = new FormData();
     this.firstNameText.setLayoutData(firstNameTextData);
 
@@ -39,7 +43,6 @@ public class AddressBookDetailsWidget extends Composite {
     this.lastNameLabel.setLayoutData(lastNameLabelData);
 
     this.lastNameText = new Text(this, SWT.READ_ONLY);
-    this.lastNameText.setText("Last name");
     FormData lastNameTextData = new FormData();
     this.lastNameText.setLayoutData(lastNameTextData);
 
@@ -57,5 +60,22 @@ public class AddressBookDetailsWidget extends Composite {
     lastNameTextData.left = new FormAttachment(lastNameLabel);
     lastNameTextData.top = new FormAttachment(firstNameText);
     lastNameTextData.right = new FormAttachment(100, 0);
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+   */
+  public void selectionChanged(SelectionChangedEvent e) {
+    IStructuredSelection selection = (IStructuredSelection)e.getSelection();
+
+    if (selection.isEmpty()) {
+      this.firstNameText.setText("");
+      this.lastNameText.setText("");
+    } else {
+      Person person = (Person)selection.getFirstElement();
+      this.firstNameText.setText(person.getFirstName());
+      this.lastNameText.setText(person.getLastName());
+    }
+
   }
 }

@@ -20,6 +20,7 @@ public class AddressBookDemo {
 
     AddressBookDetailsWidget detailsWidget =
         new AddressBookDetailsWidget(shell, SWT.NO_SCROLL);
+    listViewer.addSelectionChangedListener(detailsWidget);
 
     SashBuilder.buildSash(shell, listViewer.getList(), detailsWidget);
 
