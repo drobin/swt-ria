@@ -9,6 +9,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class AddressBookDetailsWidget extends Composite {
+  private Label firstNameLabel = null;
+  private Text firstNameText = null;
+  private Label lastNameLabel = null;
+  private Text lastNameText = null;
+
   public AddressBookDetailsWidget(Composite parent, int style) {
     super(parent, style);
 
@@ -18,25 +23,25 @@ public class AddressBookDetailsWidget extends Composite {
     layout.marginRight = 5;
     setLayout(layout);
 
-    Label firstNameLabel = new Label(this, SWT.LEFT);
-    firstNameLabel.setText("First name:");
+    this.firstNameLabel = new Label(this, SWT.LEFT);
+    this.firstNameLabel.setText("First name:");
     FormData firstNameLabelData = new FormData();
-    firstNameLabel.setLayoutData(firstNameLabelData);
+    this.firstNameLabel.setLayoutData(firstNameLabelData);
 
-    Text firstNameText = new Text(this, SWT.READ_ONLY);
-    firstNameText.setText("First name");
+    this.firstNameText = new Text(this, SWT.READ_ONLY);
+    this.firstNameText.setText("First name");
     FormData firstNameTextData = new FormData();
-    firstNameText.setLayoutData(firstNameTextData);
+    this.firstNameText.setLayoutData(firstNameTextData);
 
-    Label lastNameLabel = new Label(this, SWT.LEFT);
-    lastNameLabel.setText("Last name:");
+    this.lastNameLabel = new Label(this, SWT.LEFT);
+    this.lastNameLabel.setText("Last name:");
     FormData lastNameLabelData = new FormData();
-    lastNameLabel.setLayoutData(lastNameLabelData);
+    this.lastNameLabel.setLayoutData(lastNameLabelData);
 
-    Text lastNameText = new Text(this, SWT.READ_ONLY);
-    lastNameText.setText("Last name");
+    this.lastNameText = new Text(this, SWT.READ_ONLY);
+    this.lastNameText.setText("Last name");
     FormData lastNameTextData = new FormData();
-    lastNameText.setLayoutData(lastNameTextData);
+    this.lastNameText.setLayoutData(lastNameTextData);
 
 
     firstNameLabelData.left = new FormAttachment(0, 0);
