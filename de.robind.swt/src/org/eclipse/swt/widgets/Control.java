@@ -81,4 +81,28 @@ public abstract class Control extends Widget implements Drawable {
 
     this.layoutData = layoutData;
   }
+
+  /**
+   * If the argument is <code>false</code>, causes subsequent drawing
+   * operations in the receiver to be ignored. No drawing of any kind can occu
+   * in the receiver until the flag is set to <code>true</code>. Graphics
+   * operations that occurred while the flag was <code>false</code> are lost.
+   * When the flag is set to <code>true</code>, the entire widget is marked
+   * as needing to be redrawn. Nested calls to this method are stacked.
+   *
+   * @param redraw the new redraw state
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void setRedraw(boolean redraw) throws SWTException {
+    checkWidget();
+    getDisplay().callMethod(getId(), "setRedraw", redraw);
+  }
 }
