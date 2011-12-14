@@ -81,4 +81,21 @@ public class List extends Scrollable {
 
     return (result);
   }
+
+  /**
+   * Deselects all selected items in the receiver.
+   *
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void deselectAll() throws SWTException {
+    getDisplay().callMethod(getId(), "deselectAll");
+  }
 }
