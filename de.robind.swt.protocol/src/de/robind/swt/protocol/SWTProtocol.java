@@ -238,6 +238,61 @@ public class SWTProtocol {
   }
 
   /**
+   * Reads an array from the given buffer.
+   *
+   * @param buffer The source buffer
+   * @return The decoded array
+   * @throws SWTProtocolException if decoding has failed
+   * @throws IndexOutOfBoundsException if not enough data are available in
+   *         <code>buffer</code>.
+   * @throws NullPointerException if <code>buffer</code> is <code>null</code>
+   */
+  public static Object[] readArray(ChannelBuffer buffer)
+      throws SWTProtocolException, IndexOutOfBoundsException,
+             NullPointerException {
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    byte numArgs = buffer.readByte();
+    if (numArgs < 0) {
+      throw new SWTProtocolException("Number of arguments cannot be negative");
+    }
+
+    Object result[] = new Object[numArgs];
+    for (int i = 0; i < result.length; i++) {
+      result[i] = readArgument(buffer);
+    }
+
+    return (result);
+  }
+
+  public static void writeArray(ChannelBuffer buffer, Object array[])
+      throws SWTProtocolException, IndexOutOfBoundsException,
+             NullPointerException{
+
+    if (buffer == null) {
+      throw new NullPointerException("buffer cannot be null");
+    }
+
+    if (array == null) {
+      throw new NullPointerException("array cannot be null");
+    }
+
+    if (array.length > Byte.MAX_VALUE) {
+      throw new SWTProtocolException(
+          "Number of arguments cannot be greater than " + Byte.MAX_VALUE);
+    }
+
+    buffer.writeByte(array.length);
+
+    for (int i = 0; i < array.length; i++) {
+      writeArgument(buffer, array[i]);
+    }
+  }
+
+  /**
    * Reads an argument from the given channel.
    * <p>
    * The special case here is, that you don't know what kind of argument you

@@ -283,6 +283,109 @@ public class SWTProtocolTest {
   }
 
   @Test
+  public void readArrayNullBuffer() throws Exception {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("buffer cannot be null");
+
+    SWTProtocol.readArray(null);
+  }
+
+  @Test
+  public void readArrayInvalidLength() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeShort(-1);
+
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Number of arguments cannot be negative");
+
+    SWTProtocol.readArray(buffer);
+  }
+
+  @Test
+  public void readIndexIndexOutOfBounds() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.readString(buffer);
+  }
+
+  @Test
+  public void readArrayEmpty() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(0);
+
+    Object result[] = SWTProtocol.readArray(buffer);
+    assertThat(result.length, is(0));
+  }
+
+  @Test
+  public void readArrayWithContent() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    buffer.writeByte(2);
+    SWTProtocol.writeArgument(buffer, "foo");
+    SWTProtocol.writeArgument(buffer, 4711);
+
+    Object result[] = SWTProtocol.readArray(buffer);
+    assertThat(result.length, is(2));
+    assertThat((String)result[0], is(equalTo("foo")));
+    assertThat((Integer)result[1], is(4711));
+  }
+
+  @Test
+  public void writeArrayNullBuffer() throws Exception {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("buffer cannot be null");
+
+    SWTProtocol.writeArray(null, new Object[] {});
+  }
+
+  @Test
+  public void writeArrayNullArray() throws Exception {
+    exception.expect(NullPointerException.class);
+    exception.expectMessage("array cannot be null");
+
+    SWTProtocol.writeArray(ChannelBuffers.dynamicBuffer(), null);
+  }
+
+  @Test
+  public void writeArrayTooManyArguments() throws Exception {
+    exception.expect(SWTProtocolException.class);
+    exception.expectMessage("Number of arguments cannot be greater than 127");
+
+    Object array[] = new Object[Byte.MAX_VALUE + 1];
+    SWTProtocol.writeArray(ChannelBuffers.dynamicBuffer(), array);
+  }
+
+  @Test
+  public void writeArrayIndexOutOfBoundsWhileWriteLength() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.directBuffer(1);
+
+    exception.expect(IndexOutOfBoundsException.class);
+
+    SWTProtocol.writeArray(buffer, new Object[] {"foo"});
+  }
+
+  @Test
+  public void writeArrayEmpty() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    SWTProtocol.writeArray(buffer, new Object[] {});
+
+    assertThat(buffer.readByte(), is((byte)0));
+  }
+
+  @Test
+  public void writeArrayWithContent() throws Exception {
+    ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+    SWTProtocol.writeArray(buffer, new Object[] {"foo", 4711});
+
+    assertThat(buffer.readByte(), is((byte)2));
+    assertThat((String)SWTProtocol.readArgument(buffer), is(equalTo("foo")));
+    assertThat((Integer)SWTProtocol.readArgument(buffer), is(4711));
+  }
+
+  @Test
   public void readArgumentInvalidType() throws Exception {
     ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
     buffer.writeByte(42);
