@@ -71,6 +71,7 @@ public class List extends Scrollable {
    *  </ul>
    */
   public int[] getSelectionIndices() throws SWTException {
+    checkWidget();
     Object array[] = (Object[])getDisplay().callMethod(
         getId(), "getSelectionIndices");
 
@@ -80,6 +81,26 @@ public class List extends Scrollable {
     }
 
     return (result);
+  }
+
+  /**
+   * Returns the zero-relative index of the item which is currently at the top
+   * of the receiver. This index can change when items are scrolled or new
+   * items are added or removed.
+   *
+   * @return the index of the top item
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public int getTopIndex() throws SWTException {
+    return (Integer)getDisplay().callMethod(getId(), "getTopIndex");
   }
 
   /**
@@ -96,6 +117,7 @@ public class List extends Scrollable {
    *  </ul>
    */
   public void deselectAll() throws SWTException {
+    checkWidget();
     getDisplay().callMethod(getId(), "deselectAll");
   }
 }
