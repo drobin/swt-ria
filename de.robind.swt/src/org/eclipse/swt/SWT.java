@@ -236,6 +236,11 @@ public class SWT {
   public static final int MAX = 1 << 10;
 
   /**
+   * The menu detect event type (value is 35).
+   */
+  public static final int MenuDetect = 35;
+
+  /**
    * Style constant for minimize box trim (value is 1<<7).
    */
   public static final int MIN = 1 << 7;

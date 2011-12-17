@@ -13,6 +13,8 @@ import org.eclipse.swt.events.HelpEvent;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -76,6 +78,14 @@ public class TypedListenerProxy implements Listener {
       case SWT.KeyUp: {
         KeyEvent event = new KeyEvent(e);
         ((KeyListener)listener).keyReleased(event);
+        e.doit = event.doit;
+        break;
+      }
+      case SWT.MenuDetect: {
+        MenuDetectEvent event = new MenuDetectEvent(e);
+        ((MenuDetectListener)listener).menuDetected(event);
+        e.x = event.x;
+        e.y = event.y;
         e.doit = event.doit;
         break;
       }

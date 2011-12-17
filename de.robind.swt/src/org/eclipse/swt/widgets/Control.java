@@ -7,6 +7,7 @@ import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
@@ -239,6 +240,38 @@ public abstract class Control extends Widget implements Drawable {
 
   /**
    * Adds the listener to the collection of listeners who will be notified when
+   * the platform-specific context menu trigger has occurred, by sending it one
+   * of the messages defined in the {@link MenuDetectListener} interface.
+   *
+   * @param listener the listener which should be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void addMenuDetectListener(MenuDetectListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
+    addListener(SWT.MenuDetect, listenerProxy);
+  }
+
+  /**
+   * Adds the listener to the collection of listeners who will be notified when
    * mouse buttons are pressed and released, by sending it one of the messages
    * defined in the {@link MouseListener} interface.
    *
@@ -433,6 +466,36 @@ public abstract class Control extends Widget implements Drawable {
 
     removeTypedListener(SWT.KeyUp, listener);
     removeTypedListener(SWT.KeyDown, listener);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be notified
+   * when the platform-specific context menu trigger has occurred.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void removeMenuDetectListener(MenuDetectListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.MenuDetect, listener);
   }
 
   /**
