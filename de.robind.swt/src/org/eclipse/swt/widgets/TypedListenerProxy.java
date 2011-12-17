@@ -17,6 +17,7 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TypedListener;
@@ -94,6 +95,9 @@ public class TypedListenerProxy implements Listener {
         break;
       case SWT.MouseDown:
         ((MouseListener)listener).mouseDown(new MouseEvent(e));
+        break;
+      case SWT.MouseMove:
+        ((MouseMoveListener)listener).mouseMove(new MouseEvent(e));
         break;
       case SWT.MouseUp:
         ((MouseListener)listener).mouseUp(new MouseEvent(e));

@@ -256,6 +256,11 @@ public class SWT {
   public static final int MouseDown = 3;
 
   /**
+   * The mouse move event type (value is 5).
+   */
+  public static final int MouseMove = 5;
+
+  /**
    * The mouse up event type (value is 4).
    */
   public static final int MouseUp = 4;
