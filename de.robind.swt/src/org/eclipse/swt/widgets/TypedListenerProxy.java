@@ -11,6 +11,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.HelpEvent;
 import org.eclipse.swt.events.HelpListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -65,6 +67,18 @@ public class TypedListenerProxy implements Listener {
       case SWT.Help:
         ((HelpListener)listener).helpRequested(new HelpEvent (e));
         break;
+      case SWT.KeyDown: {
+        KeyEvent event = new KeyEvent(e);
+        ((KeyListener)listener).keyPressed(event);
+        e.doit = event.doit;
+        break;
+      }
+      case SWT.KeyUp: {
+        KeyEvent event = new KeyEvent(e);
+        ((KeyListener)listener).keyReleased(event);
+        e.doit = event.doit;
+        break;
+      }
       case SWT.MouseDoubleClick:
         ((MouseListener)listener).mouseDoubleClick(new MouseEvent(e));
         break;
@@ -80,13 +94,14 @@ public class TypedListenerProxy implements Listener {
       case SWT.Resize:
         ((ControlListener)listener).controlResized(new ControlEvent(e));
         break;
-      case SWT.Selection:
+      case SWT.Selection: {
         SelectionEvent event = new SelectionEvent(e);
         ((SelectionListener)listener).widgetSelected(event);
         e.x = event.x;
         e.y = event.y;
         e.doit = event.doit;
         break;
+      }
       default:
         throw new UnsupportedOperationException(
             "Event-type " + e.type + " not implemented yet");

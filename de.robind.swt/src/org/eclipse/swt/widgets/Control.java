@@ -6,6 +6,7 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.HelpListener;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
@@ -198,6 +199,46 @@ public abstract class Control extends Widget implements Drawable {
 
   /**
    * Adds the listener to the collection of listeners who will be notified when
+   * keys are pressed and released on the system keyboard, by sending it one of
+   * the messages defined in the {@link KeyListener} interface.
+   * <p>
+   * When a key listener is added to a control, the control will take part in
+   * widget traversal. By default, all traversal keys (such as the tab key and
+   * so on) are delivered to the control. In order for a control to take part
+   * in traversal, it should listen for traversal events. Otherwise, the user
+   * can traverse into a control but not out. Note that native controls such
+   * as table and tree implement key traversal in the operating system. It is
+   * not necessary to add traversal listeners for these controls, unless you
+   * want to override the default traversal.
+   *
+   * @param listener the listener which should be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void addKeyListener(KeyListener listener) throws SWTException {
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
+    addListener(SWT.KeyUp, listenerProxy);
+    addListener(SWT.KeyDown, listenerProxy);
+  }
+
+  /**
+   * Adds the listener to the collection of listeners who will be notified when
    * mouse buttons are pressed and released, by sending it one of the messages
    * defined in the {@link MouseListener} interface.
    *
@@ -363,6 +404,35 @@ public abstract class Control extends Widget implements Drawable {
     checkWidget();
 
     removeTypedListener(SWT.Help, listener);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be notified
+   * when keys are pressed and released on the system keyboard.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void removeKeyListener(KeyListener listener) throws SWTException {
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.KeyUp, listener);
+    removeTypedListener(SWT.KeyDown, listener);
   }
 
   /**

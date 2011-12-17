@@ -196,6 +196,16 @@ public class SWT {
   public static final int KEYPAD = 1 << 1;
 
   /**
+   * The key down event type (value is 1).
+   */
+  public static final int KeyDown = 1;
+
+  /**
+   * The key up event type (value is 2).
+   */
+  public static final int KeyUp = 2;
+
+  /**
    * Style constant for leading alignment (value is 1<<14).
    */
   public static final int LEAD = 1 << 14;
