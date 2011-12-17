@@ -91,6 +91,11 @@ public class SWT {
   public static final int Dispose = 12;
 
   /**
+   * The drag detect event type (value is 29).
+   */
+  public static final int DragDetect = 29;
+
+  /**
    * Keyboard event constant representing the END key (value is (1<<24)+8).
    */
   public static final int END = (1 << 24) + 8;
