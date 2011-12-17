@@ -10,6 +10,7 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.ClientTasks;
@@ -336,6 +337,40 @@ public abstract class Control extends Widget implements Drawable {
   }
 
   /**
+   * Adds the listener to the collection of listeners who will be notified when
+   * the mouse passes or hovers over controls, by sending it one of the
+   * messages defined in the {@link MouseTrackListener} interface.
+   *
+   * @param listener the listener which should be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void addMouseTrackListener(MouseTrackListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
+    addListener(SWT.MouseEnter, listenerProxy);
+    addListener(SWT.MouseExit, listenerProxy);
+    addListener(SWT.MouseHover, listenerProxy);
+  }
+
+  /**
    * Returns layout data which is associated with the receiver.
    *
    * @return the receiver's layout data
@@ -589,6 +624,38 @@ public abstract class Control extends Widget implements Drawable {
     checkWidget();
 
     removeTypedListener(SWT.MouseMove, listener);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be notified
+   * when the mouse passes or hovers over controls.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void removeMouseTrackListener(MouseTrackListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.MouseEnter, listener);
+    removeTypedListener(SWT.MouseExit, listener);
+    removeTypedListener(SWT.MouseHover, listener);
   }
 
   /**

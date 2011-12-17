@@ -256,6 +256,21 @@ public class SWT {
   public static final int MouseDown = 3;
 
   /**
+   * The mouse enter event type (value is 6).
+   */
+  public static final int MouseEnter = 6;
+
+  /**
+   * The mouse exit event type (value is 7).
+   */
+  public static final int MouseExit = 7;
+
+  /**
+   * The mouse hover event type (value is 32).
+   */
+  public static final int MouseHover = 32;
+
+  /**
    * The mouse move event type (value is 5).
    */
   public static final int MouseMove = 5;
