@@ -17,6 +17,12 @@ package org.eclipse.swt;
  */
 public class SWT {
   /**
+   * A constant indicating that a given operation should be performed on all
+   * widgets (value is 1<<0).
+   */
+  public static final int ALL = 1 << 0;
+
+  /**
    * Style constant for vertical alignment or orientation behavior
    * (value is 1).
    */
@@ -120,6 +126,12 @@ public class SWT {
    * does not fit the protocol-standard.
    */
   public static final int ERROR_INVALID_MESSAGE = 99;
+
+  /**
+   * SWT error constant indicating that a particular feature has not been
+   * implemented on this platform (value is 20).
+   */
+  public static final int ERROR_NOT_IMPLEMENTED = 20;
 
   /**
    * SWT error constant indicating that a null argument was passed in
@@ -245,6 +257,16 @@ public class SWT {
    * appearance (value is CLOSE|TITLE|MIN|MAX|RESIZE).
    */
   public static final int SHELL_TRIM = CLOSE|TITLE|MIN|MAX|RESIZE;
+
+  /**
+   * Key value for setting and getting the skin class of a widget.
+   */
+  public static final String SKIN_CLASS = "org.eclipse.swt.skin.class";
+
+  /**
+   * Key value for setting and getting the skin id of a widget.
+   */
+  public static final String SKIN_ID = "org.eclipse.swt.skin.id";
 
   /**
    * Style constant for align top behavior (value is 1<<7), since align UP and

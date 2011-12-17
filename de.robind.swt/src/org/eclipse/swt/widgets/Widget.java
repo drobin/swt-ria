@@ -1,5 +1,7 @@
 package org.eclipse.swt.widgets;
 
+import java.util.Properties;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
@@ -7,9 +9,29 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.TypedListener;
 
 /**
- * TODO Needs to be implemented!!
+ * This class is the abstract superclass of all user interface objects.
+ * Widgets are created, disposed and issue notification to listeners when
+ * events occur which affect them.
+ *
+ * <dl>
+ *  <dt><b>Styles:</b></dt>
+ *  <dd>(none)</dd>
+ *  <dt><b>Events:</b></dt>
+ *  <dd>Dispose</dd>
+ * </dl>
+ *
+ * IMPORTANT: This class is intended to be subclassed <i>only</i> within the
+ * SWT implementation. However, it has not been marked final to allow those
+ * outside of the SWT development team to implement patched versions of the
+ * class in order to get around specific limitations in advance of when those
+ * limitations can be addressed by the team. Any class built using subclassing
+ * to access the internals of this class will likely fail to compile or run
+ * between releases and may be strongly platform specific. Subclassing should
+ * not be attempted without an intimate and detailed understanding of the
+ * workings of the hierarchy. No support is provided for user-written classes
+ * which are implemented as subclasses of this class.
  */
-public class Widget extends SWTObject {
+public abstract class Widget extends SWTObject {
   /**
    * The parent widget.
    */
@@ -19,6 +41,16 @@ public class Widget extends SWTObject {
    * The style-flags of the widget
    */
   private int style = 0;
+
+  /**
+   * Data assigned to the widget
+   */
+  private Object data = null;
+
+  /**
+   * Properties assigned to the widget
+   */
+  private Properties dataProperties = null;
 
   /**
    * Table stores all assigned listener.
@@ -112,139 +144,6 @@ public class Widget extends SWTObject {
   }
 
   /**
-   * Removes the listener from the collection of listeners who will be notified
-   * when an event of the given type occurs. The event type is one of the event
-   * constants defined in class SWT.
-   *
-   * @param eventType the type of event to listen for
-   * @param listener the listener which should no longer be notified
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
-   *      if the listener is null
-   *    </li>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *  </ul>
-   */
-  public void removeListener(int eventType, Listener listener)
-      throws SWTException {
-
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    this.listenerTable.removeListener(eventType, listener);
-  }
-
-  /**
-   * Removes a {@link TypedListener} from the collection of listeners.
-   *
-   * @param eventType the type of event to listen for
-   * @param listener the listener which should no longer be notified
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
-   *      if the listener is null
-   *    </li>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *  </ul>
-   */
-  void removeTypedListener(int eventType, TypedListener listener)
-      throws SWTException {
-
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    this.listenerTable.removeListener(eventType, listener);
-  }
-
-  /**
-   * Returns an array of listeners who will be notified when an event of the
-   * given type occurs.
-   * The event type is one of the event constants defined in class
-   * <code>SWT</code>.
-   *
-   * @param eventType the type of event to listen for
-   * @return an array of listeners that will be notified when the event occurs
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *  </ul>
-   */
-  public Listener[] getListeners(int eventType) throws SWTException {
-    checkWidget();
-    return (this.listenerTable.getListener(eventType));
-  }
-
-  /**
-   * Notifies all of the receiver's listeners for events of the given type that
-   * one such event has occurred by invoking their
-   * {@link Listener#handleEvent(Event)} method.
-   * The event type is one of the event constants defined in class
-   * <code>SWT</code>.
-   *
-   * @param eventType the type of event which has occurred
-   * @param event the event data
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *  </ul>
-   */
-  public void notifyListeners(int eventType, Event event) throws SWTException {
-    checkWidget();
-    for (Listener listener: getListeners(eventType)) {
-      listener.handleEvent(event);
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if there are any listeners for the specified
-   * event type associated with the receiver, and <code>false</code> otherwise.
-   * The event type is one of the event constants defined in class SWT.
-   *
-   * @param eventType the type of event
-   * @return true if the event is hooked
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *  </ul>
-   */
-  public boolean isListening(int eventType) throws SWTException {
-    checkWidget();
-    return (this.listenerTable.haveListener(eventType));
-  }
-
-  /**
    * Adds the listener to the collection of listeners who will be notified when
    * the widget is disposed. When the widget is disposed, the listener is
    * notified by sending it the
@@ -280,101 +179,6 @@ public class Widget extends SWTObject {
   }
 
   /**
-   * Removes the listener from the collection of listeners who will be
-   * notified when the widget is disposed.
-   *
-   * @param listener the listener which should no longer be notified
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
-   *      if the listener is null
-   *    </li>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *  </ul>
-   */
-  public void removeDisposeListener(DisposeListener listener)
-      throws SWTException {
-
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.Dispose, listener);
-  }
-
-  /**
-   * Returns <code>true</code> if the widget has been disposed, and
-   * <code>false</code> otherwise.
-   * <p>
-   * This method gets the dispose state for the widget. When a widget has been
-   * disposed, it is an error to invoke any other method
-   * (except {@link #dispose()}) using the widget.
-   *
-   * @return <code>true</code> when the widget is disposed and
-   *         <code>false</code> otherwise.
-   *
-   * TODO Needs to be implemented!!
-   */
-  public boolean isDisposed() {
-    return (false);
-  }
-
-  /**
-   * Returns the {@link Display} that is associated with the receiver.
-   * <p>
-   * A widget's display is either provided when it is created (for example, top
-   * level {@link Shell}s) or is the same as its parent's display.
-   *
-   * @return the receiver's display
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *  </ul>
-   */
-  public Display getDisplay() throws SWTException {
-    if (isDisposed()) {
-      throw new SWTException(SWT.ERROR_DEVICE_DISPOSED);
-    }
-    return (this.parent.getDisplay());
-  }
-
-  /**
-   * Returns the receiver's style information.
-   * <p>
-   * Note that the value which is returned by this method may not match the
-   * value which was provided to the constructor when the receiver was created.
-   * This can occur when the underlying operating system does not support a
-   * particular combination of requested styles. For example, if the platform
-   * widget used to implement a particular SWT widget always has scroll bars,
-   * the result of calling this method would always have the SWT.H_SCROLL and
-   * SWT.V_SCROLL bits set.
-   *
-   * @return the style bits
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *  </ul>
-   */
-  public int getStyle() throws SWTException {
-    checkWidget();
-    return (this.style);
-  }
-
-  /**
    * Checks that this class can be subclassed.
    * <p>
    * The SWT class library is intended to be subclassed only at specific,
@@ -402,6 +206,7 @@ public class Widget extends SWTObject {
    *  </ul>
    */
   protected void checkSubclass() throws SWTException {
+    // TODO Implement Widget.checkSubclass()
   }
 
   /**
@@ -438,5 +243,421 @@ public class Widget extends SWTObject {
     if (display.thread != Thread.currentThread ()) {
       throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
     }
+  }
+
+  /**
+   * Disposes of the operating system resources associated with the receiver
+   * and all its descendants. After this method has been invoked, the receiver
+   * and all descendants will answer <code>true</code> when sent the message
+   * {@link #isDisposed()}. Any internal connections between the widgets in the
+   * tree will have been removed to facilitate garbage collection. This method
+   * does nothing if the widget is already disposed.
+   * <p>
+   * NOTE: This method is not called recursively on the descendants of the
+   * receiver. This means that, widget implementers can not detect when a
+   * widget is being disposed of by re-implementing this method, but should
+   * instead listen for the Dispose event.
+   *
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void dispose() throws SWTException {
+    // TODO Implement Widget.dispose()
+  }
+
+  /**
+   * Returns the application defined widget data associated with the receiver,
+   * or <code>null</code> if it has not been set. The widget data is a single,
+   * unnamed field that is stored with every widget.
+   * <p>
+   * Applications may put arbitrary objects in this field. If the object stored
+   * in the widget data needs to be notified when the widget is disposed of, it
+   * is the application's responsibility to hook the Dispose event on the
+   * widget and do so.
+   *
+   * @return the widget data
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public Object getData() throws SWTException {
+    checkWidget();
+    return (this.data);
+  }
+
+  /**
+   * Returns the application defined property of the receiver with the
+   * pecified name, or <code>null</code> if it has not been set.
+   * <p>
+   * Applications may have associated arbitrary objects with the receiver in
+   * this fashion. If the objects stored in the properties need to be notified
+   * when the widget is disposed of, it is the application's responsibility to
+   * hook the Dispose event on the widget and do so.
+   *
+   * @param key the name of the property
+   * @return the value of the property or <code>null</code> if it has not been
+   *         set
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the key is <code>null</code>
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public Object getData(String key) throws SWTException {
+    if (key == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    if (this.dataProperties == null) {
+      return (null);
+    }
+
+    return (this.dataProperties.get(key));
+  }
+
+  /**
+   * Returns the {@link Display} that is associated with the receiver.
+   * <p>
+   * A widget's display is either provided when it is created (for example, top
+   * level {@link Shell}s) or is the same as its parent's display.
+   *
+   * @return the receiver's display
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public Display getDisplay() throws SWTException {
+    if (isDisposed()) {
+      throw new SWTException(SWT.ERROR_DEVICE_DISPOSED);
+    }
+    return (this.parent.getDisplay());
+  }
+
+  /**
+   * Returns an array of listeners who will be notified when an event of the
+   * given type occurs.
+   * The event type is one of the event constants defined in class
+   * <code>SWT</code>.
+   *
+   * @param eventType the type of event to listen for
+   * @return an array of listeners that will be notified when the event occurs
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public Listener[] getListeners(int eventType) throws SWTException {
+    checkWidget();
+    return (this.listenerTable.getListener(eventType));
+  }
+
+  /**
+   * Returns the receiver's style information.
+   * <p>
+   * Note that the value which is returned by this method may not match the
+   * value which was provided to the constructor when the receiver was created.
+   * This can occur when the underlying operating system does not support a
+   * particular combination of requested styles. For example, if the platform
+   * widget used to implement a particular SWT widget always has scroll bars,
+   * the result of calling this method would always have the SWT.H_SCROLL and
+   * SWT.V_SCROLL bits set.
+   *
+   * @return the style bits
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public int getStyle() throws SWTException {
+    checkWidget();
+    return (this.style);
+  }
+
+  /**
+   * Returns <code>true</code> if the widget has been disposed, and
+   * <code>false</code> otherwise.
+   * <p>
+   * This method gets the dispose state for the widget. When a widget has been
+   * disposed, it is an error to invoke any other method
+   * (except {@link #dispose()}) using the widget.
+   *
+   * @return <code>true</code> when the widget is disposed and
+   *         <code>false</code> otherwise.
+   */
+  public boolean isDisposed() {
+    // TODO Implement Widget.isDisposed()
+    return (false);
+  }
+
+  /**
+   * Returns <code>true</code> if there are any listeners for the specified
+   * event type associated with the receiver, and <code>false</code> otherwise.
+   * The event type is one of the event constants defined in class SWT.
+   *
+   * @param eventType the type of event
+   * @return true if the event is hooked
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public boolean isListening(int eventType) throws SWTException {
+    checkWidget();
+    return (this.listenerTable.haveListener(eventType));
+  }
+
+  /**
+   * Notifies all of the receiver's listeners for events of the given type that
+   * one such event has occurred by invoking their
+   * {@link Listener#handleEvent(Event)} method.
+   * The event type is one of the event constants defined in class
+   * <code>SWT</code>.
+   *
+   * @param eventType the type of event which has occurred
+   * @param event the event data
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void notifyListeners(int eventType, Event event) throws SWTException {
+    checkWidget();
+    for (Listener listener: getListeners(eventType)) {
+      listener.handleEvent(event);
+    }
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be notified
+   * when an event of the given type occurs. The event type is one of the event
+   * constants defined in class SWT.
+   *
+   * @param eventType the type of event to listen for
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void removeListener(int eventType, Listener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    this.listenerTable.removeListener(eventType, listener);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be
+   * notified when the widget is disposed.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void removeDisposeListener(DisposeListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.Dispose, listener);
+  }
+
+  /**
+   * Removes a {@link TypedListener} from the collection of listeners.
+   *
+   * @param eventType the type of event to listen for
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  void removeTypedListener(int eventType, TypedListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    this.listenerTable.removeListener(eventType, listener);
+  }
+
+  /**
+   * Marks the widget to be skinned.
+   * <p>
+   * The skin event is sent to the receiver's display when appropriate
+   * (usually before the next event is handled). Widgets are automatically
+   * marked for skinning upon creation as well as when its skin id or class
+   * changes. The skin id and/or class can be changed by calling
+   * {@link Display#setData(String, Object)} with the keys {@link SWT#SKIN_ID}
+   * and/or {@link SWT#SKIN_CLASS}. Once the skin event is sent to a widget,
+   * it will not be sent again unless {@link #reskin(int)} is called on the
+   * widget or on an ancestor while specifying the {@link SWT#ALL} flag.
+   *
+   * @param flags the flags specifying how to reskin
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void reskin(int flags) throws SWTException {
+    checkWidget();
+    getDisplay().callMethod(getId(), "reskin", flags);
+  }
+
+  /**
+   * Sets the application defined widget data associated with the receiver to
+   * be the argument. The widget data is a single, unnamed field that is stored
+   * with every widget.
+   * <p>
+   * Applications may put arbitrary objects in this field. If the object stored
+   * in the widget data needs to be notified when the widget is disposed of,
+   * it is the application's responsibility to hook the Dispose event on the
+   * widget and do so.
+   *
+   * @param data the widget data
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void setData(Object data) throws SWTException {
+    checkWidget();
+    this.data = data;
+  }
+
+  /**
+   * Sets the application defined property of the receiver with the specified
+   * name to the given value.
+   * <p>
+   * Applications may associate arbitrary objects with the receiver in this
+   * fashion. If the objects stored in the properties need to be notified when
+   * the widget is disposed of, it is the application's responsibility to hook
+   * the Dispose event on the widget and do so.
+   *
+   * @param key the name of the property
+   * @param value the new value for the property
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the key is <code>null</code>
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void setData(String key, Object value) throws SWTException {
+    if (key == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    if (this.dataProperties == null) {
+      this.dataProperties = new Properties();
+    }
+
+    this.dataProperties.put(key, value);
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[objId=" + this.getId() + "]";
   }
 }
