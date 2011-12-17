@@ -205,6 +205,21 @@ public class SWT {
   public static final int MIN = 1 << 7;
 
   /**
+   * The mouse double click event type (value is 8).
+   */
+  public static final int MouseDoubleClick = 8;
+
+  /**
+   * The mouse down event type (value is 3).
+   */
+  public static final int MouseDown = 3;
+
+  /**
+   * The mouse up event type (value is 4).
+   */
+  public static final int MouseUp = 4;
+
+  /**
    * The move event type (value is 10).
    */
   public static final int Move = 10;

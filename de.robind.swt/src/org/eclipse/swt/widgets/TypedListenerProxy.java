@@ -5,6 +5,8 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TypedListener;
@@ -44,6 +46,15 @@ public class TypedListenerProxy implements Listener {
     switch (e.type) {
       case SWT.Dispose:
         ((DisposeListener)listener).widgetDisposed(new DisposeEvent(e));
+        break;
+      case SWT.MouseDoubleClick:
+        ((MouseListener)listener).mouseDoubleClick(new MouseEvent(e));
+        break;
+      case SWT.MouseDown:
+        ((MouseListener)listener).mouseDown(new MouseEvent(e));
+        break;
+      case SWT.MouseUp:
+        ((MouseListener)listener).mouseUp(new MouseEvent(e));
         break;
       case SWT.Move:
         ((ControlListener)listener).controlMoved(new ControlEvent(e));
