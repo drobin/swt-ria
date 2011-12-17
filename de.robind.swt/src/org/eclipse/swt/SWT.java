@@ -408,6 +408,78 @@ public class SWT {
   public static final int TRAIL = 1 << 17;
 
   /**
+   * Traversal event detail field value indicating that the key which
+   * designates that focus should be given to the previous tab item was
+   * pressed; typically, this is either the RIGHT-ARROW or DOWN-ARROW keys
+   * (value is 1<<6).
+   */
+  public static final int TRAVERSE_ARROW_NEXT = 1 << 6;
+
+  /**
+   * Traversal event detail field value indicating that the key which
+   * designates that focus should be given to the previous tab item was
+   * pressed; typically, this is either the LEFT-ARROW or UP-ARROW keys
+   * (value is 1<<5).
+   */
+  public static final int TRAVERSE_ARROW_PREVIOUS = 1 << 5;
+
+  /**
+   * Traversal event detail field value indicating that the key which
+   * designates that a dialog should be cancelled was pressed; typically, this
+   * is the ESC key (value is 1<<1).
+   */
+  public static final int TRAVERSE_ESCAPE = 1 << 1;
+
+  /**
+   * Traversal event detail field value indicating that a mnemonic key sequence
+   * was pressed (value is 1<<7).
+   */
+  public static final int TRAVERSE_MNEMONIC = 1 << 7;
+
+  /**
+   * Traversal event detail field value indicating that no traversal action
+   * should be taken (value is 0).
+   */
+  public static final int TRAVERSE_NONE = 0;
+
+  /**
+   * Traversal event detail field value indicating that the key which
+   * designates that the next page of a multi-page window should be shown was
+   * pressed; typically, this is the CTRL-PAGEDOWN key sequence
+   * (value is 1<<9).
+   */
+  public static final int TRAVERSE_PAGE_NEXT = 1 << 9;
+
+  /**
+   * Traversal event detail field value indicating that the key which
+   * designates that the previous page of a multi-page window should be shown
+   * was pressed; typically, this is the CTRL-PAGEUP key sequence
+   * (value is 1<<8).
+   */
+  public static final int TRAVERSE_PAGE_PREVIOUS = 1 << 8;
+
+  /**
+   * Traversal event detail field value indicating that the key which activates
+   * the default button in a dialog was pressed; typically, this is the ENTER
+   * key (value is 1<<2).
+   */
+  public static final int TRAVERSE_RETURN = 1 << 2;
+
+  /**
+   * Traversal event detail field value indicating that the key which
+   * designates that focus should be given to the next tab group was pressed;
+   * typically, this is the TAB key (value is 1<<4).
+   */
+  public static final int TRAVERSE_TAB_NEXT = 1 << 4;
+
+  /**
+   * Traversal event detail field value indicating that the key which
+   * designates that focus should be given to the previous tab group was
+   * pressed; typically, this is the SHIFT-TAB key sequence (value is 1<<3).
+   */
+  public static final int TRAVERSE_TAB_PREVIOUS = 1 << 3;
+
+  /**
    * Style constant for vertical alignment or orientation behavior
    * (value is 1<<9).
    */
