@@ -53,6 +53,12 @@ public class SWT {
   public static final int CLOSE = 1 << 16;
 
   /**
+   * Keyboard and/or mouse event mask indicating that the CTRL key was pushed
+   * on the keyboard when the event was generated (value is 1<<18).
+   */
+  public static final int CTRL = 1 << 18;
+
+  /**
    * Indicates that a default should be used (value is -1).
    */
   public static final int DEFAULT = -1;
