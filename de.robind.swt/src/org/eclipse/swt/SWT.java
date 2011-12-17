@@ -164,6 +164,16 @@ public class SWT {
   public static final int ERROR_WIDGET_DISPOSED = 24;
 
   /**
+   * The focus in event type (value is 15).
+   */
+  public static final int FocusIn = 15;
+
+  /**
+   * The focus out event type (value is 16).
+   */
+  public static final int FocusOut = 16;
+
+  /**
    * Style constant for horizontal alignment or orientation behavior
    * (value is 1<<8).
    */
