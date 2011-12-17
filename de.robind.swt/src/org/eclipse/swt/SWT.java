@@ -408,6 +408,11 @@ public class SWT {
   public static final int TRAIL = 1 << 17;
 
   /**
+   * The traverse event type (value is 31).
+   */
+  public static final int Traverse = 31;
+
+  /**
    * Traversal event detail field value indicating that the key which
    * designates that focus should be given to the previous tab item was
    * pressed; typically, this is either the RIGHT-ARROW or DOWN-ARROW keys

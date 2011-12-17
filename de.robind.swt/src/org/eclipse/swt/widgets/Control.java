@@ -13,6 +13,7 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.ClientTasks;
@@ -435,6 +436,38 @@ public abstract class Control extends Widget implements Drawable {
   }
 
   /**
+   * Adds the listener to the collection of listeners who will be notified when
+   * traversal events occur, by sending it one of the messages defined in the
+   * {@link TraverseListener} interface.
+   *
+   * @param listener the listener which should be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void addTraverseListener(TraverseListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
+    addListener(SWT.Traverse, listenerProxy);
+  }
+
+  /**
    * Returns layout data which is associated with the receiver.
    *
    * @return the receiver's layout data
@@ -779,6 +812,36 @@ public abstract class Control extends Widget implements Drawable {
     checkWidget();
 
     removeTypedListener(SWT.Paint, listener);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be notified
+   * when traversal events occur.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void removeTraverseListener(TraverseListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.Traverse, listener);
   }
 
   /**

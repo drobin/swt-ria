@@ -24,6 +24,8 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.TypedListener;
 
 /**
@@ -135,6 +137,13 @@ public class TypedListenerProxy implements Listener {
         ((SelectionListener)listener).widgetSelected(event);
         e.x = event.x;
         e.y = event.y;
+        e.doit = event.doit;
+        break;
+      }
+      case SWT.Traverse: {
+        TraverseEvent event = new TraverseEvent (e);
+        ((TraverseListener)listener).keyTraversed(event);
+        e.detail = event.detail;
         e.doit = event.doit;
         break;
       }
