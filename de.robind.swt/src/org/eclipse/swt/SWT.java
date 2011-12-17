@@ -281,6 +281,19 @@ public class SWT {
   public static final int MouseUp = 4;
 
   /**
+   * The mouse vertical wheel event type (value is 37).
+   */
+  public static final int MouseVerticalWheel = 37;
+
+  /**
+   * The mouse wheel event type (value is 37). This is a synonym for
+   * {@link SWT#MouseVerticalWheel} (value is 37). Newer applications should
+   * use @link SWT#MouseVerticalWheel} instead of {@link SWT#MouseWheel} to
+   * make code more understandable.
+   */
+  public static final int MouseWheel = 37;
+
+  /**
    * The move event type (value is 10).
    */
   public static final int Move = 10;
