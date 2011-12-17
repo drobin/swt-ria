@@ -2,22 +2,101 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.DisplayPool;
 
 /**
- * TODO Needs to be implemented!!
+ * Control is the abstract superclass of all windowed user interface classes.
+ *
+ * <dl>
+ *  <dt><b>Styles:</b></dt>
+ *  <dd>BORDER</dd>
+ *  <dd>LEFT_TO_RIGHT, RIGHT_TO_LEFT</dd>
+ *  <dt><b>Events:</b></dt>
+ *  <dd>
+ *    DragDetect, FocusIn, FocusOut, Help, KeyDown, KeyUp, MenuDetect,
+ *    MouseDoubleClick, MouseDown, MouseEnter, MouseExit, MouseHover, MouseUp,
+ *    MouseMove, MouseWheel, MouseHorizontalWheel, MouseVerticalWheel, Move,
+ *    Paint, Resize, Traverse
+ *  </dd>
+ * </dl>
+ *
+ * Only one of LEFT_TO_RIGHT or RIGHT_TO_LEFT may be specified.
+ * <p>
+ * IMPORTANT: This class is intended to be subclassed <i>only</i> within the
+ * SWT implementation.
  */
 public abstract class Control extends Widget implements Drawable {
+  /**
+   * Layout-data assigned to the control
+   */
   Object layoutData = null;
 
   /**
-   * TODO Needs to be implemented!!
+   * Constructs a new instance of this class given its parent and a style
+   * value describing its behavior and appearance.
+   * <p>
+   * The style value is either one of the style constants defined in class SWT
+   * which is applicable to instances of this class, or must be built by
+   * bitwise OR'ing together (that is, using the int "|" operator) two or more
+   * of those SWT style constants. The class description lists the style
+   * constants that are applicable to the class. Style bits are also inherited
+   * from superclasses.
+   *
+   * @param parent a composite control which will be the parent of the new
+   *               instance (cannot be null)
+   * @param style the style of control to construct
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the parent is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the parent
+   *    </li>
+   *    <li>{@link SWT#ERROR_INVALID_SUBCLASS} -
+   *      if this class is not an allowed subclass
+   *    </li>
+   *  </ul>
    */
-  public Control(Composite parent, int style) {
+  public Control(Composite parent, int style) throws SWTException {
     super(parent, style);
+  }
+
+  /**
+   * Adds the listener to the collection of listeners who will be notified when
+   * the control is moved or resized, by sending it one of the messages
+   * defined in the {@link ControlListener} interface.
+   *
+   * @param listener the listener which should be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void addControlListener(ControlListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
+    addListener(SWT.Move, listenerProxy);
+    addListener(SWT.Resize, listenerProxy);
   }
 
   /**
@@ -37,6 +116,37 @@ public abstract class Control extends Widget implements Drawable {
   public Object getLayoutData() throws SWTException {
     checkWidget();
     return (this.layoutData);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be notified
+   * when the control is moved or resized.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void removeControlListener(ControlListener listener)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.Move, listener);
+    removeTypedListener(SWT.Resize, listener);
   }
 
   /**

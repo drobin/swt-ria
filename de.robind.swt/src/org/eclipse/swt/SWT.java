@@ -183,6 +183,18 @@ public class SWT {
   public static final int LEFT = 1 << 14;
 
   /**
+   * Style constant for left to right orientation (value is 1<<25).
+   * <p>
+   * When orientation is not explicitly specified, orientation is inherited.
+   * This means that children will be assigned the orientation of their parent.
+   * To override this behavior and force an orientation for a child, explicitl
+   * set the orientation of the child when that child is created.
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int LEFT_TO_RIGHT = 1 << 25;
+
+  /**
    * Style constant for maximize box trim (value is 1<<10).
    */
   public static final int MAX = 1 << 10;
@@ -191,6 +203,11 @@ public class SWT {
    * Style constant for minimize box trim (value is 1<<7).
    */
   public static final int MIN = 1 << 7;
+
+  /**
+   * The move event type (value is 10).
+   */
+  public static final int Move = 10;
 
   /**
    * A constant known to be zero (0), typically used in operations which take
@@ -209,6 +226,11 @@ public class SWT {
   public static final int READ_ONLY = 1 << 3;
 
   /**
+   * The resize event type (value is 11).
+   */
+  public static final int Resize = 11;
+
+  /**
    * Style constant for resize box trim (value is 1<<4).
    */
   public static final int RESIZE = 1 << 4;
@@ -223,6 +245,18 @@ public class SWT {
    *  during a key event.
    */
   public static final int RIGHT = 1 << 17;
+
+  /**
+   * Style constant for right to left orientation (value is 1<<26).
+   * <p>
+   * When orientation is not explicitly specified, orientation is inherited.
+   * This means that children will be assigned the orientation of their parent.
+   * To override this behavior and force an orientation for a child, explicitly
+   * set the orientation of the child when that child is created.
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int RIGHT_TO_LEFT = 1 << 26;
 
   /**
    * The selection event type (value is 13).

@@ -1,6 +1,8 @@
 package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -42,6 +44,12 @@ public class TypedListenerProxy implements Listener {
     switch (e.type) {
       case SWT.Dispose:
         ((DisposeListener)listener).widgetDisposed(new DisposeEvent(e));
+        break;
+      case SWT.Move:
+        ((ControlListener)listener).controlMoved(new ControlEvent(e));
+        break;
+      case SWT.Resize:
+        ((ControlListener)listener).controlResized(new ControlEvent(e));
         break;
       case SWT.Selection:
         SelectionEvent event = new SelectionEvent(e);
