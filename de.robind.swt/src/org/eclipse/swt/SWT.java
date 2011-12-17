@@ -305,6 +305,11 @@ public class SWT {
   public static final int NONE = 0;
 
   /**
+   * The paint event type (value is 9).
+   */
+  public static final int Paint = 9;
+
+  /**
    * Style constant for push button behavior (value is 1<<3).
    */
   public static final int PUSH = 1 << 3;

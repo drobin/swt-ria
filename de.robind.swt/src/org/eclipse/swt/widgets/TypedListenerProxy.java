@@ -20,6 +20,8 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TypedListener;
@@ -119,6 +121,12 @@ public class TypedListenerProxy implements Listener {
       case SWT.Move:
         ((ControlListener)listener).controlMoved(new ControlEvent(e));
         break;
+      case SWT.Paint: {
+        PaintEvent event = new PaintEvent (e);
+        ((PaintListener)listener).paintControl(event);
+        e.gc = event.gc;
+        break;
+      }
       case SWT.Resize:
         ((ControlListener)listener).controlResized(new ControlEvent(e));
         break;
