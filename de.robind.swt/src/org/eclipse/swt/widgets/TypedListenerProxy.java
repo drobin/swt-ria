@@ -9,6 +9,8 @@ import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.HelpEvent;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -59,6 +61,9 @@ public class TypedListenerProxy implements Listener {
         break;
       case SWT.FocusOut:
         ((FocusListener)listener).focusLost((new FocusEvent(e)));
+        break;
+      case SWT.Help:
+        ((HelpListener)listener).helpRequested(new HelpEvent (e));
         break;
       case SWT.MouseDoubleClick:
         ((MouseListener)listener).mouseDoubleClick(new MouseEvent(e));

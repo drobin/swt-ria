@@ -174,6 +174,11 @@ public class SWT {
   public static final int FocusOut = 16;
 
   /**
+   * The help event type (value is 28).
+   */
+  public static final int Help = 28;
+
+  /**
    * Style constant for horizontal alignment or orientation behavior
    * (value is 1<<8).
    */

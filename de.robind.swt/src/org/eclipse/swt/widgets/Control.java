@@ -5,6 +5,7 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.layout.LayoutData;
@@ -167,6 +168,36 @@ public abstract class Control extends Widget implements Drawable {
 
   /**
    * Adds the listener to the collection of listeners who will be notified when
+   * help events are generated for the control, by sending it one of the
+   * messages defined in the {@link HelpListener} interface.
+   *
+   * @param listener the listener which should be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void addHelpListener(HelpListener listener) throws SWTException {
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
+    addListener(SWT.Help, listenerProxy);
+  }
+
+  /**
+   * Adds the listener to the collection of listeners who will be notified when
    * mouse buttons are pressed and released, by sending it one of the messages
    * defined in the {@link MouseListener} interface.
    *
@@ -304,6 +335,34 @@ public abstract class Control extends Widget implements Drawable {
 
     removeTypedListener(SWT.FocusIn, listener);
     removeTypedListener(SWT.FocusOut, listener);
+  }
+
+  /**
+   * Removes the listener from the collection of listeners who will be notified
+   * when the help events are generated for the control.
+   *
+   * @param listener the listener which should no longer be notified
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void removeHelpListener(HelpListener listener) throws SWTException {
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    removeTypedListener(SWT.Help, listener);
   }
 
   /**
