@@ -63,11 +63,11 @@ class ListenerTable {
    * @param eventType The event-type of the listener
    * @param listener The associated listener to remove
    */
-  void removeListener(int eventType, TypedListener listener) {
+  void removeTypedListener(int eventType, TypedListener listener) {
     for (Listener l: getListenerList(eventType)) {
       if (l instanceof TypedListenerProxy) {
         if (((TypedListenerProxy)l).getListener() == listener) {
-          removeListener(eventType, listener);
+          removeListener(eventType, l);
           return;
         }
       }
