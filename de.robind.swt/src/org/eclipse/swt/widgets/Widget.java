@@ -179,6 +179,41 @@ public abstract class Widget extends SWTObject {
   }
 
   /**
+   * Adds the listener-proxy to the collection of listeners who will be
+   * notified when an event of the given types occurs.
+   *
+   * @param listener the listener which should be notified when the events
+   *                 occur
+   * @param eventTypes Event-typed, where the proxy should be registered
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the listener is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  protected void addTypedListener(TypedListener listener, int... eventTypes)
+      throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+    TypedListenerProxy proxy = new TypedListenerProxy(listener);
+
+    for (int eventType: eventTypes) {
+      addListener(eventType, proxy);
+    }
+  }
+
+  /**
    * Checks that this class can be subclassed.
    * <p>
    * The SWT class library is intended to be subclassed only at specific,
@@ -532,6 +567,39 @@ public abstract class Widget extends SWTObject {
   }
 
   /**
+   * Removes the listener from the collection of listeners who will be
+   * notified when the widget is disposed.
+   *
+   * @param listener the listener which should no longer be notified
+   * @param eventTypes Event-types, where the proxy shoudl be unregistered
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the proxy is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  protected void removeTypedListener(TypedListener listener,
+      int... eventTypes) throws SWTException {
+
+    if (listener == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    checkWidget();
+
+    for (int eventType: eventTypes) {
+      this.listenerTable.removeTypedListener(eventType, listener);
+    }
+  }
+
+  /**
    * Removes a {@link TypedListener} from the collection of listeners.
    *
    * @param eventType the type of event to listen for
@@ -558,7 +626,7 @@ public abstract class Widget extends SWTObject {
 
     checkWidget();
 
-    this.listenerTable.removeListener(eventType, listener);
+    this.listenerTable.removeTypedListener(eventType, listener);
   }
 
   /**
