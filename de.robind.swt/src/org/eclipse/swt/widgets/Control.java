@@ -99,15 +99,7 @@ public abstract class Control extends Widget implements Drawable {
   public void addControlListener(ControlListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.Move, listenerProxy);
-    addListener(SWT.Resize, listenerProxy);
+    addTypedListener(listener, SWT.Move, SWT.Resize);
   }
 
   /**
@@ -132,14 +124,7 @@ public abstract class Control extends Widget implements Drawable {
   public void addDragDetectListener(DragDetectListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.DragDetect, listenerProxy);
+    addTypedListener(listener, SWT.DragDetect);
   }
 
   /**
@@ -162,15 +147,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void addFocusListener(FocusListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.FocusIn, listenerProxy);
-    addListener(SWT.FocusOut, listenerProxy);
+    addTypedListener(listener, SWT.FocusIn, SWT.FocusOut);
   }
 
   /**
@@ -193,14 +170,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void addHelpListener(HelpListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.Help, listenerProxy);
+    addTypedListener(listener, SWT.Help);
   }
 
   /**
@@ -232,15 +202,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void addKeyListener(KeyListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.KeyUp, listenerProxy);
-    addListener(SWT.KeyDown, listenerProxy);
+    addTypedListener(listener, SWT.KeyUp, SWT.KeyDown);
   }
 
   /**
@@ -265,14 +227,7 @@ public abstract class Control extends Widget implements Drawable {
   public void addMenuDetectListener(MenuDetectListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.MenuDetect, listenerProxy);
+    addTypedListener(listener, SWT.MenuDetect);
   }
 
   /**
@@ -295,16 +250,8 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void addMouseListener(MouseListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.MouseUp, listenerProxy);
-    addListener(SWT.MouseDown, listenerProxy);
-    addListener(SWT.MouseDoubleClick, listenerProxy);
+    addTypedListener(listener,
+        SWT.MouseUp, SWT.MouseDown, SWT.MouseDoubleClick);
   }
 
   /**
@@ -329,14 +276,7 @@ public abstract class Control extends Widget implements Drawable {
   public void addMouseMoveListener(MouseMoveListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.MouseMove, listenerProxy);
+    addTypedListener(listener, SWT.MouseMove);
   }
 
   /**
@@ -361,16 +301,7 @@ public abstract class Control extends Widget implements Drawable {
   public void addMouseTrackListener(MouseTrackListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.MouseEnter, listenerProxy);
-    addListener(SWT.MouseExit, listenerProxy);
-    addListener(SWT.MouseHover, listenerProxy);
+    addTypedListener(listener, SWT.MouseEnter, SWT.MouseExit, SWT.MouseHover);
   }
 
   /**
@@ -395,14 +326,7 @@ public abstract class Control extends Widget implements Drawable {
   public void addMouseWheelListener(MouseWheelListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.MouseWheel, listenerProxy);
+    addTypedListener(listener, SWT.MouseWheel);
   }
 
   /**
@@ -425,14 +349,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void addPaintListener(PaintListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.Paint, listenerProxy);
+    addTypedListener(listener, SWT.Paint);
   }
 
   /**
@@ -457,14 +374,7 @@ public abstract class Control extends Widget implements Drawable {
   public void addTraverseListener(TraverseListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.Traverse, listenerProxy);
+    addTypedListener(listener, SWT.Traverse);
   }
 
   /**
@@ -507,14 +417,7 @@ public abstract class Control extends Widget implements Drawable {
   public void removeControlListener(ControlListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.Move, listener);
-    removeTypedListener(SWT.Resize, listener);
+    removeTypedListener(listener, SWT.Move, SWT.Resize);
   }
 
   /**
@@ -538,13 +441,7 @@ public abstract class Control extends Widget implements Drawable {
   public void removeDragDetectListener(DragDetectListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.DragDetect, listener);
+    removeTypedListener(listener, SWT.DragDetect);
   }
 
   /**
@@ -566,14 +463,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void removeFocusListener(FocusListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.FocusIn, listener);
-    removeTypedListener(SWT.FocusOut, listener);
+    removeTypedListener(listener, SWT.FocusIn, SWT.FocusOut);
   }
 
   /**
@@ -595,13 +485,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void removeHelpListener(HelpListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.Help, listener);
+    removeTypedListener(listener, SWT.Help);
   }
 
   /**
@@ -623,14 +507,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void removeKeyListener(KeyListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.KeyUp, listener);
-    removeTypedListener(SWT.KeyDown, listener);
+    removeTypedListener(listener, SWT.KeyUp, SWT.KeyDown);
   }
 
   /**
@@ -654,13 +531,7 @@ public abstract class Control extends Widget implements Drawable {
   public void removeMenuDetectListener(MenuDetectListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.MenuDetect, listener);
+    removeTypedListener(listener, SWT.MenuDetect);
   }
 
   /**
@@ -682,15 +553,8 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void removeMouseListener(MouseListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.MouseUp, listener);
-    removeTypedListener(SWT.MouseDown, listener);
-    removeTypedListener(SWT.MouseDoubleClick, listener);
+    removeTypedListener(listener,
+        SWT.MouseUp, SWT.MouseDown, SWT.MouseDoubleClick);
   }
 
   /**
@@ -714,13 +578,7 @@ public abstract class Control extends Widget implements Drawable {
   public void removeMouseMoveListener(MouseMoveListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.MouseMove, listener);
+    removeTypedListener(listener, SWT.MouseMove);
   }
 
   /**
@@ -744,15 +602,8 @@ public abstract class Control extends Widget implements Drawable {
   public void removeMouseTrackListener(MouseTrackListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.MouseEnter, listener);
-    removeTypedListener(SWT.MouseExit, listener);
-    removeTypedListener(SWT.MouseHover, listener);
+    removeTypedListener(listener,
+        SWT.MouseEnter, SWT.MouseExit, SWT.MouseHover);
   }
 
   /**
@@ -776,14 +627,7 @@ public abstract class Control extends Widget implements Drawable {
   public void removeMouseWheelListener(MouseWheelListener listener)
       throws SWTException {
 
-
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.MouseWheel, listener);
+    removeTypedListener(listener, SWT.MouseWheel);
   }
 
   /**
@@ -805,13 +649,7 @@ public abstract class Control extends Widget implements Drawable {
    *  </ul>
    */
   public void removePaintListener(PaintListener listener) throws SWTException {
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.Paint, listener);
+    removeTypedListener(listener, SWT.Paint);
   }
 
   /**
@@ -835,13 +673,7 @@ public abstract class Control extends Widget implements Drawable {
   public void removeTraverseListener(TraverseListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.Traverse, listener);
+    removeTypedListener(listener, SWT.Traverse);
   }
 
   /**

@@ -50,15 +50,7 @@ public class Button extends Control {
   public void addSelectionListener(SelectionListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.Selection, listenerProxy);
-    addListener(SWT.DefaultSelection, listenerProxy);
+    addTypedListener(listener, SWT.Selection, SWT.DefaultSelection);
   }
 
   /**
@@ -82,14 +74,7 @@ public class Button extends Control {
   public void removeSelectionListener(SelectionListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.Selection, listener);
-    removeTypedListener(SWT.DefaultSelection, listener);
+    removeTypedListener(listener, SWT.Selection, SWT.DefaultSelection);
   }
 
   /**

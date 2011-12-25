@@ -168,14 +168,7 @@ public abstract class Widget extends SWTObject {
   public void addDisposeListener(DisposeListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    TypedListenerProxy listenerProxy = new TypedListenerProxy(listener);
-    addListener(SWT.Dispose, listenerProxy);
+    addTypedListener(listener, SWT.Dispose);
   }
 
   /**
@@ -557,13 +550,7 @@ public abstract class Widget extends SWTObject {
   public void removeDisposeListener(DisposeListener listener)
       throws SWTException {
 
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    removeTypedListener(SWT.Dispose, listener);
+    removeTypedListener(listener, SWT.Dispose);
   }
 
   /**
@@ -597,36 +584,6 @@ public abstract class Widget extends SWTObject {
     for (int eventType: eventTypes) {
       this.listenerTable.removeTypedListener(eventType, listener);
     }
-  }
-
-  /**
-   * Removes a {@link TypedListener} from the collection of listeners.
-   *
-   * @param eventType the type of event to listen for
-   * @param listener the listener which should no longer be notified
-   * @throws SWTException
-   *  <ul>
-   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
-   *      if the listener is null
-   *    </li>
-   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
-   *      if the receiver has been disposed
-   *    </li>
-   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
-   *      if not called from the thread that created the receiver
-   *    </li>
-   *  </ul>
-   */
-  void removeTypedListener(int eventType, TypedListener listener)
-      throws SWTException {
-
-    if (listener == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    checkWidget();
-
-    this.listenerTable.removeTypedListener(eventType, listener);
   }
 
   /**
