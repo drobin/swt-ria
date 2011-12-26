@@ -27,6 +27,12 @@ public abstract class TLV {
   static final byte TYPE_STRING = 1;
 
   /**
+   * A TLV representing an {@link Integer}.
+   * @see IntTLV
+   */
+  static final byte TYPE_INT = 2;
+
+  /**
    * Reads a {@link TLV}-structure from the given {@link ChannelBuffer}.
    * <p>
    * If not enough data are avaiable to read a complete TLV-structure,
@@ -150,6 +156,8 @@ public abstract class TLV {
   private static byte tlv2type(TLV tlv) throws SWTProtocolException {
     if (tlv instanceof StringTLV) {
       return (TYPE_STRING);
+    } else if (tlv instanceof IntTLV) {
+      return (TYPE_INT);
     } else {
       throw new SWTProtocolException(
           "Unsupported TLV of class " + tlv.getClass().getName());
@@ -166,6 +174,7 @@ public abstract class TLV {
   private static TLV type2tlv(byte type) throws SWTProtocolException {
     switch (type) {
       case TYPE_STRING: return (new StringTLV());
+      case TYPE_INT   : return (new IntTLV());
       default: throw new SWTProtocolException("Unsupported TLV-type: " + type);
     }
   }
