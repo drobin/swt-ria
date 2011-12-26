@@ -39,6 +39,12 @@ public abstract class TLV {
   static final byte TYPE_BYTE = 3;
 
   /**
+   * A TLV representing a {@link Boolean}.
+   * @see BoolTLV
+   */
+  static final byte TYPE_BOOL = 4;
+
+  /**
    * Reads a {@link TLV}-structure from the given {@link ChannelBuffer}.
    * <p>
    * If not enough data are avaiable to read a complete TLV-structure,
@@ -166,6 +172,8 @@ public abstract class TLV {
       return (TYPE_INT);
     } else if (tlv instanceof ByteTLV) {
       return (TYPE_BYTE);
+    } else if (tlv instanceof BoolTLV) {
+      return (TYPE_BOOL);
     } else {
       throw new SWTProtocolException(
           "Unsupported TLV of class " + tlv.getClass().getName());
@@ -184,6 +192,7 @@ public abstract class TLV {
       case TYPE_STRING: return (new StringTLV());
       case TYPE_INT   : return (new IntTLV());
       case TYPE_BYTE  : return (new ByteTLV());
+      case TYPE_BOOL  : return (new BoolTLV());
       default: throw new SWTProtocolException("Unsupported TLV-type: " + type);
     }
   }
