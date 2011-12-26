@@ -3,6 +3,7 @@ package de.robind.swt.protocol.tlv;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 
+import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.protocol.SWTProtocolException;
 
 /**
@@ -43,6 +44,12 @@ public abstract class TLV {
    * @see BoolTLV
    */
   static final byte TYPE_BOOL = 4;
+
+  /**
+   * A TLV representing a {@link SWTObjectId}.
+   * @see SwtObjTLV
+   */
+  static final byte TYPE_SWTOBJ = 5;
 
   /**
    * Reads a {@link TLV}-structure from the given {@link ChannelBuffer}.
@@ -174,6 +181,8 @@ public abstract class TLV {
       return (TYPE_BYTE);
     } else if (tlv instanceof BoolTLV) {
       return (TYPE_BOOL);
+    } else if (tlv instanceof SwtObjTLV) {
+      return (TYPE_SWTOBJ);
     } else {
       throw new SWTProtocolException(
           "Unsupported TLV of class " + tlv.getClass().getName());
@@ -193,6 +202,7 @@ public abstract class TLV {
       case TYPE_INT   : return (new IntTLV());
       case TYPE_BYTE  : return (new ByteTLV());
       case TYPE_BOOL  : return (new BoolTLV());
+      case TYPE_SWTOBJ: return (new SwtObjTLV());
       default: throw new SWTProtocolException("Unsupported TLV-type: " + type);
     }
   }
