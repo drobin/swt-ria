@@ -331,4 +331,58 @@ public class WidgetTest {
 
     assertThat(listener.handledEvents.size(), is(0));
   }
+
+  @Test
+  public void getDataDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.getData();
+  }
+
+  @Test
+  public void getDataInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.getData();
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void setDataDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.setData(null);
+  }
+
+  @Test
+  public void setDataInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.setData(null);
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void dataHandling() {
+    Object data = new Object();
+    Widget widget = new Widget(this.shell, 0) {};
+
+    assertThat(widget.getData(), is(nullValue()));
+    widget.setData(data);
+    assertThat(widget.getData(), is(sameInstance(data)));
+  }
 }
