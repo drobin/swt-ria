@@ -48,6 +48,11 @@ public abstract class Widget extends SWTObject {
   private Object data = null;
 
   /**
+   * Dispose-state of the widget
+   */
+  private boolean disposed = false;
+
+  /**
    * Properties assigned to the widget
    */
   private Properties dataProperties = null;
@@ -96,7 +101,6 @@ public abstract class Widget extends SWTObject {
       throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
     }
 
-    // Will throw SWTException (with SWT.ERROR_INVALID_SUBCLASS) on failure
     checkSubclass();
 
     this.parent = parent;
@@ -104,10 +108,7 @@ public abstract class Widget extends SWTObject {
 
     Display display = getDisplay();
     if (display != null) {
-      if (display.thread != Thread.currentThread()) {
-        throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
-      }
-
+      checkThread();
       display.createObject(getId(), getClass(), this.parent, this.style);
     }
   }
@@ -206,6 +207,18 @@ public abstract class Widget extends SWTObject {
     }
   }
 
+  private void checkThread() throws SWTException {
+    if (getDisplay().thread != Thread.currentThread ()) {
+      throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
+    }
+  }
+
+  private void checkDisposed() throws SWTException {
+    if (getDisplay() == null || isDisposed()) {
+      throw new SWTException(SWT.ERROR_WIDGET_DISPOSED);
+    }
+  }
+
   /**
    * Checks that this class can be subclassed.
    * <p>
@@ -262,15 +275,8 @@ public abstract class Widget extends SWTObject {
    *  </ul>
    */
   protected void checkWidget() throws SWTException {
-    Display display = getDisplay();
-
-    if (display == null || isDisposed()) {
-      throw new SWTException(SWT.ERROR_WIDGET_DISPOSED);
-    }
-
-    if (display.thread != Thread.currentThread ()) {
-      throw new SWTException(SWT.ERROR_THREAD_INVALID_ACCESS);
-    }
+    checkDisposed();
+    checkThread();
   }
 
   /**
@@ -294,7 +300,9 @@ public abstract class Widget extends SWTObject {
    *  </ul>
    */
   public void dispose() throws SWTException {
-    // TODO Implement Widget.dispose()
+    checkThread();
+    getDisplay().callMethod(getId(), "dispose");
+    this.disposed = true;
   }
 
   /**
@@ -445,8 +453,7 @@ public abstract class Widget extends SWTObject {
    *         <code>false</code> otherwise.
    */
   public boolean isDisposed() {
-    // TODO Implement Widget.isDisposed()
-    return (false);
+    return (this.disposed);
   }
 
   /**
