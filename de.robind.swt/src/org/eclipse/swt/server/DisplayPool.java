@@ -101,9 +101,10 @@ public class DisplayPool {
   }
 
   private static ClientTasks createClientTasks() throws Exception {
-    Class<? extends ClientTasks> c =
-        Class.forName("de.robind.swt.server.ClientTasksImpl")
-          .asSubclass(ClientTasks.class);
+    String className = System.getProperty("de.robind.swt.clienttasks",
+        "de.robind.swt.server.ClientTasksImpl");
+    Class<? extends ClientTasks> c = Class.forName(className)
+        .asSubclass(ClientTasks.class);
     return (c.newInstance());
   }
 }
