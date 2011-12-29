@@ -118,4 +118,12 @@ public class SWTException extends RuntimeException {
     // TODO if (Library.JAVA_VERSION < Library.JAVA_VERSION(1, 4, 0) && throwable != null) {
     // TODO We will assume that the java-version is always greater than 1.4.0
   }
+
+  /* (non-Javadoc)
+   * @see java.lang.Throwable#toString()
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[code=" + this.code + "]";
+  }
 }
