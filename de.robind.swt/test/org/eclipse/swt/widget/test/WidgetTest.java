@@ -2,6 +2,9 @@ package org.eclipse.swt.widget.test;
 
 import static org.eclipse.swt.test.SWTExceptionMatcher.swtCode;
 import static org.eclipse.swt.test.SWTTestUtils.asyncExec;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsSame.sameInstance;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.concurrent.Callable;
@@ -10,7 +13,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestClientTasks;
+import org.eclipse.swt.test.TestListener;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.After;
@@ -23,6 +29,7 @@ import org.junit.rules.ExpectedException;
 
 public class WidgetTest {
   private Display display = null;
+  private Shell shell = null;
 
   @Rule
   public ExpectedException exception = ExpectedException.none();
@@ -41,10 +48,12 @@ public class WidgetTest {
   public void before() {
     DisplayPool.getInstance().pushKey(new Key() {});
     this.display = new Display();
+    this.shell = new Shell(this.display);
   }
 
   @After
   public void after() {
+    this.shell = null;
     this.display = null;
   }
 
@@ -69,8 +78,6 @@ public class WidgetTest {
   public void ctorInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
-    final Shell shell = new Shell(this.display);
-
     asyncExec(new Callable<Widget>() {
       public Widget call() throws Exception {
         return (new Widget(shell, 0) {});
@@ -86,5 +93,144 @@ public class WidgetTest {
   @Test
   public void ctorStyle() {
     fail("TODO Merge style with parent");
+  }
+
+  @Test
+  public void addListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.addListener(0, null);
+  }
+
+  @Test
+  public void addListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.addListener(0, new  TestListener());
+  }
+
+  @Test
+  public void addListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.addListener(0, new TestListener());
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void removeListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.removeListener(0, null);
+  }
+
+  @Test
+  public void removeListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.removeListener(0, new TestListener());
+  }
+
+  @Test
+  public void removeListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.removeListener(0, new TestListener());
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void isListeningDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.isListening(0);
+  }
+
+  @Test
+  public void isListeningInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.isListening(0);
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void getListenersDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.getListeners(0);
+  }
+
+  @Test
+  public void getListenersInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.getListeners(0);
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void untypedListenerHandling() {
+    TestListener listener = new TestListener();
+    Widget widget = new Widget(this.shell, 0) {};
+    Event event1 = new Event();
+    Event event2 = new Event();
+
+    Listener list[] = widget.getListeners(4711);
+    assertThat(list.length, is(0));
+
+    assertThat(widget.isListening(4711), is(false));
+    widget.addListener(4711, listener);
+    assertThat(widget.isListening(4711), is(true));
+
+    list = widget.getListeners(4711);
+    assertThat(list.length, is(1));
+    assertThat((TestListener)list[0], is(sameInstance(listener)));
+
+    widget.notifyListeners(4711, event1);
+    widget.notifyListeners(4711, event2);
+
+    assertThat(listener.handledEvents.size(), is(2));
+    assertThat(listener.handledEvents.get(0), is(sameInstance(event1)));
+    assertThat(listener.handledEvents.get(1), is(sameInstance(event2)));
+
+    widget.removeListener(4711, listener);
+    list = widget.getListeners(4711);
+    assertThat(list.length, is(0));
+
+    listener.handledEvents.clear();
+    widget.notifyListeners(4711, event1);
+    widget.notifyListeners(4711, event2);
+    assertThat(listener.handledEvents.size(), is(0));
   }
 }
