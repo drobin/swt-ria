@@ -49,8 +49,7 @@ public class DisplayPool {
     try {
       this.clientTasks = createClientTasks();
     } catch (Exception e) {
-      // TODO What you should do with the error?
-      e.printStackTrace();
+      throw new Error(e);
     }
   }
 
