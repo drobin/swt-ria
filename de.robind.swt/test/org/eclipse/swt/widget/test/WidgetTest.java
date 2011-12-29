@@ -181,6 +181,36 @@ public class WidgetTest {
   }
 
   @Test
+  public void notifyListenersNullEvent() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.notifyListeners(0, null);
+  }
+
+  @Test
+  public void notifyListenersDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.notifyListeners(0, new Event());
+  }
+
+  @Test
+  public void notifyListenersInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.notifyListeners(0, new Event());
+        return (widget);
+      }
+    });
+  }
+
+  @Test
   public void getListenersDisposed() {
     exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
 
@@ -466,5 +496,14 @@ public class WidgetTest {
 
     assertThat(widget.getData("foo"), is(nullValue()));
     assertThat(widget.getData("bar"), is(nullValue()));
+  }
+
+  @Test
+  public void getDisplayDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.getDisplay();
   }
 }
