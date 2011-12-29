@@ -386,7 +386,7 @@ public abstract class Widget extends SWTObject {
    */
   public Display getDisplay() throws SWTException {
     if (isDisposed()) {
-      throw new SWTException(SWT.ERROR_DEVICE_DISPOSED);
+      throw new SWTException(SWT.ERROR_WIDGET_DISPOSED);
     }
     return (this.parent.getDisplay());
   }
