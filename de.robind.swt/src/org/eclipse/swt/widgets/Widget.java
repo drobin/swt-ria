@@ -682,7 +682,11 @@ public abstract class Widget extends SWTObject {
       this.dataProperties = new Properties();
     }
 
-    this.dataProperties.put(key, value);
+    if (value != null) {
+      this.dataProperties.put(key, value);
+    } else {
+      this.dataProperties.remove(key);
+    }
   }
 
   /* (non-Javadoc)

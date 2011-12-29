@@ -385,4 +385,86 @@ public class WidgetTest {
     widget.setData(data);
     assertThat(widget.getData(), is(sameInstance(data)));
   }
+
+  @Test
+  public void getDataWithKeyNullKey() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.getData(null);
+  }
+
+  @Test
+  public void getDataWithKeyDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.getData("foo");
+  }
+
+  @Test
+  public void getDataWithKeyInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.getData("foo");
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void setDataWithKeyNullKey() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.setData(null, "foo");
+  }
+
+  @Test
+  public void setDataWithKeyDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.setData("foo", "bar");
+  }
+
+  @Test
+  public void setDataWithKeyInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.setData("foo", "bar");
+        return (widget);
+      }
+    });
+  }
+
+  @Test
+  public void dataWithKeyHandling() {
+    Object fooData = new Object();
+    Object barData = new Object();
+    Widget widget = new Widget(this.shell, 0) {};
+
+    assertThat(widget.getData("foo"), is(nullValue()));
+    assertThat(widget.getData("bar"), is(nullValue()));
+
+    widget.setData("foo", fooData);
+    widget.setData("bar", barData);
+
+    assertThat(widget.getData("foo"), is(sameInstance(fooData)));
+    assertThat(widget.getData("bar"), is(sameInstance(barData)));
+
+    widget.setData("foo", null);
+    widget.setData("bar", null);
+
+    assertThat(widget.getData("foo"), is(nullValue()));
+    assertThat(widget.getData("bar"), is(nullValue()));
+  }
 }
