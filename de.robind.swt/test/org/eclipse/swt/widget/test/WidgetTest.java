@@ -95,7 +95,30 @@ public class WidgetTest {
 
   @Test
   public void ctorStyle() {
-    fail("TODO Merge style with parent");
+    Widget widget = new Widget(this.shell, 4711) {};
+    assertThat(widget.getStyle(), is(4711));
+  }
+
+  @Test
+  public void getStyleDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.getStyle();
+  }
+
+  @Test
+  public void getStyleInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.getStyle();
+        return (widget);
+      }
+    });
   }
 
   @Test
