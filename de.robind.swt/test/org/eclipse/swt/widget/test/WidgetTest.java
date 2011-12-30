@@ -205,10 +205,57 @@ public class WidgetTest {
 
   @Test
   public void notifyListenersNullEvent() {
-    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+    TestListener listener = new TestListener();
+    Widget widget = new Widget(this.shell, 0) {};
+
+    widget.addListener(4711, listener);
+    widget.notifyListeners(4711, null);
+
+    assertThat(listener.handledEvents.size(), is(1));
+    assertThat(listener.handledEvents.get(0).type, is(4711));
+    assertThat(listener.handledEvents.get(0).display, is(sameInstance(this.display)));
+    assertThat(listener.handledEvents.get(0).widget, is(sameInstance(widget)));
+    assertThat(listener.handledEvents.get(0).time, is(0));
+  }
+
+  @Test
+  public void notifyListenersWithEvent() {
+    TestListener listener = new TestListener();
+
+    Object testData = new Object();
+    TestEvent event = new TestEvent(testData);
+    event.type = 4711;
 
     Widget widget = new Widget(this.shell, 0) {};
-    widget.notifyListeners(0, null);
+
+    widget.addListener(4711, listener);
+    widget.notifyListeners(4711, event);
+
+    assertThat(listener.handledEvents.size(), is(1));
+    assertThat(listener.handledEvents.get(0).type, is(4711));
+    assertThat(listener.handledEvents.get(0).display, is(sameInstance(this.display)));
+    assertThat(listener.handledEvents.get(0).widget, is(sameInstance(widget)));
+    assertThat(listener.handledEvents.get(0).time, is(0));
+  }
+
+  @Test
+  public void notifyListenersDifferentType() {
+    TestListener listener = new TestListener();
+
+    Object testData = new Object();
+    TestEvent event = new TestEvent(testData);
+    event.type = 42;
+
+    Widget widget = new Widget(this.shell, 0) {};
+
+    widget.addListener(4711, listener);
+    widget.notifyListeners(4711, event);
+
+    assertThat(listener.handledEvents.size(), is(1));
+    assertThat(listener.handledEvents.get(0).type, is(4711));
+    assertThat(listener.handledEvents.get(0).display, is(sameInstance(this.display)));
+    assertThat(listener.handledEvents.get(0).widget, is(sameInstance(widget)));
+    assertThat(listener.handledEvents.get(0).time, is(0));
   }
 
   @Test
@@ -354,9 +401,10 @@ public class WidgetTest {
   public void disposeListenerHandling() {
     Widget widget = new Widget(this.shell, 0) {};
     TestDisposeListener listener = new TestDisposeListener();
+    Object event1Data = new Object();
     Object event2Data = new Object();
-    TestEvent event1 = new TestEvent(SWT.Dispose, this.display, widget, 1, null);
-    TestEvent event2 = new TestEvent(SWT.Dispose, this.display, widget, 2, event2Data);
+    TestEvent event1 = new TestEvent(event1Data);
+    TestEvent event2 = new TestEvent(event2Data);
 
     assertThat(widget.getListeners(SWT.Dispose).length, is(0));
     widget.addDisposeListener(listener);
@@ -368,11 +416,11 @@ public class WidgetTest {
     assertThat(listener.handledEvents.size(), is(2));
     assertThat(listener.handledEvents.get(0).display, is(sameInstance(this.display)));
     assertThat(listener.handledEvents.get(0).widget, is(sameInstance(widget)));
-    assertThat(listener.handledEvents.get(0).time, is(1));
-    assertThat(listener.handledEvents.get(0).data, is(nullValue()));
+    assertThat(listener.handledEvents.get(0).time, is(0));
+    assertThat(listener.handledEvents.get(0).data, is(sameInstance(event1Data)));
     assertThat(listener.handledEvents.get(1).display, is(sameInstance(this.display)));
     assertThat(listener.handledEvents.get(1).widget, is(sameInstance(widget)));
-    assertThat(listener.handledEvents.get(1).time, is(2));
+    assertThat(listener.handledEvents.get(1).time, is(0));
     assertThat(listener.handledEvents.get(1).data, is(sameInstance(event2Data)));
 
     listener.handledEvents.clear();

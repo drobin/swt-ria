@@ -498,11 +498,17 @@ public abstract class Widget extends SWTObject {
    *  </ul>
    */
   public void notifyListeners(int eventType, Event event) throws SWTException {
+    checkWidget();
+
     if (event == null) {
-      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+      event = new Event();
     }
 
-    checkWidget();
+    event.type = eventType;
+    event.display = getDisplay();
+    event.widget = this;
+    event.time = 0; // TODO Fix time handling
+
     for (Listener listener: getListeners(eventType)) {
       listener.handleEvent(event);
     }
