@@ -16,6 +16,7 @@ import org.eclipse.swt.test.TestClientTasks;
 import org.eclipse.swt.test.TestControlListener;
 import org.eclipse.swt.test.TestDragDetectListener;
 import org.eclipse.swt.test.TestEvent;
+import org.eclipse.swt.test.TestFocusListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -298,5 +299,105 @@ public class ControlTest {
     control.notifyListeners(SWT.DragDetect, event2);
 
     assertThat(listener.events.size(), is(0));
+  }
+
+  @Test
+  public void addFocusListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addFocusListener(null);
+  }
+
+  @Test
+  public void addFocusListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addFocusListener(new TestFocusListener());
+  }
+
+  @Test
+  public void addFocusListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addFocusListener(new TestFocusListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeFocusListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeFocusListener(null);
+  }
+
+  @Test
+  public void removeFocusListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeFocusListener(new TestFocusListener());
+  }
+
+  @Test
+  public void removeFocusListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeFocusListener(new TestFocusListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void focusListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestFocusListener listener = new TestFocusListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+    TestEvent event3 = new TestEvent(3);
+    TestEvent event4 = new TestEvent(4);
+
+    assertThat(control.getListeners(SWT.FocusIn).length, is(0));
+    assertThat(control.getListeners(SWT.FocusOut).length, is(0));
+    control.addFocusListener(listener);
+    assertThat(control.getListeners(SWT.FocusIn).length, is(1));
+    assertThat(control.getListeners(SWT.FocusOut).length, is(1));
+
+    control.notifyListeners(SWT.FocusIn, event1);
+    control.notifyListeners(SWT.FocusOut, event2);
+    control.notifyListeners(SWT.FocusIn, event3);
+    control.notifyListeners(SWT.FocusOut, event4);
+
+    assertThat(listener.focusGainedEvents.size(), is(2));
+    assertThat(listener.focusGainedEvents.get(0), is(event(display, control, 1)));
+    assertThat(listener.focusGainedEvents.get(1), is(event(display, control, 3)));
+    assertThat(listener.focusLostEvents.get(0), is(event(display, control, 2)));
+    assertThat(listener.focusLostEvents.get(1), is(event(display, control, 4)));
+
+    listener.clearEvents();
+    control.removeFocusListener(listener);
+    assertThat(control.getListeners(SWT.FocusIn).length, is(0));
+    assertThat(control.getListeners(SWT.FocusOut).length, is(0));
+
+    control.notifyListeners(SWT.FocusIn, event1);
+    control.notifyListeners(SWT.FocusOut, event2);
+    control.notifyListeners(SWT.FocusIn, event3);
+    control.notifyListeners(SWT.FocusOut, event4);
+
+    assertThat(listener.focusGainedEvents.size(), is(0));
+    assertThat(listener.focusLostEvents.size(), is(0));
   }
 }
