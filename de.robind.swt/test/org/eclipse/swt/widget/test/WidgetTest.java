@@ -2,6 +2,7 @@ package org.eclipse.swt.widget.test;
 
 import static org.eclipse.swt.test.SWTExceptionMatcher.swtCode;
 import static org.eclipse.swt.test.SWTTestUtils.asyncExec;
+import static org.eclipse.swt.test.TypedEventMatcher.event;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
@@ -414,14 +415,8 @@ public class WidgetTest {
     widget.notifyListeners(SWT.Dispose, event2);
 
     assertThat(listener.handledEvents.size(), is(2));
-    assertThat(listener.handledEvents.get(0).display, is(sameInstance(this.display)));
-    assertThat(listener.handledEvents.get(0).widget, is(sameInstance(widget)));
-    assertThat(listener.handledEvents.get(0).time, is(0));
-    assertThat(listener.handledEvents.get(0).data, is(sameInstance(event1Data)));
-    assertThat(listener.handledEvents.get(1).display, is(sameInstance(this.display)));
-    assertThat(listener.handledEvents.get(1).widget, is(sameInstance(widget)));
-    assertThat(listener.handledEvents.get(1).time, is(0));
-    assertThat(listener.handledEvents.get(1).data, is(sameInstance(event2Data)));
+    assertThat(listener.handledEvents.get(0), is(event(this.display, widget, event1Data)));
+    assertThat(listener.handledEvents.get(1), is(event(this.display, widget, event2Data)));
 
     listener.handledEvents.clear();
     widget.removeDisposeListener(listener);
