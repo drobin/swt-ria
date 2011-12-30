@@ -18,6 +18,7 @@ import org.eclipse.swt.test.TestDragDetectListener;
 import org.eclipse.swt.test.TestEvent;
 import org.eclipse.swt.test.TestFocusListener;
 import org.eclipse.swt.test.TestHelpListener;
+import org.eclipse.swt.test.TestKeyListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -488,5 +489,142 @@ public class ControlTest {
     control.notifyListeners(SWT.Help, event2);
 
     assertThat(listener.events.size(), is(0));
+  }
+
+  @Test
+  public void addKeyListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addKeyListener(null);
+  }
+
+  @Test
+  public void addKeyListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addKeyListener(new TestKeyListener());
+  }
+
+  @Test
+  public void addKeyListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addKeyListener(new TestKeyListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeKeyListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeKeyListener(null);
+  }
+
+  @Test
+  public void removeKeyListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeKeyListener(new TestKeyListener());
+  }
+
+  @Test
+  public void removeKeyListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeKeyListener(new TestKeyListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void keyListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestKeyListener listener = new TestKeyListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+    TestEvent event3 = new TestEvent(3);
+    TestEvent event4 = new TestEvent(4);
+
+    event1.character = 'a';
+    event1.doit = true;
+    event1.keyCode = 1;
+    event1.keyLocation = 2;
+
+    event2.character = 'b';
+    event2.doit = false;
+    event2.keyCode = 3;
+    event2.keyLocation = 4;
+
+    event3.character = 'c';
+    event3.doit = true;
+    event3.keyCode = 5;
+    event3.keyLocation = 6;
+
+    event4.character = 'd';
+    event4.doit = false;
+    event4.keyCode = 7;
+    event4.keyLocation = 8;
+
+    assertThat(control.getListeners(SWT.KeyUp).length, is(0));
+    assertThat(control.getListeners(SWT.KeyDown).length, is(0));
+    control.addKeyListener(listener);
+    assertThat(control.getListeners(SWT.KeyUp).length, is(1));
+    assertThat(control.getListeners(SWT.KeyDown).length, is(1));
+
+    control.notifyListeners(SWT.KeyDown, event1);
+    control.notifyListeners(SWT.KeyUp, event2);
+    control.notifyListeners(SWT.KeyDown, event3);
+    control.notifyListeners(SWT.KeyUp, event4);
+
+    assertThat(listener.keyPressedEvents.size(), is(2));
+    assertThat(listener.keyPressedEvents.get(0), is(event(display, control, 1)));
+    assertThat(listener.keyPressedEvents.get(0).character, is('a'));
+    assertThat(listener.keyPressedEvents.get(0).doit, is(true));
+    assertThat(listener.keyPressedEvents.get(0).keyCode, is(1));
+    assertThat(listener.keyPressedEvents.get(0).keyLocation, is(2));
+    assertThat(listener.keyPressedEvents.get(1), is(event(display, control, 3)));
+    assertThat(listener.keyPressedEvents.get(1).character, is('c'));
+    assertThat(listener.keyPressedEvents.get(1).doit, is(true));
+    assertThat(listener.keyPressedEvents.get(1).keyCode, is(5));
+    assertThat(listener.keyPressedEvents.get(1).keyLocation, is(6));
+    assertThat(listener.keyReleasedEvents.size(), is(2));
+    assertThat(listener.keyReleasedEvents.get(0), is(event(display, control, 2)));
+    assertThat(listener.keyReleasedEvents.get(0).character, is('b'));
+    assertThat(listener.keyReleasedEvents.get(0).doit, is(false));
+    assertThat(listener.keyReleasedEvents.get(0).keyCode, is(3));
+    assertThat(listener.keyReleasedEvents.get(0).keyLocation, is(4));
+    assertThat(listener.keyReleasedEvents.get(1), is(event(display, control, 4)));
+    assertThat(listener.keyReleasedEvents.get(1).character, is('d'));
+    assertThat(listener.keyReleasedEvents.get(1).doit, is(false));
+    assertThat(listener.keyReleasedEvents.get(1).keyCode, is(7));
+    assertThat(listener.keyReleasedEvents.get(1).keyLocation, is(8));
+
+    listener.clearEvents();
+    control.removeKeyListener(listener);
+    assertThat(control.getListeners(SWT.KeyUp).length, is(0));
+    assertThat(control.getListeners(SWT.KeyDown).length, is(0));
+
+    control.notifyListeners(SWT.KeyUp, event1);
+    control.notifyListeners(SWT.KeyDown, event2);
+    control.notifyListeners(SWT.KeyUp, event3);
+    control.notifyListeners(SWT.KeyDown, event4);
+
+    assertThat(listener.keyPressedEvents.size(), is(0));
+    assertThat(listener.keyReleasedEvents.size(), is(0));
   }
 }
