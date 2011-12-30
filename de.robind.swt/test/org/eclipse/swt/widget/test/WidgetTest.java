@@ -506,4 +506,26 @@ public class WidgetTest {
     widget.dispose();
     widget.getDisplay();
   }
+
+  @Test
+  public void reskinDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Widget widget = new Widget(this.shell, 0) {};
+    widget.dispose();
+    widget.reskin(0);
+  }
+
+  @Test
+  public void reskinInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Widget widget = new Widget(this.shell, 0) {};
+    asyncExec(new Callable<Widget>() {
+      public Widget call() throws Exception {
+        widget.reskin(0);
+        return (widget);
+      }
+    });
+  }
 }
