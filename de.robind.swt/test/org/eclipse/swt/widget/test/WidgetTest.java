@@ -49,7 +49,7 @@ public class WidgetTest {
 
   @Before
   public void before() {
-    DisplayPool.getInstance().pushKey(new Key() {});
+    DisplayPool.getInstance().offerKey(new Key() {});
     this.display = new Display();
     this.shell = new Shell(this.display);
   }

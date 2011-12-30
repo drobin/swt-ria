@@ -17,7 +17,7 @@ public class DisplayPool {
   /**
    * Map of registered displays.
    * The key of the map is the external {@link Key} assigned with
-   * {@link #pushKey(Key)}.
+   * {@link #offerKey(Key)}.
    */
   private Map<Key, Display> displayMap = new HashMap<Key, Display>();
 
@@ -62,7 +62,7 @@ public class DisplayPool {
    *
    * @param key the new key
    */
-  public void pushKey(Key key) {
+  public void offerKey(Key key) {
     this.keyQueue.offer(key);
   }
 
@@ -70,12 +70,12 @@ public class DisplayPool {
    * Appends a {@link Display} to the {@link DisplayPool}.
    * <p>
    * The method fetches a {@link Key key} from the internal
-   * {@link #pushKey(Key) key-list} and assigns it to the display. So later,
+   * {@link ##offerKey(Key) key-list} and assigns it to the display. So later,
    * the display can be identified by the key.
    *
    * @param display The display to be appended
    * @throws NullPointerException if no key is available. You need to call
-   *         {@link #pushKey(Key)} before!
+   *         {@link #offerKey(Key)} before!
    */
   public void addDisplay(Display display) throws NullPointerException {
     Key key = this.keyQueue.poll();

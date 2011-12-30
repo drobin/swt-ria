@@ -107,7 +107,7 @@ public class SWTApplication extends Thread {
   @Override
   public void run() {
     try {
-      DisplayPool.getInstance().pushKey(this.key);
+      DisplayPool.getInstance().offerKey(this.key);
 
       Class<?> appClass = Class.forName("de.robind.swt.demo.ButtonDemo");
       Method mainMethod = appClass.getMethod("main", String[].class);
