@@ -14,6 +14,7 @@ import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestClientTasks;
 import org.eclipse.swt.test.TestControlListener;
+import org.eclipse.swt.test.TestDragDetectListener;
 import org.eclipse.swt.test.TestEvent;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -128,7 +129,7 @@ public class ControlTest {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
-    control.addControlListener(null);
+    control.removeControlListener(null);
   }
 
   @Test
@@ -137,7 +138,7 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.dispose();
-    control.addControlListener(new TestControlListener());
+    control.removeControlListener(new TestControlListener());
   }
 
   @Test
@@ -147,7 +148,7 @@ public class ControlTest {
     final Control control = new Control(this.shell, 0) {};
     asyncExec(new Callable<Control>() {
       public Control call() throws Exception {
-        control.addControlListener(new TestControlListener());
+        control.removeControlListener(new TestControlListener());
         return (control);
       }
     });
@@ -191,5 +192,111 @@ public class ControlTest {
 
     assertThat(listener.movedEvents.size(), is(0));
     assertThat(listener.resizedEvents.size(), is(0));
+  }
+
+  @Test
+  public void addDragDetectListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addDragDetectListener(null);
+  }
+
+  @Test
+  public void addDragDetectListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addDragDetectListener(new TestDragDetectListener());
+  }
+
+  @Test
+  public void addDragDetectListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addDragDetectListener(new TestDragDetectListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeDragDetectListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeDragDetectListener(null);
+  }
+
+  @Test
+  public void removeDragDetectListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeDragDetectListener(new TestDragDetectListener());
+  }
+
+  @Test
+  public void removeDragDetectListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeDragDetectListener(new TestDragDetectListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void dragDetectListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestDragDetectListener listener = new TestDragDetectListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+
+    event1.button = 1;
+    event1.stateMask = 2;
+    event1.x = 3;
+    event1.y = 4;
+
+    event2.button = 5;
+    event2.stateMask = 6;
+    event2.x = 7;
+    event2.y = 8;
+
+    assertThat(control.getListeners(SWT.DragDetect).length, is(0));
+    control.addDragDetectListener(listener);
+    assertThat(control.getListeners(SWT.DragDetect).length, is(1));
+
+    control.notifyListeners(SWT.DragDetect, event1);
+    control.notifyListeners(SWT.DragDetect, event2);
+
+    assertThat(listener.events.size(), is(2));
+    assertThat(listener.events.get(0), is(event(display, control, 1)));
+    assertThat(listener.events.get(0).button, is(1));
+    assertThat(listener.events.get(0).stateMask, is(2));
+    assertThat(listener.events.get(0).x, is(3));
+    assertThat(listener.events.get(0).y, is(4));
+    assertThat(listener.events.get(1), is(event(display, control, 2)));
+    assertThat(listener.events.get(1).button, is(5));
+    assertThat(listener.events.get(1).stateMask, is(6));
+    assertThat(listener.events.get(1).x, is(7));
+    assertThat(listener.events.get(1).y, is(8));
+
+    listener.events.clear();
+    control.removeDragDetectListener(listener);
+    assertThat(control.getListeners(SWT.DragDetect).length, is(0));
+
+    control.notifyListeners(SWT.DragDetect, event1);
+    control.notifyListeners(SWT.DragDetect, event2);
+
+    assertThat(listener.events.size(), is(0));
   }
 }
