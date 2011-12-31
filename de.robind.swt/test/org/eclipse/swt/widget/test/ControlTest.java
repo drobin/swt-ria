@@ -1563,4 +1563,26 @@ public class ControlTest {
     control.setLayoutData(data);
     assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));
   }
+
+  @Test
+  public void setRedrawDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.setRedraw(true);
+  }
+
+  @Test
+  public void setRedrawInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.setRedraw(true);
+        return (control);
+      }
+    });
+  }
 }
