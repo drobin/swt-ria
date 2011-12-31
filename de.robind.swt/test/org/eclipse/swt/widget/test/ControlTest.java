@@ -22,6 +22,7 @@ import org.eclipse.swt.test.TestKeyListener;
 import org.eclipse.swt.test.TestMenuDetectListener;
 import org.eclipse.swt.test.TestMouseListener;
 import org.eclipse.swt.test.TestMouseMoveListener;
+import org.eclipse.swt.test.TestMouseTrackListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -1005,5 +1006,173 @@ public class ControlTest {
     control.notifyListeners(SWT.MouseMove, event2);
 
     assertThat(listener.events.size(), is(0));
+  }
+
+  @Test
+  public void addMouseTrackListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addMouseTrackListener(null);
+  }
+
+  @Test
+  public void addMouseTrackListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addMouseTrackListener(new TestMouseTrackListener());
+  }
+
+  @Test
+  public void addMouseTrackListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addMouseTrackListener(new TestMouseTrackListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeMouseTrackListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeMouseTrackListener(null);
+  }
+
+  @Test
+  public void removeMouseTrackListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeMouseTrackListener(new TestMouseTrackListener());
+  }
+
+  @Test
+  public void removeMouseTrackListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeMouseTrackListener(new TestMouseTrackListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void mouseTrackListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestMouseTrackListener listener = new TestMouseTrackListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+    TestEvent event3 = new TestEvent(3);
+    TestEvent event4 = new TestEvent(4);
+    TestEvent event5 = new TestEvent(5);
+    TestEvent event6 = new TestEvent(6);
+
+    event1.button = 1;
+    event1.stateMask = 2;
+    event1.x = 3;
+    event1.y = 4;
+
+    event2.button = 5;
+    event2.stateMask = 6;
+    event2.x = 7;
+    event2.y = 8;
+
+    event3.button = 9;
+    event3.stateMask = 10;
+    event3.x = 11;
+    event3.y = 12;
+
+    event4.button = 13;
+    event4.stateMask = 14;
+    event4.x = 15;
+    event4.y = 16;
+
+    event5.button = 17;
+    event5.stateMask = 18;
+    event5.x = 19;
+    event5.y = 20;
+
+    event6.button = 21;
+    event6.stateMask = 22;
+    event6.x = 23;
+    event6.y = 24;
+
+    assertThat(control.getListeners(SWT.MouseEnter).length, is(0));
+    assertThat(control.getListeners(SWT.MouseExit).length, is(0));
+    assertThat(control.getListeners(SWT.MouseHover).length, is(0));
+    control.addMouseTrackListener(listener);
+    assertThat(control.getListeners(SWT.MouseEnter).length, is(1));
+    assertThat(control.getListeners(SWT.MouseExit).length, is(1));
+    assertThat(control.getListeners(SWT.MouseHover).length, is(1));
+
+    control.notifyListeners(SWT.MouseEnter, event1);
+    control.notifyListeners(SWT.MouseExit, event2);
+    control.notifyListeners(SWT.MouseHover, event3);
+    control.notifyListeners(SWT.MouseEnter, event4);
+    control.notifyListeners(SWT.MouseExit, event5);
+    control.notifyListeners(SWT.MouseHover, event6);
+
+    assertThat(listener.enterEvents.size(), is(2));
+    assertThat(listener.exitEvents.size(), is(2));
+    assertThat(listener.hoverEvents.size(), is(2));
+    assertThat(listener.enterEvents.get(0), is(event(display, control, 1)));
+    assertThat(listener.enterEvents.get(0).button, is(1));
+    assertThat(listener.enterEvents.get(0).stateMask, is(2));
+    assertThat(listener.enterEvents.get(0).x, is(3));
+    assertThat(listener.enterEvents.get(0).y, is(4));
+    assertThat(listener.enterEvents.get(1), is(event(display, control, 4)));
+    assertThat(listener.enterEvents.get(1).button, is(13));
+    assertThat(listener.enterEvents.get(1).stateMask, is(14));
+    assertThat(listener.enterEvents.get(1).x, is(15));
+    assertThat(listener.enterEvents.get(1).y, is(16));
+    assertThat(listener.exitEvents.get(0), is(event(display, control, 2)));
+    assertThat(listener.exitEvents.get(0).button, is(5));
+    assertThat(listener.exitEvents.get(0).stateMask, is(6));
+    assertThat(listener.exitEvents.get(0).x, is(7));
+    assertThat(listener.exitEvents.get(0).y, is(8));
+    assertThat(listener.exitEvents.get(1), is(event(display, control, 5)));
+    assertThat(listener.exitEvents.get(1).button, is(17));
+    assertThat(listener.exitEvents.get(1).stateMask, is(18));
+    assertThat(listener.exitEvents.get(1).x, is(19));
+    assertThat(listener.exitEvents.get(1).y, is(20));
+    assertThat(listener.hoverEvents.get(0), is(event(display, control, 3)));
+    assertThat(listener.hoverEvents.get(0).button, is(9));
+    assertThat(listener.hoverEvents.get(0).stateMask, is(10));
+    assertThat(listener.hoverEvents.get(0).x, is(11));
+    assertThat(listener.hoverEvents.get(0).y, is(12));
+    assertThat(listener.hoverEvents.get(1), is(event(display, control, 6)));
+    assertThat(listener.hoverEvents.get(1).button, is(21));
+    assertThat(listener.hoverEvents.get(1).stateMask, is(22));
+    assertThat(listener.hoverEvents.get(1).x, is(23));
+    assertThat(listener.hoverEvents.get(1).y, is(24));
+
+    listener.clearEvents();
+    control.removeMouseTrackListener(listener);
+    assertThat(control.getListeners(SWT.MouseEnter).length, is(0));
+    assertThat(control.getListeners(SWT.MouseExit).length, is(0));
+    assertThat(control.getListeners(SWT.MouseHover).length, is(0));
+
+    control.notifyListeners(SWT.MouseEnter, event1);
+    control.notifyListeners(SWT.MouseExit, event2);
+    control.notifyListeners(SWT.MouseHover, event3);
+    control.notifyListeners(SWT.MouseEnter, event4);
+    control.notifyListeners(SWT.MouseExit, event5);
+    control.notifyListeners(SWT.MouseHover, event6);
+
+    assertThat(listener.enterEvents.size(), is(0));
+    assertThat(listener.exitEvents.size(), is(0));
+    assertThat(listener.hoverEvents.size(), is(0));
   }
 }
