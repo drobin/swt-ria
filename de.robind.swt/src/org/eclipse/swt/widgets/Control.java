@@ -696,7 +696,7 @@ public abstract class Control extends Widget implements Drawable {
   public void setLayoutData(Object layoutData) throws SWTException {
     checkWidget();
 
-    if (!(layoutData instanceof LayoutData)) {
+    if (layoutData != null && !(layoutData instanceof LayoutData)) {
       throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
     }
 

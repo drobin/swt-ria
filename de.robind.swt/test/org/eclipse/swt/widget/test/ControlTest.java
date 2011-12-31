@@ -4,7 +4,9 @@ import static org.eclipse.swt.test.SWTExceptionMatcher.swtCode;
 import static org.eclipse.swt.test.SWTTestUtils.asyncExec;
 import static org.eclipse.swt.test.TypedEventMatcher.event;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -12,6 +14,7 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestClientTasks;
@@ -1493,5 +1496,71 @@ public class ControlTest {
     control.notifyListeners(SWT.Traverse, event2);
 
     assertThat(listener.events.size(), is(0));
+  }
+
+  @Test
+  public void getLayoutDataDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.getLayoutData();
+  }
+
+  @Test
+  public void getLayoutDataInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.getLayoutData();
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void setLayoutDataDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.setLayoutData(null);
+  }
+
+  @Test
+  public void setLayoutDataInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.setLayoutData(null);
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void setLayoutDataInvalidLayoutData() {
+    exception.expect(swtCode(SWT.ERROR_INVALID_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.setLayoutData(1);
+  }
+
+  @Test
+  public void getsetLayoutDataSuccess() {
+    LayoutData data = new LayoutData() {
+      @Override
+      public void createLayoutData(Key key) throws Throwable {
+      }
+    };
+
+    Control control = new Control(this.shell, 0) {};
+    assertThat(control.getLayoutData(), is(nullValue()));
+    control.setLayoutData(data);
+    assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));
   }
 }
