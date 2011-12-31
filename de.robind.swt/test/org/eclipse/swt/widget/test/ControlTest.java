@@ -3,6 +3,7 @@ package org.eclipse.swt.widget.test;
 import static org.eclipse.swt.test.SWTExceptionMatcher.swtCode;
 import static org.eclipse.swt.test.SWTTestUtils.asyncExec;
 import static org.eclipse.swt.test.TypedEventMatcher.event;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -10,6 +11,7 @@ import static org.junit.Assert.fail;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestClientTasks;
@@ -24,6 +26,7 @@ import org.eclipse.swt.test.TestMouseListener;
 import org.eclipse.swt.test.TestMouseMoveListener;
 import org.eclipse.swt.test.TestMouseTrackListener;
 import org.eclipse.swt.test.TestMouseWheelListener;
+import org.eclipse.swt.test.TestPaintListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -1279,6 +1282,120 @@ public class ControlTest {
 
     control.notifyListeners(SWT.MouseWheel, event1);
     control.notifyListeners(SWT.MouseWheel, event2);
+
+    assertThat(listener.events.size(), is(0));
+  }
+
+  @Test
+  public void addPaintListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addPaintListener(null);
+  }
+
+  @Test
+  public void addPaintListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addPaintListener(new TestPaintListener());
+  }
+
+  @Test
+  public void addPaintListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addPaintListener(new TestPaintListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removePaintListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removePaintListener(null);
+  }
+
+  @Test
+  public void removePaintListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removePaintListener(new TestPaintListener());
+  }
+
+  @Test
+  public void removePaintListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removePaintListener(new TestPaintListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void paintListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestPaintListener listener = new TestPaintListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+
+    event1.count = 1;
+    event1.gc = new GC();
+    event1.height = 2;
+    event1.width = 3;
+    event1.x = 4;
+    event1.y = 5;
+
+    event2.count = 6;
+    event2.gc = new GC();
+    event2.height = 7;
+    event2.width = 8;
+    event2.x = 9;
+    event2.y = 10;
+
+    assertThat(control.getListeners(SWT.Paint).length, is(0));
+    control.addPaintListener(listener);
+    assertThat(control.getListeners(SWT.Paint).length, is(1));
+
+    control.notifyListeners(SWT.Paint, event1);
+    control.notifyListeners(SWT.Paint, event2);
+
+    assertThat(listener.events.size(), is(2));
+    assertThat(listener.events.get(0), is(event(display, control, 1)));
+    assertThat(listener.events.get(0).count, is(1));
+    assertThat(listener.events.get(0).gc, is(notNullValue()));
+    assertThat(listener.events.get(0).height, is(2));
+    assertThat(listener.events.get(0).width, is(3));
+    assertThat(listener.events.get(0).x, is(4));
+    assertThat(listener.events.get(0).y, is(5));
+    assertThat(listener.events.get(1), is(event(display, control, 2)));
+    assertThat(listener.events.get(1).count, is(6));
+    assertThat(listener.events.get(1).gc, is(notNullValue()));
+    assertThat(listener.events.get(1).height, is(7));
+    assertThat(listener.events.get(1).width, is(8));
+    assertThat(listener.events.get(1).x, is(9));
+    assertThat(listener.events.get(1).y, is(10));
+
+    listener.events.clear();
+    control.removePaintListener(listener);
+    assertThat(control.getListeners(SWT.Paint).length, is(0));
+
+    control.notifyListeners(SWT.Paint, event1);
+    control.notifyListeners(SWT.Paint, event2);
 
     assertThat(listener.events.size(), is(0));
   }
