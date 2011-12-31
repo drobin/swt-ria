@@ -21,6 +21,7 @@ import org.eclipse.swt.test.TestHelpListener;
 import org.eclipse.swt.test.TestKeyListener;
 import org.eclipse.swt.test.TestMenuDetectListener;
 import org.eclipse.swt.test.TestMouseListener;
+import org.eclipse.swt.test.TestMouseMoveListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -898,5 +899,111 @@ public class ControlTest {
     assertThat(listener.upEvents.size(), is(0));
     assertThat(listener.downEvents.size(), is(0));
     assertThat(listener.doubleClickEvents.size(), is(0));
+  }
+
+  @Test
+  public void addMouseMoveListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addMouseMoveListener(null);
+  }
+
+  @Test
+  public void addMouseMoveListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addMouseMoveListener(new TestMouseMoveListener());
+  }
+
+  @Test
+  public void addMouseMoveListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addMouseMoveListener(new TestMouseMoveListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeMouseMoveListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeMouseMoveListener(null);
+  }
+
+  @Test
+  public void removeMouseMoveListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeMouseMoveListener(new TestMouseMoveListener());
+  }
+
+  @Test
+  public void removeMouseMoveListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeMouseMoveListener(new TestMouseMoveListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void mouseMoveListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestMouseMoveListener listener = new TestMouseMoveListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+
+    event1.button = 1;
+    event1.stateMask = 2;
+    event1.x = 3;
+    event1.y = 4;
+
+    event2.button = 5;
+    event2.stateMask = 6;
+    event2.x = 7;
+    event2.y = 8;
+
+    assertThat(control.getListeners(SWT.MouseMove).length, is(0));
+    control.addMouseMoveListener(listener);
+    assertThat(control.getListeners(SWT.MouseMove).length, is(1));
+
+    control.notifyListeners(SWT.MouseMove, event1);
+    control.notifyListeners(SWT.MouseMove, event2);
+
+    assertThat(listener.events.size(), is(2));
+    assertThat(listener.events.get(0), is(event(display, control, 1)));
+    assertThat(listener.events.get(0).button, is(1));
+    assertThat(listener.events.get(0).stateMask, is(2));
+    assertThat(listener.events.get(0).x, is(3));
+    assertThat(listener.events.get(0).y, is(4));
+    assertThat(listener.events.get(1), is(event(display, control, 2)));
+    assertThat(listener.events.get(1).button, is(5));
+    assertThat(listener.events.get(1).stateMask, is(6));
+    assertThat(listener.events.get(1).x, is(7));
+    assertThat(listener.events.get(1).y, is(8));
+
+    listener.events.clear();
+    control.removeMouseMoveListener(listener);
+    assertThat(control.getListeners(SWT.MouseMove).length, is(0));
+
+    control.notifyListeners(SWT.MouseMove, event1);
+    control.notifyListeners(SWT.MouseMove, event2);
+
+    assertThat(listener.events.size(), is(0));
   }
 }
