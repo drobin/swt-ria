@@ -27,6 +27,7 @@ import org.eclipse.swt.test.TestMouseMoveListener;
 import org.eclipse.swt.test.TestMouseTrackListener;
 import org.eclipse.swt.test.TestMouseWheelListener;
 import org.eclipse.swt.test.TestPaintListener;
+import org.eclipse.swt.test.TestTraverseListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -1396,6 +1397,100 @@ public class ControlTest {
 
     control.notifyListeners(SWT.Paint, event1);
     control.notifyListeners(SWT.Paint, event2);
+
+    assertThat(listener.events.size(), is(0));
+  }
+
+  @Test
+  public void addTraverseListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addTraverseListener(null);
+  }
+
+  @Test
+  public void addTraverseListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addTraverseListener(new TestTraverseListener());
+  }
+
+  @Test
+  public void addTraverseListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addTraverseListener(new TestTraverseListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeTraverseListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeTraverseListener(null);
+  }
+
+  @Test
+  public void removeTraverseListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeTraverseListener(new TestTraverseListener());
+  }
+
+  @Test
+  public void removeTraverseListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeTraverseListener(new TestTraverseListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void traverseListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestTraverseListener listener = new TestTraverseListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+
+    event1.detail = 1;
+
+    event2.detail = 2;
+
+    assertThat(control.getListeners(SWT.Traverse).length, is(0));
+    control.addTraverseListener(listener);
+    assertThat(control.getListeners(SWT.Traverse).length, is(1));
+
+    control.notifyListeners(SWT.Traverse, event1);
+    control.notifyListeners(SWT.Traverse, event2);
+
+    assertThat(listener.events.size(), is(2));
+    assertThat(listener.events.get(0), is(event(display, control, 1)));
+    assertThat(listener.events.get(0).detail, is(1));
+    assertThat(listener.events.get(1), is(event(display, control, 2)));
+    assertThat(listener.events.get(1).detail, is(2));
+
+    listener.events.clear();
+    control.removeTraverseListener(listener);
+    assertThat(control.getListeners(SWT.Traverse).length, is(0));
+
+    control.notifyListeners(SWT.Traverse, event1);
+    control.notifyListeners(SWT.Traverse, event2);
 
     assertThat(listener.events.size(), is(0));
   }
