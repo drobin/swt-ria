@@ -19,6 +19,7 @@ import org.eclipse.swt.test.TestEvent;
 import org.eclipse.swt.test.TestFocusListener;
 import org.eclipse.swt.test.TestHelpListener;
 import org.eclipse.swt.test.TestKeyListener;
+import org.eclipse.swt.test.TestMenuDetectListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -626,5 +627,107 @@ public class ControlTest {
 
     assertThat(listener.keyPressedEvents.size(), is(0));
     assertThat(listener.keyReleasedEvents.size(), is(0));
+  }
+
+  @Test
+  public void addMenuDetectListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addMenuDetectListener(null);
+  }
+
+  @Test
+  public void addMenuDetectListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addMenuDetectListener(new TestMenuDetectListener());
+  }
+
+  @Test
+  public void addMenuDetectListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addMenuDetectListener(new TestMenuDetectListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeMenuDetectListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeMenuDetectListener(null);
+  }
+
+  @Test
+  public void removeMenuDetectListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeMenuDetectListener(new TestMenuDetectListener());
+  }
+
+  @Test
+  public void removeMenuDetectListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeMenuDetectListener(new TestMenuDetectListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void menuDetectListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestMenuDetectListener listener = new TestMenuDetectListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+
+    event1.doit = true;
+    event1.x = 1;
+    event1.y = 2;
+
+    event2.doit = false;
+    event2.x = 3;
+    event2.y = 4;
+
+    assertThat(control.getListeners(SWT.MenuDetect).length, is(0));
+    control.addMenuDetectListener(listener);
+    assertThat(control.getListeners(SWT.MenuDetect).length, is(1));
+
+    control.notifyListeners(SWT.MenuDetect, event1);
+    control.notifyListeners(SWT.MenuDetect, event2);
+
+    assertThat(listener.events.size(), is(2));
+    assertThat(listener.events.get(0), is(event(display, control, 1)));
+    assertThat(listener.events.get(0).doit, is(true));
+    assertThat(listener.events.get(0).x, is(1));
+    assertThat(listener.events.get(0).y, is(2));
+    assertThat(listener.events.get(1), is(event(display, control, 2)));
+    assertThat(listener.events.get(1).doit, is(false));
+    assertThat(listener.events.get(1).x, is(3));
+    assertThat(listener.events.get(1).y, is(4));
+
+    listener.events.clear();
+    control.removeMenuDetectListener(listener);
+    assertThat(control.getListeners(SWT.MenuDetect).length, is(0));
+
+    control.notifyListeners(SWT.MenuDetect, event1);
+    control.notifyListeners(SWT.MenuDetect, event2);
+
+    assertThat(listener.events.size(), is(0));
   }
 }
