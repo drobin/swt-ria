@@ -20,6 +20,7 @@ import org.eclipse.swt.test.TestFocusListener;
 import org.eclipse.swt.test.TestHelpListener;
 import org.eclipse.swt.test.TestKeyListener;
 import org.eclipse.swt.test.TestMenuDetectListener;
+import org.eclipse.swt.test.TestMouseListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -729,5 +730,173 @@ public class ControlTest {
     control.notifyListeners(SWT.MenuDetect, event2);
 
     assertThat(listener.events.size(), is(0));
+  }
+
+  @Test
+  public void addMouseListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.addMouseListener(null);
+  }
+
+  @Test
+  public void addMouseListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.addMouseListener(new TestMouseListener());
+  }
+
+  @Test
+  public void addMouseListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.addMouseListener(new TestMouseListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void removeMouseListenerNullListener() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Control control = new Control(this.shell, 0) {};
+    control.removeMouseListener(null);
+  }
+
+  @Test
+  public void removeMouseListenerDisposed() {
+    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
+
+    Control control = new Control(this.shell, 0) {};
+    control.dispose();
+    control.removeMouseListener(new TestMouseListener());
+  }
+
+  @Test
+  public void removeMouseListenerInvalidThread() throws Throwable {
+    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
+
+    final Control control = new Control(this.shell, 0) {};
+    asyncExec(new Callable<Control>() {
+      public Control call() throws Exception {
+        control.removeMouseListener(new TestMouseListener());
+        return (control);
+      }
+    });
+  }
+
+  @Test
+  public void mouseListenerHandling() {
+    Control control = new Control(this.shell, 0) {};
+    TestMouseListener listener = new TestMouseListener();
+    TestEvent event1 = new TestEvent(1);
+    TestEvent event2 = new TestEvent(2);
+    TestEvent event3 = new TestEvent(3);
+    TestEvent event4 = new TestEvent(4);
+    TestEvent event5 = new TestEvent(5);
+    TestEvent event6 = new TestEvent(6);
+
+    event1.button = 1;
+    event1.stateMask = 2;
+    event1.x = 3;
+    event1.y = 4;
+
+    event2.button = 5;
+    event2.stateMask = 6;
+    event2.x = 7;
+    event2.y = 8;
+
+    event3.button = 9;
+    event3.stateMask = 10;
+    event3.x = 11;
+    event3.y = 12;
+
+    event4.button = 13;
+    event4.stateMask = 14;
+    event4.x = 15;
+    event4.y = 16;
+
+    event5.button = 17;
+    event5.stateMask = 18;
+    event5.x = 19;
+    event5.y = 20;
+
+    event6.button = 21;
+    event6.stateMask = 22;
+    event6.x = 23;
+    event6.y = 24;
+
+    assertThat(control.getListeners(SWT.MouseUp).length, is(0));
+    assertThat(control.getListeners(SWT.MouseDown).length, is(0));
+    assertThat(control.getListeners(SWT.MouseDoubleClick).length, is(0));
+    control.addMouseListener(listener);
+    assertThat(control.getListeners(SWT.MouseUp).length, is(1));
+    assertThat(control.getListeners(SWT.MouseDown).length, is(1));
+    assertThat(control.getListeners(SWT.MouseDoubleClick).length, is(1));
+
+    control.notifyListeners(SWT.MouseUp, event1);
+    control.notifyListeners(SWT.MouseDown, event2);
+    control.notifyListeners(SWT.MouseDoubleClick, event3);
+    control.notifyListeners(SWT.MouseUp, event4);
+    control.notifyListeners(SWT.MouseDown, event5);
+    control.notifyListeners(SWT.MouseDoubleClick, event6);
+
+    assertThat(listener.upEvents.size(), is(2));
+    assertThat(listener.downEvents.size(), is(2));
+    assertThat(listener.doubleClickEvents.size(), is(2));
+    assertThat(listener.upEvents.get(0), is(event(display, control, 1)));
+    assertThat(listener.upEvents.get(0).button, is(1));
+    assertThat(listener.upEvents.get(0).stateMask, is(2));
+    assertThat(listener.upEvents.get(0).x, is(3));
+    assertThat(listener.upEvents.get(0).y, is(4));
+    assertThat(listener.upEvents.get(1), is(event(display, control, 4)));
+    assertThat(listener.upEvents.get(1).button, is(13));
+    assertThat(listener.upEvents.get(1).stateMask, is(14));
+    assertThat(listener.upEvents.get(1).x, is(15));
+    assertThat(listener.upEvents.get(1).y, is(16));
+    assertThat(listener.downEvents.get(0), is(event(display, control, 2)));
+    assertThat(listener.downEvents.get(0).button, is(5));
+    assertThat(listener.downEvents.get(0).stateMask, is(6));
+    assertThat(listener.downEvents.get(0).x, is(7));
+    assertThat(listener.downEvents.get(0).y, is(8));
+    assertThat(listener.downEvents.get(1), is(event(display, control, 5)));
+    assertThat(listener.downEvents.get(1).button, is(17));
+    assertThat(listener.downEvents.get(1).stateMask, is(18));
+    assertThat(listener.downEvents.get(1).x, is(19));
+    assertThat(listener.downEvents.get(1).y, is(20));
+    assertThat(listener.doubleClickEvents.get(0), is(event(display, control, 3)));
+    assertThat(listener.doubleClickEvents.get(0).button, is(9));
+    assertThat(listener.doubleClickEvents.get(0).stateMask, is(10));
+    assertThat(listener.doubleClickEvents.get(0).x, is(11));
+    assertThat(listener.doubleClickEvents.get(0).y, is(12));
+    assertThat(listener.doubleClickEvents.get(1), is(event(display, control, 6)));
+    assertThat(listener.doubleClickEvents.get(1).button, is(21));
+    assertThat(listener.doubleClickEvents.get(1).stateMask, is(22));
+    assertThat(listener.doubleClickEvents.get(1).x, is(23));
+    assertThat(listener.doubleClickEvents.get(1).y, is(24));
+
+    listener.clearEvents();
+    control.removeMouseListener(listener);
+    assertThat(control.getListeners(SWT.MouseUp).length, is(0));
+    assertThat(control.getListeners(SWT.MouseDown).length, is(0));
+    assertThat(control.getListeners(SWT.MouseDoubleClick).length, is(0));
+
+    control.notifyListeners(SWT.MouseUp, event1);
+    control.notifyListeners(SWT.MouseDown, event2);
+    control.notifyListeners(SWT.MouseDoubleClick, event3);
+    control.notifyListeners(SWT.MouseUp, event4);
+    control.notifyListeners(SWT.MouseDown, event5);
+    control.notifyListeners(SWT.MouseDoubleClick, event6);
+
+    assertThat(listener.upEvents.size(), is(0));
+    assertThat(listener.downEvents.size(), is(0));
+    assertThat(listener.doubleClickEvents.size(), is(0));
   }
 }
