@@ -1,8 +1,8 @@
 package org.eclipse.swt.widget.test;
 
-import static org.eclipse.swt.test.SWTExceptionMatcher.swtCode;
-import static org.eclipse.swt.test.SWTTestUtils.asyncExec;
-import static org.eclipse.swt.test.TypedEventMatcher.event;
+import static org.eclipse.swt.test.utils.SWTExceptionMatcher.swtCode;
+import static org.eclipse.swt.test.utils.SWTTestUtils.asyncExec;
+import static org.eclipse.swt.test.utils.TypedEventMatcher.event;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -17,20 +17,20 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.eclipse.swt.test.TestClientTasks;
-import org.eclipse.swt.test.TestControlListener;
-import org.eclipse.swt.test.TestDragDetectListener;
-import org.eclipse.swt.test.TestEvent;
-import org.eclipse.swt.test.TestFocusListener;
-import org.eclipse.swt.test.TestHelpListener;
-import org.eclipse.swt.test.TestKeyListener;
-import org.eclipse.swt.test.TestMenuDetectListener;
-import org.eclipse.swt.test.TestMouseListener;
-import org.eclipse.swt.test.TestMouseMoveListener;
-import org.eclipse.swt.test.TestMouseTrackListener;
-import org.eclipse.swt.test.TestMouseWheelListener;
-import org.eclipse.swt.test.TestPaintListener;
-import org.eclipse.swt.test.TestTraverseListener;
+import org.eclipse.swt.test.utils.TestClientTasks;
+import org.eclipse.swt.test.utils.TestControlListener;
+import org.eclipse.swt.test.utils.TestDragDetectListener;
+import org.eclipse.swt.test.utils.TestEvent;
+import org.eclipse.swt.test.utils.TestFocusListener;
+import org.eclipse.swt.test.utils.TestHelpListener;
+import org.eclipse.swt.test.utils.TestKeyListener;
+import org.eclipse.swt.test.utils.TestMenuDetectListener;
+import org.eclipse.swt.test.utils.TestMouseListener;
+import org.eclipse.swt.test.utils.TestMouseMoveListener;
+import org.eclipse.swt.test.utils.TestMouseTrackListener;
+import org.eclipse.swt.test.utils.TestMouseWheelListener;
+import org.eclipse.swt.test.utils.TestPaintListener;
+import org.eclipse.swt.test.utils.TestTraverseListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -42,6 +42,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 
 public class ControlTest {
   private Display display = null;

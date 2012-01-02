@@ -1,4 +1,4 @@
-package org.eclipse.swt.test;
+package org.eclipse.swt.test.utils;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;

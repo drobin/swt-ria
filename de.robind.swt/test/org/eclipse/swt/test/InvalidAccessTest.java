@@ -1,7 +1,7 @@
 package org.eclipse.swt.test;
 
-import static org.eclipse.swt.test.SWTExceptionMatcher.swtCode;
-import static org.eclipse.swt.test.SWTTestUtils.asyncExec;
+import static org.eclipse.swt.test.utils.SWTExceptionMatcher.swtCode;
+import static org.eclipse.swt.test.utils.SWTTestUtils.asyncExec;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +27,21 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
+import org.eclipse.swt.test.utils.TestClientTasks;
+import org.eclipse.swt.test.utils.TestControlListener;
+import org.eclipse.swt.test.utils.TestDisposeListener;
+import org.eclipse.swt.test.utils.TestDragDetectListener;
+import org.eclipse.swt.test.utils.TestFocusListener;
+import org.eclipse.swt.test.utils.TestHelpListener;
+import org.eclipse.swt.test.utils.TestKeyListener;
+import org.eclipse.swt.test.utils.TestListener;
+import org.eclipse.swt.test.utils.TestMenuDetectListener;
+import org.eclipse.swt.test.utils.TestMouseListener;
+import org.eclipse.swt.test.utils.TestMouseMoveListener;
+import org.eclipse.swt.test.utils.TestMouseTrackListener;
+import org.eclipse.swt.test.utils.TestMouseWheelListener;
+import org.eclipse.swt.test.utils.TestPaintListener;
+import org.eclipse.swt.test.utils.TestTraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -44,6 +59,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
 
 @RunWith(Parameterized.class)
 public class InvalidAccessTest {

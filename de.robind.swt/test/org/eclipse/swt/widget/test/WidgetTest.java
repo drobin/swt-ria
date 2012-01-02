@@ -1,8 +1,8 @@
 package org.eclipse.swt.widget.test;
 
-import static org.eclipse.swt.test.SWTExceptionMatcher.swtCode;
-import static org.eclipse.swt.test.SWTTestUtils.asyncExec;
-import static org.eclipse.swt.test.TypedEventMatcher.event;
+import static org.eclipse.swt.test.utils.SWTExceptionMatcher.swtCode;
+import static org.eclipse.swt.test.utils.SWTTestUtils.asyncExec;
+import static org.eclipse.swt.test.utils.TypedEventMatcher.event;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
@@ -14,10 +14,10 @@ import java.util.concurrent.Callable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.eclipse.swt.test.TestClientTasks;
-import org.eclipse.swt.test.TestDisposeListener;
-import org.eclipse.swt.test.TestEvent;
-import org.eclipse.swt.test.TestListener;
+import org.eclipse.swt.test.utils.TestClientTasks;
+import org.eclipse.swt.test.utils.TestDisposeListener;
+import org.eclipse.swt.test.utils.TestEvent;
+import org.eclipse.swt.test.utils.TestListener;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -30,6 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 
 public class WidgetTest {
   private Display display = null;
