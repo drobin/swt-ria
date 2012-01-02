@@ -10,9 +10,23 @@ import java.util.Collection;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.DragDetectListener;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.HelpListener;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -69,6 +83,33 @@ public class DisposeTest {
         { TestWidget.class, "setData", p(String.class, Object.class), a("foo", "bar") },
         { TestWidget.class, "getDisplay", p(), a() },
         { TestWidget.class, "reskin", p(int.class), a(0) },
+        { TestControl.class, "addControlListener", p(ControlListener.class), a(new TestControlListener()) },
+        { TestControl.class, "addDragDetectListener", p(DragDetectListener.class), a(new TestDragDetectListener()) },
+        { TestControl.class, "addFocusListener", p(FocusListener.class), a(new TestFocusListener()) },
+        { TestControl.class, "addHelpListener", p(HelpListener.class), a(new TestHelpListener()) },
+        { TestControl.class, "addKeyListener", p(KeyListener.class), a(new TestKeyListener()) },
+        { TestControl.class, "addMenuDetectListener", p(MenuDetectListener.class), a(new TestMenuDetectListener()) },
+        { TestControl.class, "addMouseListener", p(MouseListener.class), a(new TestMouseListener()) },
+        { TestControl.class, "addMouseMoveListener", p(MouseMoveListener.class), a(new TestMouseMoveListener()) },
+        { TestControl.class, "addMouseTrackListener", p(MouseTrackListener.class), a(new TestMouseTrackListener()) },
+        { TestControl.class, "addMouseWheelListener", p(MouseWheelListener.class), a(new TestMouseWheelListener()) },
+        { TestControl.class, "addPaintListener", p(PaintListener.class), a(new TestPaintListener()) },
+        { TestControl.class, "addTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
+        { TestControl.class, "getLayoutData", p(), a() },
+        { TestControl.class, "removeControlListener", p(ControlListener.class), a(new TestControlListener()) },
+        { TestControl.class, "removeDragDetectListener", p(DragDetectListener.class), a(new TestDragDetectListener()) },
+        { TestControl.class, "removeFocusListener", p(FocusListener.class), a(new TestFocusListener()) },
+        { TestControl.class, "removeHelpListener", p(HelpListener.class), a(new TestHelpListener()) },
+        { TestControl.class, "removeKeyListener", p(KeyListener.class), a(new TestKeyListener()) },
+        { TestControl.class, "removeMenuDetectListener", p(MenuDetectListener.class), a(new TestMenuDetectListener()) },
+        { TestControl.class, "removeMouseListener", p(MouseListener.class), a(new TestMouseListener()) },
+        { TestControl.class, "removeMouseMoveListener", p(MouseMoveListener.class), a(new TestMouseMoveListener()) },
+        { TestControl.class, "removeMouseTrackListener", p(MouseTrackListener.class), a(new TestMouseTrackListener()) },
+        { TestControl.class, "removeMouseWheelListener", p(MouseWheelListener.class), a(new TestMouseWheelListener()) },
+        { TestControl.class, "removePaintListener", p(PaintListener.class), a(new TestPaintListener()) },
+        { TestControl.class, "removeTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
+        { TestControl.class, "setLayoutData", p(Object.class), a((Object)null) },
+        { TestControl.class, "setRedraw", p(boolean.class), a(true) },
     };
     return (Arrays.asList(data));
   }
@@ -126,6 +167,12 @@ public class DisposeTest {
   private static class TestWidget extends Widget {
     public TestWidget(Widget parent, int style) throws SWTException {
       super(parent, style);
+    }
+  }
+
+  private static class TestControl extends Control {
+    public TestControl(Widget parent, int style) throws SWTException {
+      super((Composite)parent, style);
     }
   }
 }

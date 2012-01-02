@@ -118,15 +118,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addControlListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addControlListener(new TestControlListener());
-  }
-
-  @Test
   public void addControlListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -145,15 +136,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeControlListener(null);
-  }
-
-  @Test
-  public void removeControlListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeControlListener(new TestControlListener());
   }
 
   @Test
@@ -218,15 +200,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addDragDetectListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addDragDetectListener(new TestDragDetectListener());
-  }
-
-  @Test
   public void addDragDetectListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -245,15 +218,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeDragDetectListener(null);
-  }
-
-  @Test
-  public void removeDragDetectListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeDragDetectListener(new TestDragDetectListener());
   }
 
   @Test
@@ -324,15 +288,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addFocusListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addFocusListener(new TestFocusListener());
-  }
-
-  @Test
   public void addFocusListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -351,15 +306,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeFocusListener(null);
-  }
-
-  @Test
-  public void removeFocusListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeFocusListener(new TestFocusListener());
   }
 
   @Test
@@ -424,15 +370,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addHelpListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addHelpListener(new TestHelpListener());
-  }
-
-  @Test
   public void addHelpListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -451,15 +388,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeHelpListener(null);
-  }
-
-  @Test
-  public void removeHelpListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeHelpListener(new TestHelpListener());
   }
 
   @Test
@@ -512,15 +440,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addKeyListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addKeyListener(new TestKeyListener());
-  }
-
-  @Test
   public void addKeyListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -539,15 +458,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeKeyListener(null);
-  }
-
-  @Test
-  public void removeKeyListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeKeyListener(new TestKeyListener());
   }
 
   @Test
@@ -649,15 +559,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addMenuDetectListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addMenuDetectListener(new TestMenuDetectListener());
-  }
-
-  @Test
   public void addMenuDetectListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -676,15 +577,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeMenuDetectListener(null);
-  }
-
-  @Test
-  public void removeMenuDetectListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeMenuDetectListener(new TestMenuDetectListener());
   }
 
   @Test
@@ -751,15 +643,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addMouseListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addMouseListener(new TestMouseListener());
-  }
-
-  @Test
   public void addMouseListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -778,15 +661,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseListener(null);
-  }
-
-  @Test
-  public void removeMouseListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeMouseListener(new TestMouseListener());
   }
 
   @Test
@@ -919,15 +793,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addMouseMoveListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addMouseMoveListener(new TestMouseMoveListener());
-  }
-
-  @Test
   public void addMouseMoveListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -946,15 +811,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseMoveListener(null);
-  }
-
-  @Test
-  public void removeMouseMoveListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeMouseMoveListener(new TestMouseMoveListener());
   }
 
   @Test
@@ -1025,15 +881,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addMouseTrackListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addMouseTrackListener(new TestMouseTrackListener());
-  }
-
-  @Test
   public void addMouseTrackListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -1052,15 +899,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseTrackListener(null);
-  }
-
-  @Test
-  public void removeMouseTrackListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeMouseTrackListener(new TestMouseTrackListener());
   }
 
   @Test
@@ -1193,15 +1031,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addMouseWheelListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addMouseWheelListener(new TestMouseWheelListener());
-  }
-
-  @Test
   public void addMouseWheelListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -1220,15 +1049,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseWheelListener(null);
-  }
-
-  @Test
-  public void removeMouseWheelListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeMouseWheelListener(new TestMouseWheelListener());
   }
 
   @Test
@@ -1299,15 +1119,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addPaintListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addPaintListener(new TestPaintListener());
-  }
-
-  @Test
   public void addPaintListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -1326,15 +1137,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removePaintListener(null);
-  }
-
-  @Test
-  public void removePaintListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removePaintListener(new TestPaintListener());
   }
 
   @Test
@@ -1413,15 +1215,6 @@ public class ControlTest {
   }
 
   @Test
-  public void addTraverseListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.addTraverseListener(new TestTraverseListener());
-  }
-
-  @Test
   public void addTraverseListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -1440,15 +1233,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeTraverseListener(null);
-  }
-
-  @Test
-  public void removeTraverseListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.removeTraverseListener(new TestTraverseListener());
   }
 
   @Test
@@ -1499,15 +1283,6 @@ public class ControlTest {
   }
 
   @Test
-  public void getLayoutDataDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.getLayoutData();
-  }
-
-  @Test
   public void getLayoutDataInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -1518,15 +1293,6 @@ public class ControlTest {
         return (control);
       }
     });
-  }
-
-  @Test
-  public void setLayoutDataDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.setLayoutData(null);
   }
 
   @Test
@@ -1562,15 +1328,6 @@ public class ControlTest {
     assertThat(control.getLayoutData(), is(nullValue()));
     control.setLayoutData(data);
     assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));
-  }
-
-  @Test
-  public void setRedrawDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Control control = new Control(this.shell, 0) {};
-    control.dispose();
-    control.setRedraw(true);
   }
 
   @Test
