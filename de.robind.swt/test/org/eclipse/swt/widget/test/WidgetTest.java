@@ -101,19 +101,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void getStyleInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.getStyle();
-        return (widget);
-      }
-    });
-  }
-
-  @Test
   public void addListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
@@ -122,50 +109,11 @@ public class WidgetTest {
   }
 
   @Test
-  public void addListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.addListener(0, new TestListener());
-        return (widget);
-      }
-    });
-  }
-
-  @Test
   public void removeListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Widget widget = new Widget(this.shell, 0) {};
     widget.removeListener(0, null);
-  }
-
-  @Test
-  public void removeListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.removeListener(0, new TestListener());
-        return (widget);
-      }
-    });
-  }
-
-  @Test
-  public void isListeningInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.isListening(0);
-        return (widget);
-      }
-    });
   }
 
   @Test
@@ -224,32 +172,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void notifyListenersInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.notifyListeners(0, new Event());
-        return (widget);
-      }
-    });
-  }
-
-  @Test
-  public void getListenersInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.getListeners(0);
-        return (widget);
-      }
-    });
-  }
-
-  @Test
   public void untypedListenerHandling() {
     TestListener listener = new TestListener();
     Widget widget = new Widget(this.shell, 0) {};
@@ -293,37 +215,11 @@ public class WidgetTest {
   }
 
   @Test
-  public void addDisposeListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.addDisposeListener(new TestDisposeListener());
-        return (widget);
-      }
-    });
-  }
-
-  @Test
   public void removeDisposeListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Widget widget = new Widget(this.shell, 0) {};
     widget.removeDisposeListener(null);
-  }
-
-  @Test
-  public void removeDisposeListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.removeDisposeListener(new TestDisposeListener());
-        return (widget);
-      }
-    });
   }
 
   @Test
@@ -357,32 +253,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void getDataInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.getData();
-        return (widget);
-      }
-    });
-  }
-
-  @Test
-  public void setDataInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.setData(null);
-        return (widget);
-      }
-    });
-  }
-
-  @Test
   public void dataHandling() {
     Object data = new Object();
     Widget widget = new Widget(this.shell, 0) {};
@@ -401,37 +271,11 @@ public class WidgetTest {
   }
 
   @Test
-  public void getDataWithKeyInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.getData("foo");
-        return (widget);
-      }
-    });
-  }
-
-  @Test
   public void setDataWithKeyNullKey() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Widget widget = new Widget(this.shell, 0) {};
     widget.setData(null, "foo");
-  }
-
-  @Test
-  public void setDataWithKeyInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.setData("foo", "bar");
-        return (widget);
-      }
-    });
   }
 
   @Test
@@ -454,18 +298,5 @@ public class WidgetTest {
 
     assertThat(widget.getData("foo"), is(nullValue()));
     assertThat(widget.getData("bar"), is(nullValue()));
-  }
-
-  @Test
-  public void reskinInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Widget widget = new Widget(this.shell, 0) {};
-    asyncExec(new Callable<Widget>() {
-      public Widget call() throws Exception {
-        widget.reskin(0);
-        return (widget);
-      }
-    });
   }
 }

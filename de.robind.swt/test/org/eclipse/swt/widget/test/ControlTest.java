@@ -118,37 +118,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addControlListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addControlListener(new TestControlListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeControlListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeControlListener(null);
-  }
-
-  @Test
-  public void removeControlListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeControlListener(new TestControlListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -200,37 +174,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addDragDetectListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addDragDetectListener(new TestDragDetectListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeDragDetectListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeDragDetectListener(null);
-  }
-
-  @Test
-  public void removeDragDetectListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeDragDetectListener(new TestDragDetectListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -288,37 +236,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addFocusListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addFocusListener(new TestFocusListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeFocusListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeFocusListener(null);
-  }
-
-  @Test
-  public void removeFocusListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeFocusListener(new TestFocusListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -370,37 +292,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addHelpListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addHelpListener(new TestHelpListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeHelpListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeHelpListener(null);
-  }
-
-  @Test
-  public void removeHelpListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeHelpListener(new TestHelpListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -440,37 +336,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addKeyListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addKeyListener(new TestKeyListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeKeyListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeKeyListener(null);
-  }
-
-  @Test
-  public void removeKeyListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeKeyListener(new TestKeyListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -559,37 +429,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addMenuDetectListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addMenuDetectListener(new TestMenuDetectListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeMenuDetectListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeMenuDetectListener(null);
-  }
-
-  @Test
-  public void removeMenuDetectListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeMenuDetectListener(new TestMenuDetectListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -643,37 +487,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addMouseListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addMouseListener(new TestMouseListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeMouseListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseListener(null);
-  }
-
-  @Test
-  public void removeMouseListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeMouseListener(new TestMouseListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -792,18 +610,6 @@ public class ControlTest {
     control.addMouseMoveListener(null);
   }
 
-  @Test
-  public void addMouseMoveListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addMouseMoveListener(new TestMouseMoveListener());
-        return (control);
-      }
-    });
-  }
 
   @Test
   public void removeMouseMoveListenerNullListener() {
@@ -811,19 +617,6 @@ public class ControlTest {
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseMoveListener(null);
-  }
-
-  @Test
-  public void removeMouseMoveListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeMouseMoveListener(new TestMouseMoveListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -881,37 +674,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addMouseTrackListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addMouseTrackListener(new TestMouseTrackListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeMouseTrackListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseTrackListener(null);
-  }
-
-  @Test
-  public void removeMouseTrackListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeMouseTrackListener(new TestMouseTrackListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -1031,37 +798,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addMouseWheelListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addMouseWheelListener(new TestMouseWheelListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeMouseWheelListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeMouseWheelListener(null);
-  }
-
-  @Test
-  public void removeMouseWheelListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeMouseWheelListener(new TestMouseWheelListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -1119,37 +860,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addPaintListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addPaintListener(new TestPaintListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removePaintListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removePaintListener(null);
-  }
-
-  @Test
-  public void removePaintListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removePaintListener(new TestPaintListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -1215,37 +930,11 @@ public class ControlTest {
   }
 
   @Test
-  public void addTraverseListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.addTraverseListener(new TestTraverseListener());
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void removeTraverseListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
     Control control = new Control(this.shell, 0) {};
     control.removeTraverseListener(null);
-  }
-
-  @Test
-  public void removeTraverseListenerInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.removeTraverseListener(new TestTraverseListener());
-        return (control);
-      }
-    });
   }
 
   @Test
@@ -1283,32 +972,6 @@ public class ControlTest {
   }
 
   @Test
-  public void getLayoutDataInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.getLayoutData();
-        return (control);
-      }
-    });
-  }
-
-  @Test
-  public void setLayoutDataInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.setLayoutData(null);
-        return (control);
-      }
-    });
-  }
-
-  @Test
   public void setLayoutDataInvalidLayoutData() {
     exception.expect(swtCode(SWT.ERROR_INVALID_ARGUMENT));
 
@@ -1328,18 +991,5 @@ public class ControlTest {
     assertThat(control.getLayoutData(), is(nullValue()));
     control.setLayoutData(data);
     assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));
-  }
-
-  @Test
-  public void setRedrawInvalidThread() throws Throwable {
-    exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
-
-    final Control control = new Control(this.shell, 0) {};
-    asyncExec(new Callable<Control>() {
-      public Control call() throws Exception {
-        control.setRedraw(true);
-        return (control);
-      }
-    });
   }
 }
