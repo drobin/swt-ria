@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
@@ -87,6 +88,9 @@ public class InvalidAccessTest {
   @Parameters
   public static Collection<Object[]>testData() {
     Object[][] data = new Object[][] {
+        { List.class, "getSelectionIndices", p(), a() },
+        { List.class, "getTopIndex", p(), a() },
+        { List.class, "deselectAll", p(), a() },
         { TestWidget.class, "getStyle", p(), a() },
         { TestWidget.class, "addListener", p(int.class, Listener.class), a(0, new TestListener()) },
         { TestWidget.class, "removeListener", p(int.class, Listener.class), a(0, new TestListener()) },
@@ -156,7 +160,7 @@ public class InvalidAccessTest {
     this.shell = new Shell(this.display);
 
     Constructor<? extends Widget> ctor =
-        this.testClass.getConstructor(Widget.class, int.class);
+        this.testClass.getConstructor(Composite.class, int.class);
     this.widget = ctor.newInstance(this.shell, 0);
   }
 
@@ -191,14 +195,14 @@ public class InvalidAccessTest {
   }
 
   private static class TestWidget extends Widget {
-    public TestWidget(Widget parent, int style) throws SWTException {
-      super(parent, style);
+    public TestWidget(Composite parent, int style) throws SWTException {
+      super((Widget)parent, style);
     }
   }
 
   private static class TestControl extends Control {
-    public TestControl(Widget parent, int style) throws SWTException {
-      super((Composite)parent, style);
+    public TestControl(Composite parent, int style) throws SWTException {
+      super(parent, style);
     }
   }
 }
