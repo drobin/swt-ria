@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -20,6 +21,8 @@ import de.robind.swt.msg.SWTRequest;
 import de.robind.swt.msg.SWTResponse;
 
 public class SWTClient {
+  private static final Logger logger = Logger.getLogger(SWTClient.class);
+
   public static void main(String[] args) throws Exception {
     Display display = new Display();
 
@@ -104,8 +107,10 @@ public class SWTClient {
 
       return (factory.createNewResponse());
     } catch (InvocationTargetException e) {
+      logger.error("handleNewRequest catches exception", e);
       return (factory.createException(e.getCause()));
     } catch (Exception e) {
+      logger.error("handleNewRequest catches exception", e);
       return factory.createException(e);
     }
   }
@@ -119,8 +124,10 @@ public class SWTClient {
 
       return (factory.createCallResponse(result));
     } catch (InvocationTargetException e) {
+      logger.error("handleCallRequest catches exception", e);
       return (factory.createException(e.getCause()));
     } catch (Exception e) {
+      logger.error("handleCallRequest catches exception", e);
       return (factory.createException(e));
     }
   }
@@ -134,6 +141,7 @@ public class SWTClient {
           request.getEventType(), request.enable());
       return (messageFactory.createRegResponse());
     } catch (Exception e) {
+      logger.error("handleRegRequest catches exception", e);
       return (messageFactory.createException(e));
     }
   }
