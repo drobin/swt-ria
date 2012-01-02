@@ -101,15 +101,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void getStyleDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.getStyle();
-  }
-
-  @Test
   public void getStyleInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -128,15 +119,6 @@ public class WidgetTest {
 
     Widget widget = new Widget(this.shell, 0) {};
     widget.addListener(0, null);
-  }
-
-  @Test
-  public void addListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.addListener(0, new  TestListener());
   }
 
   @Test
@@ -161,15 +143,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void removeListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.removeListener(0, new TestListener());
-  }
-
-  @Test
   public void removeListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -180,15 +153,6 @@ public class WidgetTest {
         return (widget);
       }
     });
-  }
-
-  @Test
-  public void isListeningDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.isListening(0);
   }
 
   @Test
@@ -260,15 +224,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void notifyListenersDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.notifyListeners(0, new Event());
-  }
-
-  @Test
   public void notifyListenersInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -279,15 +234,6 @@ public class WidgetTest {
         return (widget);
       }
     });
-  }
-
-  @Test
-  public void getListenersDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.getListeners(0);
   }
 
   @Test
@@ -347,15 +293,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void addDisposeListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.addDisposeListener(new TestDisposeListener());
-  }
-
-  @Test
   public void addDisposeListenerInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -374,15 +311,6 @@ public class WidgetTest {
 
     Widget widget = new Widget(this.shell, 0) {};
     widget.removeDisposeListener(null);
-  }
-
-  @Test
-  public void removeDisposeListenerDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.removeDisposeListener(new TestDisposeListener());
   }
 
   @Test
@@ -429,15 +357,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void getDataDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.getData();
-  }
-
-  @Test
   public void getDataInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -448,15 +367,6 @@ public class WidgetTest {
         return (widget);
       }
     });
-  }
-
-  @Test
-  public void setDataDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.setData(null);
   }
 
   @Test
@@ -491,15 +401,6 @@ public class WidgetTest {
   }
 
   @Test
-  public void getDataWithKeyDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.getData("foo");
-  }
-
-  @Test
   public void getDataWithKeyInvalidThread() throws Throwable {
     exception.expect(swtCode(SWT.ERROR_THREAD_INVALID_ACCESS));
 
@@ -518,15 +419,6 @@ public class WidgetTest {
 
     Widget widget = new Widget(this.shell, 0) {};
     widget.setData(null, "foo");
-  }
-
-  @Test
-  public void setDataWithKeyDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.setData("foo", "bar");
   }
 
   @Test
@@ -562,24 +454,6 @@ public class WidgetTest {
 
     assertThat(widget.getData("foo"), is(nullValue()));
     assertThat(widget.getData("bar"), is(nullValue()));
-  }
-
-  @Test
-  public void getDisplayDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.getDisplay();
-  }
-
-  @Test
-  public void reskinDisposed() {
-    exception.expect(swtCode(SWT.ERROR_WIDGET_DISPOSED));
-
-    Widget widget = new Widget(this.shell, 0) {};
-    widget.dispose();
-    widget.reskin(0);
   }
 
   @Test
