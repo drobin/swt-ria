@@ -156,7 +156,7 @@ public class SWTAnyTest {
     ChannelBuffer buffer = dynamicBuffer();
     SWTAny.writeAny(buffer, true);
 
-    assertThat(SWTBoolean.readBollean(buffer), is(true));
+    assertThat(SWTBoolean.readBoolean(buffer), is(true));
   }
 
   @Test

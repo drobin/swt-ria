@@ -26,7 +26,7 @@ public class SWTBoolean {
    *         <code>buffer</code> to read the boolean
    * @throws SWTProtocolException if an decoding-error occured
    */
-  public static boolean readBollean(ChannelBuffer buffer)
+  public static boolean readBoolean(ChannelBuffer buffer)
       throws NullPointerException, IndexOutOfBoundsException,
              SWTProtocolException {
 

@@ -21,7 +21,7 @@ public class SWTBooleanTest {
     exception.expect(NullPointerException.class);
     exception.expectMessage("buffer cannot be null");
 
-    SWTBoolean.readBollean(null);
+    SWTBoolean.readBoolean(null);
   }
 
   @Test
@@ -32,7 +32,7 @@ public class SWTBooleanTest {
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Unexpected type read from buffer. Expected 4, but read 0");
 
-    SWTBoolean.readBollean(buffer);
+    SWTBoolean.readBoolean(buffer);
   }
 
   @Test
@@ -44,7 +44,7 @@ public class SWTBooleanTest {
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Unexpected flags read from buffer. Expected 0, but read 1");
 
-    SWTBoolean.readBollean(buffer);
+    SWTBoolean.readBoolean(buffer);
   }
 
   @Test
@@ -54,7 +54,7 @@ public class SWTBooleanTest {
     buffer.writeByte(0);
     buffer.writeByte(1);
 
-    assertThat(SWTBoolean.readBollean(buffer), is(true));
+    assertThat(SWTBoolean.readBoolean(buffer), is(true));
   }
 
   @Test
@@ -64,7 +64,7 @@ public class SWTBooleanTest {
     buffer.writeByte(0);
     buffer.writeByte(0);
 
-    assertThat(SWTBoolean.readBollean(buffer), is(false));
+    assertThat(SWTBoolean.readBoolean(buffer), is(false));
   }
 
   @Test

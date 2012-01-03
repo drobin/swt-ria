@@ -47,7 +47,7 @@ public class SWTAny {
     byte flags = buffer.getByte(buffer.readerIndex() + 1);
 
     switch (type) {
-      case DT_BOOL:   return (SWTBoolean.readBollean(buffer));
+      case DT_BOOL:   return (SWTBoolean.readBoolean(buffer));
       case DT_BYTE:   return (SWTByte.readByte(buffer));
       case DT_INT:    {
         if ((flags & FLAG_ARRAY) > 0) {
