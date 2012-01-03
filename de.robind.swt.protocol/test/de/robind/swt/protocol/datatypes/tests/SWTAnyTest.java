@@ -117,6 +117,17 @@ public class SWTAnyTest {
   }
 
   @Test
+  public void readAnyStringArray() throws SWTProtocolException {
+    ChannelBuffer buffer = dynamicBuffer();
+    SWTString.writeStringArray(buffer, new String[] { "foo", "bar" });
+
+    Object result = SWTAny.readAny(buffer);
+    assertThat(result, is(instanceOf(String[].class)));
+    assertThat(((String[])result)[0], is(equalTo("foo")));
+    assertThat(((String[])result)[1], is(equalTo("bar")));
+  }
+
+  @Test
   public void readAnySwtObj() throws SWTProtocolException {
     ChannelBuffer buffer = dynamicBuffer();
     SWTObj.writeIObjId(buffer, new SWTObjectId(4711));
@@ -146,9 +157,9 @@ public class SWTAnyTest {
   @Test
   public void writeAnyUnsupportedArray() throws SWTProtocolException {
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Could not write an array datatype of class java.lang.String");
+    exception.expectMessage("Could not write an array datatype of class java.lang.Object");
 
-    SWTAny.writeAny(dynamicBuffer(), new String[] {});
+    SWTAny.writeAny(dynamicBuffer(), new Object[] {});
   }
 
   @Test
@@ -176,7 +187,7 @@ public class SWTAnyTest {
   }
 
   @Test
-  public void writeAnyIntegerAttay() throws SWTProtocolException {
+  public void writeAnyIntegerArray() throws SWTProtocolException {
     ChannelBuffer buffer = dynamicBuffer();
     SWTAny.writeAny(buffer, new int[] {1, 2});
 
@@ -199,6 +210,17 @@ public class SWTAnyTest {
     SWTAny.writeAny(buffer, "foo");
 
     assertThat(SWTString.readString(buffer), is(equalTo("foo")));
+  }
+
+  @Test
+  public void writeAnyStringArray() throws SWTProtocolException {
+    ChannelBuffer buffer = dynamicBuffer();
+    SWTAny.writeAny(buffer, new String[] { "foo", "bar" });
+
+    String result[] = SWTString.readStringArray(buffer);
+    assertThat(result.length, is(2));
+    assertThat(result[0], is(equalTo("foo")));
+    assertThat(result[1], is(equalTo("bar")));
   }
 
   @Test

@@ -60,7 +60,13 @@ public class SWTAny {
         SWTNull.readNull(buffer);
         return (null);
       }
-      case DT_STRING: return (SWTString.readString(buffer));
+      case DT_STRING: {
+        if ((flags & FLAG_ARRAY) > 0) {
+          return (SWTString.readStringArray(buffer));
+        } else {
+          return (SWTString.readString(buffer));
+        }
+      }
       case DT_SWTOBJ: return (SWTObj.readObjId(buffer));
     }
 
@@ -122,14 +128,14 @@ public class SWTAny {
   private static void writeArray(ChannelBuffer buffer, Object value)
       throws SWTProtocolException {
 
-    Class<?> componentType = value.getClass().getComponentType();
-
-    if (componentType.isAssignableFrom(int.class)) {
+    if (value instanceof int[]) {
       SWTInteger.writeIntegerArray(buffer, (int[])value);
+    } else if (value instanceof String[]) {
+      SWTString.writeStringArray(buffer, (String[])value);
     } else {
       throw new SWTProtocolException(
           "Could not write an array datatype of class " +
-          componentType.getName());
+          value.getClass().getComponentType().getName());
     }
   }
 }
