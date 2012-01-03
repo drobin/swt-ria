@@ -16,6 +16,11 @@ class DataTypeUtils {
   static final byte DT_STRING = 1;
 
   /**
+   * An integer-type.
+   */
+  static final byte DT_INT = 2;
+
+  /**
    * No flags are set.
    */
   static final byte FLAG_NONE = 0x0;
