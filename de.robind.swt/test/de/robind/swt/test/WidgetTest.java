@@ -7,13 +7,13 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
+import org.eclipse.swt.test.TestWidget;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -67,7 +67,7 @@ public class WidgetTest {
   public void ctorNullParent() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    new Widget(null, 0) {};
+    new TestWidget(null, 0);
   }
 
   @Test
@@ -77,7 +77,7 @@ public class WidgetTest {
     Shell shell = new Shell(this.display);
     shell.dispose();
 
-    new Widget(shell, 0) {};
+    new TestWidget(shell, 0);
   }
 
   @Test
@@ -86,19 +86,20 @@ public class WidgetTest {
 
     asyncExec(new Callable<Widget>() {
       public Widget call() throws Exception {
-        return (new Widget(shell, 0) {});
+        return (new TestWidget(shell, 0));
       }
     });
   }
 
   @Test
   public void ctorInvalidSubclass() {
-    fail("Not implemented");
+    exception.expect(swtCode(SWT.ERROR_INVALID_SUBCLASS));
+    new Widget(this.shell, 0) {};
   }
 
   @Test
   public void ctorStyle() {
-    Widget widget = new Widget(this.shell, 4711) {};
+    Widget widget = new TestWidget(this.shell, 4711);
     assertThat(widget.getStyle(), is(4711));
   }
 
@@ -106,7 +107,7 @@ public class WidgetTest {
   public void addListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     widget.addListener(0, null);
   }
 
@@ -114,14 +115,14 @@ public class WidgetTest {
   public void removeListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     widget.removeListener(0, null);
   }
 
   @Test
   public void notifyListenersNullEvent() {
     TestListener listener = new TestListener();
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
 
     widget.addListener(4711, listener);
     widget.notifyListeners(4711, null);
@@ -141,7 +142,7 @@ public class WidgetTest {
     TestEvent event = new TestEvent(testData);
     event.type = 4711;
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
 
     widget.addListener(4711, listener);
     widget.notifyListeners(4711, event);
@@ -161,7 +162,7 @@ public class WidgetTest {
     TestEvent event = new TestEvent(testData);
     event.type = 42;
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
 
     widget.addListener(4711, listener);
     widget.notifyListeners(4711, event);
@@ -176,7 +177,7 @@ public class WidgetTest {
   @Test
   public void untypedListenerHandling() {
     TestListener listener = new TestListener();
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     Event event1 = new Event();
     Event event2 = new Event();
 
@@ -212,7 +213,7 @@ public class WidgetTest {
   public void addDisposeListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     widget.addDisposeListener(null);
   }
 
@@ -220,13 +221,13 @@ public class WidgetTest {
   public void removeDisposeListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     widget.removeDisposeListener(null);
   }
 
   @Test
   public void disposeListenerHandling() {
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     TestDisposeListener listener = new TestDisposeListener();
     Object event1Data = new Object();
     Object event2Data = new Object();
@@ -257,7 +258,7 @@ public class WidgetTest {
   @Test
   public void dataHandling() {
     Object data = new Object();
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
 
     assertThat(widget.getData(), is(nullValue()));
     widget.setData(data);
@@ -268,7 +269,7 @@ public class WidgetTest {
   public void getDataWithKeyNullKey() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     widget.getData(null);
   }
 
@@ -276,7 +277,7 @@ public class WidgetTest {
   public void setDataWithKeyNullKey() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
     widget.setData(null, "foo");
   }
 
@@ -284,7 +285,7 @@ public class WidgetTest {
   public void dataWithKeyHandling() {
     Object fooData = new Object();
     Object barData = new Object();
-    Widget widget = new Widget(this.shell, 0) {};
+    Widget widget = new TestWidget(this.shell, 0);
 
     assertThat(widget.getData("foo"), is(nullValue()));
     assertThat(widget.getData("bar"), is(nullValue()));

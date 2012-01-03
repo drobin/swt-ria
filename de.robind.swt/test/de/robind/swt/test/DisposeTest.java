@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.DragDetectListener;
@@ -25,6 +24,8 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
+import org.eclipse.swt.test.TestControl;
+import org.eclipse.swt.test.TestWidget;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -160,8 +161,14 @@ public class DisposeTest {
     this.display = new Display();
     this.shell = new Shell(this.display);
 
-    Constructor<? extends Widget> ctor =
-        this.testClass.getConstructor(Composite.class, int.class);
+    Constructor<? extends Widget> ctor;
+    if (Control.class.isAssignableFrom(this.testClass)) {
+      ctor = this.testClass.getConstructor(Composite.class, int.class);
+    } else {
+      // Special handling for Widgets. They has another constructor
+      ctor = this.testClass.getConstructor(Widget.class, int.class);
+    }
+
     this.widget = ctor.newInstance(this.shell, 0);
   }
 
@@ -183,18 +190,6 @@ public class DisposeTest {
       method.invoke(this.widget, this.arguments);
     } catch (InvocationTargetException e) {
       throw e.getCause();
-    }
-  }
-
-  private static class TestWidget extends Widget {
-    public TestWidget(Composite parent, int style) throws SWTException {
-      super((Widget)parent, style);
-    }
-  }
-
-  private static class TestControl extends Control {
-    public TestControl(Composite parent, int style) throws SWTException {
-      super(parent, style);
     }
   }
 }

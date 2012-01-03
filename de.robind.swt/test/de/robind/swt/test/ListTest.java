@@ -4,7 +4,6 @@ import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.concurrent.Callable;
 
@@ -85,7 +84,8 @@ public class ListTest {
 
   @Test
   public void ctorInvalidSubclass() {
-    fail("Not implemented");
+    exception.expect(swtCode(SWT.ERROR_INVALID_SUBCLASS));
+    new List(this.shell, 0 ) {};
   }
 
   @Test

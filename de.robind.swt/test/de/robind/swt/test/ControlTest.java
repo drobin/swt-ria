@@ -8,7 +8,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.concurrent.Callable;
 
@@ -17,6 +16,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
+import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -78,7 +78,7 @@ public class ControlTest {
   @Test
   public void ctorNullParent() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
-    new Control(null, 0) {};
+    new TestControl(null, 0);
   }
 
   @Test
@@ -86,7 +86,7 @@ public class ControlTest {
     exception.expect(swtCode(SWT.ERROR_INVALID_ARGUMENT));
 
     this.shell.dispose();
-    new Control(this.shell, 0) {};
+    new TestControl(this.shell, 0);
   }
 
   @Test
@@ -95,19 +95,20 @@ public class ControlTest {
 
     asyncExec(new Callable<Widget>() {
       public Widget call() throws Exception {
-        return (new Control(shell, 0) {});
+        return (new TestControl(shell, 0));
       }
     });
   }
 
   @Test
   public void ctorInvalidSubclass() {
-    fail("Not implemented");
+    exception.expect(swtCode(SWT.ERROR_INVALID_SUBCLASS));
+    new Control(this.shell, 0) {};
   }
 
   @Test
   public void ctorStyle() {
-    Control control = new Control(this.shell, 4711) {};
+    Control control = new TestControl(this.shell, 4711);
     assertThat(control.getStyle(), is(4711));
   }
 
@@ -115,7 +116,7 @@ public class ControlTest {
   public void addControlListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addControlListener(null);
   }
 
@@ -123,13 +124,13 @@ public class ControlTest {
   public void removeControlListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeControlListener(null);
   }
 
   @Test
   public void controlListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestControlListener listener = new TestControlListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -171,7 +172,7 @@ public class ControlTest {
   public void addDragDetectListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addDragDetectListener(null);
   }
 
@@ -179,13 +180,13 @@ public class ControlTest {
   public void removeDragDetectListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeDragDetectListener(null);
   }
 
   @Test
   public void dragDetectListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestDragDetectListener listener = new TestDragDetectListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -233,7 +234,7 @@ public class ControlTest {
   public void addFocusListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addFocusListener(null);
   }
 
@@ -241,13 +242,13 @@ public class ControlTest {
   public void removeFocusListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeFocusListener(null);
   }
 
   @Test
   public void focusListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestFocusListener listener = new TestFocusListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -289,7 +290,7 @@ public class ControlTest {
   public void addHelpListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addHelpListener(null);
   }
 
@@ -297,13 +298,13 @@ public class ControlTest {
   public void removeHelpListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeHelpListener(null);
   }
 
   @Test
   public void helpListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestHelpListener listener = new TestHelpListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -333,7 +334,7 @@ public class ControlTest {
   public void addKeyListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addKeyListener(null);
   }
 
@@ -341,13 +342,13 @@ public class ControlTest {
   public void removeKeyListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeKeyListener(null);
   }
 
   @Test
   public void keyListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestKeyListener listener = new TestKeyListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -426,7 +427,7 @@ public class ControlTest {
   public void addMenuDetectListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addMenuDetectListener(null);
   }
 
@@ -434,13 +435,13 @@ public class ControlTest {
   public void removeMenuDetectListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeMenuDetectListener(null);
   }
 
   @Test
   public void menuDetectListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestMenuDetectListener listener = new TestMenuDetectListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -484,7 +485,7 @@ public class ControlTest {
   public void addMouseListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addMouseListener(null);
   }
 
@@ -492,13 +493,13 @@ public class ControlTest {
   public void removeMouseListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeMouseListener(null);
   }
 
   @Test
   public void mouseListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestMouseListener listener = new TestMouseListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -608,7 +609,7 @@ public class ControlTest {
   public void addMouseMoveListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addMouseMoveListener(null);
   }
 
@@ -617,13 +618,13 @@ public class ControlTest {
   public void removeMouseMoveListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeMouseMoveListener(null);
   }
 
   @Test
   public void mouseMoveListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestMouseMoveListener listener = new TestMouseMoveListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -671,7 +672,7 @@ public class ControlTest {
   public void addMouseTrackListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addMouseTrackListener(null);
   }
 
@@ -679,13 +680,13 @@ public class ControlTest {
   public void removeMouseTrackListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeMouseTrackListener(null);
   }
 
   @Test
   public void mouseTrackListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestMouseTrackListener listener = new TestMouseTrackListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -795,7 +796,7 @@ public class ControlTest {
   public void addMouseWheelListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addMouseWheelListener(null);
   }
 
@@ -803,13 +804,13 @@ public class ControlTest {
   public void removeMouseWheelListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeMouseWheelListener(null);
   }
 
   @Test
   public void mouseWheelListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestMouseWheelListener listener = new TestMouseWheelListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -857,7 +858,7 @@ public class ControlTest {
   public void addPaintListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addPaintListener(null);
   }
 
@@ -865,13 +866,13 @@ public class ControlTest {
   public void removePaintListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removePaintListener(null);
   }
 
   @Test
   public void paintListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestPaintListener listener = new TestPaintListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -927,7 +928,7 @@ public class ControlTest {
   public void addTraverseListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.addTraverseListener(null);
   }
 
@@ -935,13 +936,13 @@ public class ControlTest {
   public void removeTraverseListenerNullListener() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.removeTraverseListener(null);
   }
 
   @Test
   public void traverseListenerHandling() {
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     TestTraverseListener listener = new TestTraverseListener();
     TestEvent event1 = new TestEvent(1);
     TestEvent event2 = new TestEvent(2);
@@ -977,7 +978,7 @@ public class ControlTest {
   public void setLayoutDataInvalidLayoutData() {
     exception.expect(swtCode(SWT.ERROR_INVALID_ARGUMENT));
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     control.setLayoutData(1);
   }
 
@@ -989,7 +990,7 @@ public class ControlTest {
       }
     };
 
-    Control control = new Control(this.shell, 0) {};
+    Control control = new TestControl(this.shell, 0);
     assertThat(control.getLayoutData(), is(nullValue()));
     control.setLayoutData(data);
     assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));

@@ -247,7 +247,11 @@ public abstract class Widget extends SWTObject {
    *  </ul>
    */
   protected void checkSubclass() throws SWTException {
-    // TODO Implement Widget.checkSubclass()
+    // The class needs to be located inside the "org.eclipse.swt"-package
+    String name = getClass().getPackage().getName();
+    if (!name.startsWith("org.eclipse.swt")) {
+      throw new SWTException(SWT.ERROR_INVALID_SUBCLASS);
+    }
   }
 
   /**
