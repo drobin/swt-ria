@@ -1,5 +1,11 @@
 package de.robind.swt.protocol;
 
+import static de.robind.swt.protocol.datatype.SWTAny.readAny;
+import static de.robind.swt.protocol.datatype.SWTBoolean.readBoolean;
+import static de.robind.swt.protocol.datatype.SWTByte.readByte;
+import static de.robind.swt.protocol.datatype.SWTInteger.readInteger;
+import static de.robind.swt.protocol.datatype.SWTString.readString;
+
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
@@ -149,8 +155,8 @@ public class SWTMessageDecoder extends FrameDecoder {
       byte operation, ChannelBuffer buffer) throws SWTProtocolException {
 
     if (operation == SWTProtocol.OP_NEW) {
-      int objId = buffer.readInt();
-      String objClassString = SWTProtocol.readString(buffer);
+      int objId = readInteger(buffer);
+      String objClassString = readString(buffer);
       Class<?> objClass;
 
       try {
@@ -159,7 +165,7 @@ public class SWTMessageDecoder extends FrameDecoder {
         throw new SWTProtocolException("Invalid objClass: " + objClassString);
       }
 
-      byte numArgs = buffer.readByte();
+      byte numArgs = readByte(buffer);
 
       if (numArgs < 0) {
         throw new SWTProtocolException("Invalid number of arguments: " + numArgs);
@@ -167,14 +173,14 @@ public class SWTMessageDecoder extends FrameDecoder {
 
       Object args[] = new Object[numArgs];
       for (int i = 0; i < numArgs; i++) {
-        args[i] = SWTProtocol.readArgument(buffer);
+        args[i] = readAny(buffer);
       }
 
       return (this.factory.createNewRequest(objId, objClass, args));
     } else if (operation == SWTProtocol.OP_CALL) {
-      int objId = buffer.readInt();
-      String method = SWTProtocol.readString(buffer);
-      byte numArgs = buffer.readByte();
+      int objId = readInteger(buffer);
+      String method = readString(buffer);
+      byte numArgs = readByte(buffer);
 
       if (method.length() == 0) {
         throw new SWTProtocolException("method cannot be empty");
@@ -187,14 +193,14 @@ public class SWTMessageDecoder extends FrameDecoder {
 
       Object args[] = new Object[numArgs];
       for (int i = 0; i < numArgs; i++) {
-        args[i] = SWTProtocol.readArgument(buffer);
+        args[i] = readAny(buffer);
       }
 
       return (this.factory.createCallRequest(objId, method, args));
     } else if (operation == SWTProtocol.OP_REG) {
-      int objId = buffer.readInt();
-      int eventType = buffer.readInt();
-      boolean enable = SWTProtocol.readBoolean(buffer);
+      int objId = readInteger(buffer);
+      int eventType = readInteger(buffer);
+      boolean enable = readBoolean(buffer);
 
       return (this.factory.createRegRequest(objId, eventType, enable));
     } else {
@@ -219,7 +225,7 @@ public class SWTMessageDecoder extends FrameDecoder {
       return (this.factory.createNewResponse());
     } else if (operation == SWTProtocol.OP_CALL) {
       if (payloadLength > 0) {
-        Object result = SWTProtocol.readArgument(buffer);
+        Object result = readAny(buffer);
         return (this.factory.createCallResponse(result));
       } else {
         return (this.factory.createCallResponse(null));
@@ -241,8 +247,8 @@ public class SWTMessageDecoder extends FrameDecoder {
   private SWTException decodeExceptionMessage(ChannelBuffer buffer)
       throws SWTProtocolException {
 
-    String className = SWTProtocol.readString(buffer);
-    String message = SWTProtocol.readString(buffer);
+    String className = readString(buffer);
+    String message = readString(buffer);
 
     try {
       Class<? extends Throwable> excClass =
@@ -269,16 +275,16 @@ public class SWTMessageDecoder extends FrameDecoder {
 
     Map<String, Object> attributes = new HashMap<String, Object>();
 
-    int objId = buffer.readInt();
-    byte numAttributes = buffer.readByte();
+    int objId = readInteger(buffer);
+    byte numAttributes = readByte(buffer);
 
     if (numAttributes < 0) {
       throw new SWTProtocolException("Number of attributes cannot be negative");
     }
 
     for (int i = 0; i < numAttributes; i++) {
-      String key = SWTProtocol.readString(buffer);
-      Object value = SWTProtocol.readArgument(buffer);
+      String key = readString(buffer);
+      Object value = readAny(buffer);
 
       attributes.put(key, value);
     }

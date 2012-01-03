@@ -1,5 +1,8 @@
 package de.robind.swt.protocol.tests.decoder;
 
+import static de.robind.swt.protocol.datatype.SWTByte.writeByte;
+import static de.robind.swt.protocol.datatype.SWTInteger.writeInteger;
+import static de.robind.swt.protocol.datatype.SWTString.writeString;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -19,8 +22,8 @@ public class SWTEventTest extends AbstractDecoderTest<SWTEvent> {
   @Test
   public void negativeNumberOfArguments() throws Throwable {
     ChannelBuffer buffer = createBuffer(5);
-    buffer.writeInt(4711);
-    buffer.writeByte(-1);
+    writeInteger(buffer, 4711);
+    writeByte(buffer, (byte)-1);
 
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Number of attributes cannot be negative");
@@ -30,9 +33,9 @@ public class SWTEventTest extends AbstractDecoderTest<SWTEvent> {
 
   @Test
   public void noArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(5);
-    buffer.writeInt(4711);
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(9);
+    writeInteger(buffer, 4711);
+    writeByte(buffer, (byte)0);
 
     SWTEvent msg = decodeMessage(buffer);
     assertThat(msg.getObjId(), is(4711));
@@ -41,13 +44,13 @@ public class SWTEventTest extends AbstractDecoderTest<SWTEvent> {
 
   @Test
   public void withArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(30);
-    buffer.writeInt(4711);
-    buffer.writeByte(2);
-    SWTProtocol.writeString(buffer, "foo");
-    SWTProtocol.writeArgument(buffer, 4711);
-    SWTProtocol.writeString(buffer, "bar");
-    SWTProtocol.writeArgument(buffer, "blubber");
+    ChannelBuffer buffer = createBuffer(40);
+    writeInteger(buffer, 4711);
+    writeByte(buffer, (byte)2);
+    writeString(buffer, "foo");
+    writeInteger(buffer, 4711);
+    writeString(buffer, "bar");
+    writeString(buffer, "blubber");
 
     SWTEvent msg = decodeMessage(buffer);
     assertThat(msg.getObjId(), is(4711));
@@ -58,16 +61,16 @@ public class SWTEventTest extends AbstractDecoderTest<SWTEvent> {
 
   @Test
   public void payloadNotEmptied() throws Throwable {
-    ChannelBuffer buffer = createBuffer(16);
-    buffer.writeInt(4711);
-    buffer.writeByte(1);
-    SWTProtocol.writeString(buffer, "foo");
-    SWTProtocol.writeArgument(buffer, 4711);
+    ChannelBuffer buffer = createBuffer(23);
+    writeInteger(buffer, 4711);
+    writeByte(buffer, (byte)1);
+    writeString(buffer, "foo");
+    writeInteger(buffer, 4711);
 
     buffer.writeByte(0);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Data still in payload. Available: 16, consumed: 15");
+    exception.expectMessage("Data still in payload. Available: 23, consumed: 22");
 
     decodeMessage(buffer);
   }
@@ -75,13 +78,13 @@ public class SWTEventTest extends AbstractDecoderTest<SWTEvent> {
   @Test
   public void payloadOverflow() throws Throwable {
     ChannelBuffer buffer = createBuffer(5);
-    buffer.writeInt(4711);
-    buffer.writeByte(1);
-    SWTProtocol.writeString(buffer, "foo");
-    SWTProtocol.writeArgument(buffer, 4711);
+    writeInteger(buffer, 4711);
+    writeByte(buffer, (byte)1);
+    writeString(buffer, "foo");
+    writeInteger(buffer, 4711);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Payload-overflow. Available: 5, consumed: 15");
+    exception.expectMessage("Payload-overflow. Available: 5, consumed: 22");
 
     decodeMessage(buffer);
   }

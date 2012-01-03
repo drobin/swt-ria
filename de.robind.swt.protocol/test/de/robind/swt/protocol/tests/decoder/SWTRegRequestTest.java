@@ -1,5 +1,7 @@
 package de.robind.swt.protocol.tests.decoder;
 
+import static de.robind.swt.protocol.datatype.SWTBoolean.writeBoolean;
+import static de.robind.swt.protocol.datatype.SWTInteger.writeInteger;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -18,10 +20,10 @@ public class SWTRegRequestTest extends AbstractDecoderTest<SWTRegRequest> {
 
   @Test
   public void success() throws Throwable {
-    ChannelBuffer buffer = createBuffer(9);
-    buffer.writeInt(4711);
-    buffer.writeInt(555);
-    SWTProtocol.writeBoolean(buffer, true);
+    ChannelBuffer buffer = createBuffer(15);
+    writeInteger(buffer, 4711);
+    writeInteger(buffer, 555);
+    writeBoolean(buffer, true);
 
     SWTRegRequest msg = decodeMessage(buffer);
 
@@ -33,15 +35,15 @@ public class SWTRegRequestTest extends AbstractDecoderTest<SWTRegRequest> {
 
   @Test
   public void payloadNotEmptied() throws Throwable {
-    ChannelBuffer buffer = createBuffer(10);
-    buffer.writeInt(4711);
-    buffer.writeInt(555);
-    SWTProtocol.writeBoolean(buffer, true);
+    ChannelBuffer buffer = createBuffer(16);
+    writeInteger(buffer, 4711);
+    writeInteger(buffer, 555);
+    writeBoolean(buffer, true);
 
     buffer.writeByte(0);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Data still in payload. Available: 10, consumed: 9");
+    exception.expectMessage("Data still in payload. Available: 16, consumed: 15");
 
     decodeMessage(buffer);
   }
@@ -49,12 +51,12 @@ public class SWTRegRequestTest extends AbstractDecoderTest<SWTRegRequest> {
   @Test
   public void payloadOverflow() throws Throwable {
     ChannelBuffer buffer = createBuffer(5);
-    buffer.writeInt(4711);
-    buffer.writeInt(555);
-    SWTProtocol.writeBoolean(buffer, true);
+    writeInteger(buffer, 4711);
+    writeInteger(buffer, 555);
+    writeBoolean(buffer, true);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Payload-overflow. Available: 5, consumed: 9");
+    exception.expectMessage("Payload-overflow. Available: 5, consumed: 15");
 
     decodeMessage(buffer);
   }

@@ -1,5 +1,9 @@
 package de.robind.swt.protocol.tests.decoder;
 
+import static de.robind.swt.protocol.datatype.SWTBoolean.writeBoolean;
+import static de.robind.swt.protocol.datatype.SWTByte.writeByte;
+import static de.robind.swt.protocol.datatype.SWTInteger.writeInteger;
+import static de.robind.swt.protocol.datatype.SWTString.writeString;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -19,10 +23,9 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
 
   @Test
   public void emptyObjClass() throws Throwable {
-    ChannelBuffer buffer = createBuffer(7);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "");
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(0);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "");
 
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Invalid objClass: ");
@@ -32,10 +35,9 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
 
   @Test
   public void unknownObjClass() throws Throwable {
-    ChannelBuffer buffer = createBuffer(10);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "foo");
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(0);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "foo");
 
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Invalid objClass: foo");
@@ -45,10 +47,10 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
 
   @Test
   public void invalidNumArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(23);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "java.lang.Object");
-    buffer.writeByte(-1);
+    ChannelBuffer buffer = createBuffer(0);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "java.lang.Object");
+    writeByte(buffer, (byte)-1);
 
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Invalid number of arguments: -1");
@@ -58,12 +60,10 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
 
   @Test
   public void noArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(23);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "java.lang.Object");
-    buffer.writeByte(0);
-
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(29);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "java.lang.Object");
+    writeByte(buffer, (byte)0);
 
     SWTNewRequest msg = decodeMessage(buffer);
 
@@ -75,12 +75,12 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
 
   @Test
   public void withArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(30);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "java.lang.Object");
-    buffer.writeByte(2);
-    SWTProtocol.writeArgument(buffer, 4711);
-    SWTProtocol.writeArgument(buffer, true);
+    ChannelBuffer buffer = createBuffer(38);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "java.lang.Object");
+    writeByte(buffer, (byte)2);
+    writeInteger(buffer, 4711);
+    writeBoolean(buffer, true);
 
     SWTNewRequest msg = decodeMessage(buffer);
 
@@ -95,27 +95,27 @@ public class SWTNewRequestTest extends AbstractDecoderTest<SWTNewRequest> {
   @Test
   public void payloadNotEmptied() throws Throwable {
     ChannelBuffer buffer = createBuffer(5);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "java.lang.Object");
-    buffer.writeByte(0);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "java.lang.Object");
+    writeByte(buffer, (byte)0);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Payload-overflow. Available: 5, consumed: 23");
+    exception.expectMessage("Payload-overflow. Available: 5, consumed: 29");
 
     decodeMessage(buffer);
   }
 
   @Test
   public void payloadOverflow() throws Throwable {
-    ChannelBuffer buffer = createBuffer(24);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "java.lang.Object");
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(30);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "java.lang.Object");
+    writeByte(buffer, (byte)0);
 
     buffer.writeByte(0);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Data still in payload. Available: 24, consumed: 23");
+    exception.expectMessage("Data still in payload. Available: 30, consumed: 29");
 
     decodeMessage(buffer);
   }

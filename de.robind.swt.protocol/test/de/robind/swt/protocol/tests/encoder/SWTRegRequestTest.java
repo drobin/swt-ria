@@ -1,5 +1,7 @@
 package de.robind.swt.protocol.tests.encoder;
 
+import static de.robind.swt.protocol.datatype.SWTBoolean.readBoolean;
+import static de.robind.swt.protocol.datatype.SWTInteger.readInteger;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -18,10 +20,9 @@ public class SWTRegRequestTest extends AbstractEncoderTest<SWTRegRequest>{
   public void request() throws Throwable {
     SWTRegRequest msg = this.factory.createRegRequest(1, 4711, true);
 
-    ChannelBuffer buffer = encodeMessage(msg, 9);
-    assertThat(buffer.readInt(), is(1));
-    assertThat(buffer.readInt(), is(4711));
-    assertThat(SWTProtocol.readBoolean(buffer), is(true));
+    ChannelBuffer buffer = encodeMessage(msg, 15);
+    assertThat(readInteger(buffer), is(1));
+    assertThat(readInteger(buffer), is(4711));
+    assertThat(readBoolean(buffer), is(true));
   }
-
 }

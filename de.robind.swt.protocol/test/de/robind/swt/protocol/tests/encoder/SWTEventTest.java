@@ -1,5 +1,8 @@
 package de.robind.swt.protocol.tests.encoder;
 
+import static de.robind.swt.protocol.datatype.SWTByte.readByte;
+import static de.robind.swt.protocol.datatype.SWTInteger.readInteger;
+import static de.robind.swt.protocol.datatype.SWTString.readString;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -36,10 +39,10 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
   @Test
   public void noAttributes() throws Throwable {
     SWTEvent msg = this.factory.createEvent(4711, new HashMap<String, Object>());
-    ChannelBuffer buffer = encodeMessage(msg, 5);
+    ChannelBuffer buffer = encodeMessage(msg, 9);
 
-    assertThat(buffer.readInt(), is(4711));
-    assertThat(buffer.readByte(), is((byte)0));
+    assertThat(readInteger(buffer), is(4711));
+    assertThat(readByte(buffer), is((byte)0));
   }
 
   @Test
@@ -49,13 +52,13 @@ public class SWTEventTest extends AbstractEncoderTest<SWTEvent> {
     attributes.put("bar", "xxx");
 
     SWTEvent msg = this.factory.createEvent(4711, attributes);
-    ChannelBuffer buffer = encodeMessage(msg, 26);
+    ChannelBuffer buffer = encodeMessage(msg, 36);
 
-    assertThat(buffer.readInt(), is(4711));
-    assertThat(buffer.readByte(), is((byte)2));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("foo")));
-    assertThat((Integer)SWTProtocol.readArgument(buffer), is(4711));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("bar")));
-    assertThat((String)SWTProtocol.readArgument(buffer), is(equalTo("xxx")));
+    assertThat(readInteger(buffer), is(4711));
+    assertThat(readByte(buffer), is((byte)2));
+    assertThat(readString(buffer), is(equalTo("foo")));
+    assertThat(readInteger(buffer), is(4711));
+    assertThat(readString(buffer), is(equalTo("bar")));
+    assertThat(readString(buffer), is(equalTo("xxx")));
   }
 }

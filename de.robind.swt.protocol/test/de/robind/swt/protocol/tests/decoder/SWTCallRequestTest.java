@@ -1,5 +1,9 @@
 package de.robind.swt.protocol.tests.decoder;
 
+import static de.robind.swt.protocol.datatype.SWTBoolean.writeBoolean;
+import static de.robind.swt.protocol.datatype.SWTByte.writeByte;
+import static de.robind.swt.protocol.datatype.SWTInteger.writeInteger;
+import static de.robind.swt.protocol.datatype.SWTString.writeString;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -19,10 +23,10 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
 
   @Test
   public void emptyMethod() throws Throwable {
-    ChannelBuffer buffer = createBuffer(6);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "");
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(0);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "");
+    writeByte(buffer, (byte)0);
 
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("method cannot be empty");
@@ -32,10 +36,10 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
 
   @Test
   public void invalidNumArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(10);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "foo");
-    buffer.writeByte(-1);
+    ChannelBuffer buffer = createBuffer(0);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "foo");
+    writeByte(buffer, (byte)-1);
 
     exception.expect(SWTProtocolException.class);
     exception.expectMessage("Invalid number of arguments: -1");
@@ -45,10 +49,10 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
 
   @Test
   public void noArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(10);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "foo");
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(16);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "foo");
+    writeByte(buffer, (byte)0);
 
     SWTCallRequest msg = decodeMessage(buffer);
 
@@ -60,12 +64,12 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
 
   @Test
   public void withArguments() throws Throwable {
-    ChannelBuffer buffer = createBuffer(17);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "foo");
-    buffer.writeByte(2);
-    SWTProtocol.writeArgument(buffer, 4711);
-    SWTProtocol.writeArgument(buffer, false);
+    ChannelBuffer buffer = createBuffer(25);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "foo");
+    writeByte(buffer, (byte)2);
+    writeInteger(buffer, 4711);
+    writeBoolean(buffer, false);
 
     SWTCallRequest msg = decodeMessage(buffer);
 
@@ -79,15 +83,15 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
 
   @Test
   public void payloadNotEmptied() throws Throwable {
-    ChannelBuffer buffer = createBuffer(11);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "foo");
-    buffer.writeByte(0);
+    ChannelBuffer buffer = createBuffer(17);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "foo");
+    writeByte(buffer, (byte)0);
 
     buffer.writeByte(0);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Data still in payload. Available: 11, consumed: 10");
+    exception.expectMessage("Data still in payload. Available: 17, consumed: 16");
 
     decodeMessage(buffer);
   }
@@ -95,12 +99,12 @@ public class SWTCallRequestTest extends AbstractDecoderTest<SWTCallRequest> {
   @Test
   public void payloadOverflow() throws Throwable {
     ChannelBuffer buffer = createBuffer(5);
-    buffer.writeInt(4711);
-    SWTProtocol.writeString(buffer, "foo");
-    buffer.writeByte(0);
+    writeInteger(buffer, 4711);
+    writeString(buffer, "foo");
+    writeByte(buffer, (byte)0);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Payload-overflow. Available: 5, consumed: 10");
+    exception.expectMessage("Payload-overflow. Available: 5, consumed: 16");
 
     decodeMessage(buffer);
   }

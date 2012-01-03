@@ -1,5 +1,6 @@
 package de.robind.swt.protocol.tests.decoder;
 
+import static de.robind.swt.protocol.datatype.SWTInteger.writeInteger;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -29,8 +30,8 @@ public class SWTCallResponseTest extends AbstractDecoderTest<SWTCallResponse> {
 
   @Test
   public void nonVoidResult() throws Throwable {
-    ChannelBuffer buffer = createBuffer(5);
-    SWTProtocol.writeArgument(buffer, 4711);
+    ChannelBuffer buffer = createBuffer(6);
+    writeInteger(buffer, 4711);
 
     SWTCallResponse msg = decodeMessage(buffer);
 
@@ -40,13 +41,13 @@ public class SWTCallResponseTest extends AbstractDecoderTest<SWTCallResponse> {
 
   @Test
   public void payloadNotEmptied() throws Throwable {
-    ChannelBuffer buffer = createBuffer(6);
-    SWTProtocol.writeArgument(buffer, 4711);
+    ChannelBuffer buffer = createBuffer(7);
+    writeInteger(buffer, 4711);
 
     buffer.writeByte(0);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Data still in payload. Available: 6, consumed: 5");
+    exception.expectMessage("Data still in payload. Available: 7, consumed: 6");
 
     decodeMessage(buffer);
   }
@@ -54,10 +55,10 @@ public class SWTCallResponseTest extends AbstractDecoderTest<SWTCallResponse> {
   @Test
   public void payloadOverflow() throws Throwable {
     ChannelBuffer buffer = createBuffer(3);
-    SWTProtocol.writeArgument(buffer, 4711);
+    writeInteger(buffer, 4711);
 
     exception.expect(SWTProtocolException.class);
-    exception.expectMessage("Payload-overflow. Available: 3, consumed: 5");
+    exception.expectMessage("Payload-overflow. Available: 3, consumed: 6");
 
     decodeMessage(buffer);
   }

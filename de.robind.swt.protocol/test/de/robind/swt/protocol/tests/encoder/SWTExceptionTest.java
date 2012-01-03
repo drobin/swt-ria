@@ -1,5 +1,6 @@
 package de.robind.swt.protocol.tests.encoder;
 
+import static de.robind.swt.protocol.datatype.SWTString.readString;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -20,31 +21,31 @@ public class SWTExceptionTest extends AbstractEncoderTest<SWTException> {
   public void regularException() throws Throwable {
     IndexOutOfBoundsException exc = new IndexOutOfBoundsException("foo");
     SWTException msg = this.factory.createException(exc);
-    ChannelBuffer buffer = encodeMessage(msg, 42);
+    ChannelBuffer buffer = encodeMessage(msg, 46);
 
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("java.lang.IndexOutOfBoundsException")));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("foo")));
+    assertThat(readString(buffer), is(equalTo("java.lang.IndexOutOfBoundsException")));
+    assertThat(readString(buffer), is(equalTo("foo")));
   }
 
   @Test
   public void nullMessage() throws Throwable {
     IndexOutOfBoundsException exc = new IndexOutOfBoundsException();
     SWTException msg = this.factory.createException(exc);
-    ChannelBuffer buffer = encodeMessage(msg, 39);
+    ChannelBuffer buffer = encodeMessage(msg, 43);
 
     assertThat(exc.getMessage(), is(nullValue()));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("java.lang.IndexOutOfBoundsException")));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("")));
+    assertThat(readString(buffer), is(equalTo("java.lang.IndexOutOfBoundsException")));
+    assertThat(readString(buffer), is(equalTo("")));
   }
 
   @Test
   public void emptyMessage() throws Throwable {
     IndexOutOfBoundsException exc = new IndexOutOfBoundsException("");
     SWTException msg = this.factory.createException(exc);
-    ChannelBuffer buffer = encodeMessage(msg, 39);
+    ChannelBuffer buffer = encodeMessage(msg, 43);
 
     assertThat(exc.getMessage(), is(equalTo("")));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("java.lang.IndexOutOfBoundsException")));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("")));
+    assertThat(readString(buffer), is(equalTo("java.lang.IndexOutOfBoundsException")));
+    assertThat(readString(buffer), is(equalTo("")));
   }
 }

@@ -1,5 +1,11 @@
 package de.robind.swt.protocol;
 
+import static de.robind.swt.protocol.datatype.SWTAny.writeAny;
+import static de.robind.swt.protocol.datatype.SWTBoolean.writeBoolean;
+import static de.robind.swt.protocol.datatype.SWTByte.writeByte;
+import static de.robind.swt.protocol.datatype.SWTInteger.writeInteger;
+import static de.robind.swt.protocol.datatype.SWTString.writeString;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -90,33 +96,33 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
     if (msg instanceof SWTCallRequest) {
       SWTCallRequest request = (SWTCallRequest)msg;
 
-      buffer.writeInt(request.getObjId());
-      SWTProtocol.writeString(buffer, request.getMethod());
-      buffer.writeByte(request.getArguments().length);
+      writeInteger(buffer, request.getObjId());
+      writeString(buffer, request.getMethod());
+      writeByte(buffer, (byte)request.getArguments().length); // TODO Check for overflow
 
       for (Object arg: request.getArguments()) {
-        SWTProtocol.writeArgument(buffer, arg);
+        writeAny(buffer, arg);
       }
 
       return (SWTProtocol.OP_CALL);
     } else if (msg instanceof SWTNewRequest) {
       SWTNewRequest request = (SWTNewRequest)msg;
 
-      buffer.writeInt(request.getObjId());
-      SWTProtocol.writeString(buffer, request.getObjClass().getName());
-      buffer.writeByte(request.getArguments().length);
+      writeInteger(buffer, request.getObjId());
+      writeString(buffer, request.getObjClass().getName());
+      writeByte(buffer, (byte)request.getArguments().length); // TODO Check or overflow
 
       for (Object arg: request.getArguments()) {
-        SWTProtocol.writeArgument(buffer, arg);
+        writeAny(buffer, arg);
       }
 
       return (SWTProtocol.OP_NEW);
     } else if (msg instanceof SWTRegRequest) {
       SWTRegRequest request = (SWTRegRequest)msg;
 
-      buffer.writeInt(request.getObjId());
-      buffer.writeInt(request.getEventType());
-      SWTProtocol.writeBoolean(buffer, request.enable());
+      writeInteger(buffer, request.getObjId());
+      writeInteger(buffer, request.getEventType());
+      writeBoolean(buffer, request.enable());
 
       return (SWTProtocol.OP_REG);
     }
@@ -140,7 +146,7 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       SWTCallResponse response = (SWTCallResponse)msg;
 
       if (response.getResult() != null) {
-        SWTProtocol.writeArgument(buffer, response.getResult());
+        writeAny(buffer, response.getResult());
       }
 
       return (SWTProtocol.OP_CALL);
@@ -170,8 +176,8 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       message = "";
     }
 
-    SWTProtocol.writeString(buffer, msg.getCause().getClass().getName());
-    SWTProtocol.writeString(buffer, message);
+    writeString(buffer, msg.getCause().getClass().getName());
+    writeString(buffer, message);
 
     return (SWTProtocol.OP_CALL); // Ignored by the exception-message-type
   }
@@ -192,12 +198,12 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
           "Number of attributes cannot be greater than " + Byte.MAX_VALUE);
     }
 
-    buffer.writeInt(msg.getObjId());
-    buffer.writeByte(msg.getAttributes().length);
+    writeInteger(buffer, msg.getObjId());
+    writeByte(buffer, (byte)msg.getAttributes().length); // TODO Check for overflow
 
     for (String attribute: msg.getAttributes()) {
-      SWTProtocol.writeString(buffer, attribute);
-      SWTProtocol.writeArgument(buffer, msg.getAttributeValue(attribute));
+      writeString(buffer, attribute);
+      writeAny(buffer, msg.getAttributeValue(attribute));
     }
 
     return (SWTProtocol.OP_CALL); // Ignored by the event-message-type

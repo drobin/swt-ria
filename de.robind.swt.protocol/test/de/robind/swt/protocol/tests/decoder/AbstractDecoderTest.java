@@ -1,5 +1,8 @@
 package de.robind.swt.protocol.tests.decoder;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.embedder.CodecEmbedderException;
@@ -42,7 +45,7 @@ public class AbstractDecoderTest<T extends SWTMessage> {
 
   protected T decodeMessage(ChannelBuffer buffer) throws Throwable {
     try {
-      this.embedder.offer(buffer);
+      assertThat(this.embedder.offer(buffer), is(true));
       return (this.embedder.poll());
     } catch (CodecEmbedderException e) {
       throw e.getCause();

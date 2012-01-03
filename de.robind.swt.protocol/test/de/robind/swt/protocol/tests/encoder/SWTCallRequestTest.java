@@ -1,5 +1,9 @@
 package de.robind.swt.protocol.tests.encoder;
 
+import static de.robind.swt.protocol.datatype.SWTBoolean.readBoolean;
+import static de.robind.swt.protocol.datatype.SWTByte.readByte;
+import static de.robind.swt.protocol.datatype.SWTInteger.readInteger;
+import static de.robind.swt.protocol.datatype.SWTString.readString;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -19,10 +23,10 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
   public void noArguments() throws Throwable {
     SWTCallRequest msg = this.factory.createCallRequest(4711, "foo");
 
-    ChannelBuffer buffer = encodeMessage(msg, 10);
-    assertThat(buffer.readInt(), is(4711));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("foo")));
-    assertThat(buffer.readByte(), is((byte)0));
+    ChannelBuffer buffer = encodeMessage(msg, 16);
+    assertThat(readInteger(buffer), is(4711));
+    assertThat(readString(buffer), is(equalTo("foo")));
+    assertThat(readByte(buffer), is((byte)0));
   }
 
   @Test
@@ -30,11 +34,11 @@ public class SWTCallRequestTest extends AbstractEncoderTest<SWTCallRequest> {
     SWTCallRequest msg =
         this.factory.createCallRequest(4711, "foo", 1, true);
 
-    ChannelBuffer buffer = encodeMessage(msg, 17);
-    assertThat(buffer.readInt(), is(4711));
-    assertThat(SWTProtocol.readString(buffer), is(equalTo("foo")));
-    assertThat(buffer.readByte(), is((byte)2));
-    assertThat((Integer)SWTProtocol.readArgument(buffer), is(1));
-    assertThat((Boolean)SWTProtocol.readArgument(buffer), is(true));
+    ChannelBuffer buffer = encodeMessage(msg, 25);
+    assertThat(readInteger(buffer), is(4711));
+    assertThat(readString(buffer), is(equalTo("foo")));
+    assertThat(readByte(buffer), is((byte)2));
+    assertThat(readInteger(buffer), is(1));
+    assertThat(readBoolean(buffer), is(true));
   }
 }
