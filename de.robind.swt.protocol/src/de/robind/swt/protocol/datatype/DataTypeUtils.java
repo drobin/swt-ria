@@ -26,6 +26,11 @@ class DataTypeUtils {
   static final byte DT_BYTE = 3;
 
   /**
+   * A boolean-type.
+   */
+  static final byte DT_BOOL = 4;
+
+  /**
    * No flags are set.
    */
   static final byte FLAG_NONE = 0x0;
