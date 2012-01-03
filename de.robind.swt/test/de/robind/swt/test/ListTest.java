@@ -1,7 +1,7 @@
-package org.eclipse.swt.widget.test;
+package de.robind.swt.test;
 
-import static org.eclipse.swt.test.utils.SWTExceptionMatcher.swtCode;
-import static org.eclipse.swt.test.utils.SWTTestUtils.asyncExec;
+import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
+import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.eclipse.swt.test.utils.TestClientTasks;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
@@ -23,6 +22,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import de.robind.swt.test.utils.TestClientTasks;
 
 public class ListTest {
   private Display display = null;

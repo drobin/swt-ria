@@ -1,8 +1,8 @@
-package org.eclipse.swt.widget.test;
+package de.robind.swt.test;
 
-import static org.eclipse.swt.test.utils.SWTExceptionMatcher.swtCode;
-import static org.eclipse.swt.test.utils.SWTTestUtils.asyncExec;
-import static org.eclipse.swt.test.utils.TypedEventMatcher.event;
+import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
+import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
+import static de.robind.swt.test.utils.TypedEventMatcher.event;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -17,20 +17,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.eclipse.swt.test.utils.TestClientTasks;
-import org.eclipse.swt.test.utils.TestControlListener;
-import org.eclipse.swt.test.utils.TestDragDetectListener;
-import org.eclipse.swt.test.utils.TestEvent;
-import org.eclipse.swt.test.utils.TestFocusListener;
-import org.eclipse.swt.test.utils.TestHelpListener;
-import org.eclipse.swt.test.utils.TestKeyListener;
-import org.eclipse.swt.test.utils.TestMenuDetectListener;
-import org.eclipse.swt.test.utils.TestMouseListener;
-import org.eclipse.swt.test.utils.TestMouseMoveListener;
-import org.eclipse.swt.test.utils.TestMouseTrackListener;
-import org.eclipse.swt.test.utils.TestMouseWheelListener;
-import org.eclipse.swt.test.utils.TestPaintListener;
-import org.eclipse.swt.test.utils.TestTraverseListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -42,6 +28,21 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import de.robind.swt.test.utils.TestClientTasks;
+import de.robind.swt.test.utils.TestControlListener;
+import de.robind.swt.test.utils.TestDragDetectListener;
+import de.robind.swt.test.utils.TestEvent;
+import de.robind.swt.test.utils.TestFocusListener;
+import de.robind.swt.test.utils.TestHelpListener;
+import de.robind.swt.test.utils.TestKeyListener;
+import de.robind.swt.test.utils.TestMenuDetectListener;
+import de.robind.swt.test.utils.TestMouseListener;
+import de.robind.swt.test.utils.TestMouseMoveListener;
+import de.robind.swt.test.utils.TestMouseTrackListener;
+import de.robind.swt.test.utils.TestMouseWheelListener;
+import de.robind.swt.test.utils.TestPaintListener;
+import de.robind.swt.test.utils.TestTraverseListener;
 
 
 public class ControlTest {

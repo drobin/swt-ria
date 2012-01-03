@@ -1,4 +1,4 @@
-package org.eclipse.swt.test.utils;
+package de.robind.swt.test.utils;
 
 import java.util.LinkedList;
 import java.util.List;

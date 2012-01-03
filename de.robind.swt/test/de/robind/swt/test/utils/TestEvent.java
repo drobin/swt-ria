@@ -1,4 +1,4 @@
-package org.eclipse.swt.test.utils;
+package de.robind.swt.test.utils;
 
 import org.eclipse.swt.widgets.Event;
 

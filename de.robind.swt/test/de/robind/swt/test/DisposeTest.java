@@ -1,6 +1,6 @@
-package org.eclipse.swt.test;
+package de.robind.swt.test;
 
-import static org.eclipse.swt.test.utils.SWTExceptionMatcher.swtCode;
+import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -25,21 +25,6 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.eclipse.swt.test.utils.TestClientTasks;
-import org.eclipse.swt.test.utils.TestControlListener;
-import org.eclipse.swt.test.utils.TestDisposeListener;
-import org.eclipse.swt.test.utils.TestDragDetectListener;
-import org.eclipse.swt.test.utils.TestFocusListener;
-import org.eclipse.swt.test.utils.TestHelpListener;
-import org.eclipse.swt.test.utils.TestKeyListener;
-import org.eclipse.swt.test.utils.TestListener;
-import org.eclipse.swt.test.utils.TestMenuDetectListener;
-import org.eclipse.swt.test.utils.TestMouseListener;
-import org.eclipse.swt.test.utils.TestMouseMoveListener;
-import org.eclipse.swt.test.utils.TestMouseTrackListener;
-import org.eclipse.swt.test.utils.TestMouseWheelListener;
-import org.eclipse.swt.test.utils.TestPaintListener;
-import org.eclipse.swt.test.utils.TestTraverseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -58,6 +43,22 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import de.robind.swt.test.utils.TestClientTasks;
+import de.robind.swt.test.utils.TestControlListener;
+import de.robind.swt.test.utils.TestDisposeListener;
+import de.robind.swt.test.utils.TestDragDetectListener;
+import de.robind.swt.test.utils.TestFocusListener;
+import de.robind.swt.test.utils.TestHelpListener;
+import de.robind.swt.test.utils.TestKeyListener;
+import de.robind.swt.test.utils.TestListener;
+import de.robind.swt.test.utils.TestMenuDetectListener;
+import de.robind.swt.test.utils.TestMouseListener;
+import de.robind.swt.test.utils.TestMouseMoveListener;
+import de.robind.swt.test.utils.TestMouseTrackListener;
+import de.robind.swt.test.utils.TestMouseWheelListener;
+import de.robind.swt.test.utils.TestPaintListener;
+import de.robind.swt.test.utils.TestTraverseListener;
 
 
 @RunWith(value = Parameterized.class)
