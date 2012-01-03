@@ -72,15 +72,10 @@ public class List extends Scrollable {
    */
   public int[] getSelectionIndices() throws SWTException {
     checkWidget();
-    Object array[] = (Object[])getDisplay().callMethod(
-        getId(), "getSelectionIndices");
 
-    int result[] = new int[array.length];
-    for (int i = 0; i < array.length; i++) {
-      result[i] = (Integer)array[i];
-    }
-
-    return (result);
+    int indices[] =
+        (int[])getDisplay().callMethod(getId(), "getSelectionIndices");
+    return (indices);
   }
 
   /**

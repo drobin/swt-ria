@@ -96,7 +96,7 @@ public class ListTest {
 
   @Test
   public void getSelectionIndices() {
-    getClientTasks().setCallMethodResult(new Object[] {});
+    getClientTasks().setCallMethodResult(new int[] {});
 
     List list = new List(this.shell, 4711);
     assertThat(list.getSelectionIndices().length, is(0));
