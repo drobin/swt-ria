@@ -2,6 +2,7 @@ package de.robind.swt.protocol.datatype;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 
+import de.robind.swt.msg.SWTObjectId;
 import de.robind.swt.protocol.SWTProtocolException;
 
 /**
@@ -34,6 +35,11 @@ class DataTypeUtils {
    * A null-type.
    */
   static final byte DT_NULL = 5;
+
+  /**
+   * A {@link SWTObjectId}-type.
+   */
+  static final byte DT_SWTOBJ = 6;
 
   /**
    * No flags are set.
