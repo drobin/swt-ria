@@ -97,9 +97,19 @@ public class SWT {
   public static final int Dispose = 12;
 
   /**
+   * Style constant to indicate double buffering (value is 1<<29).
+   */
+  public static final int DOUBLE_BUFFERED = 1 << 29;
+
+  /**
    * The drag detect event type (value is 29).
    */
   public static final int DragDetect = 29;
+
+  /**
+   * Style constant to allow embedding (value is 1<<24).
+   */
+  public static final int EMBEDDED = 1 << 24;
 
   /**
    * Keyboard event constant representing the END key (value is (1<<24)+8).
@@ -297,6 +307,56 @@ public class SWT {
    * The move event type (value is 10).
    */
   public static final int Move = 10;
+
+  /**
+   * Style constant for no background behavior (value is 1<<18).
+   * <p>
+   * By default, before a widget paints, the client area is filled with the
+   * current background. When this style is specified, the background is not
+   * filled, and the application is responsible for filling every pixel of the
+   * client area. This style might be used as an alternative to
+   * "double-buffering" in order to reduce flicker. This style does not mean
+   * "transparent" - widgets that are obscured will not draw through.
+   */
+  public static final int NO_BACKGROUND = 1 << 18;
+
+  /**
+   * Style constant for no focus from the mouse behavior (value is 1<<19).
+   * <p>
+   * Normally, when the user clicks on a control, focus is assigned to that
+   * control, providing the control has no children. Some controls, such as
+   * tool bars and sashes, don't normally take focus when the mouse is clicked
+   * or accept focus when assigned from within the program. This style allows
+   * Composites to implement "no focus" mouse behavior.
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int NO_FOCUS = 1 << 19;
+
+  /**
+   * Style constant for no paint event merging behavior (value is 1<<21).
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int NO_MERGE_PAINTS = 1 << 21;
+
+  /**
+   * Style constant for preventing child radio group behavior (value is 1<<22).
+   */
+  public static final int NO_RADIO_GROUP = 1 << 22;
+
+  /**
+   * Style constant for no redraw on resize behavior (value is 1<<20).
+   * <p>
+   * This style stops the entire client area from being invalidated when the
+   * size of the Canvas changes. Specifically, when the size of the Canvas gets
+   * smaller, the SWT.Paint event is not sent. When it gets bigger, an
+   * SWT.Paint event is sent with a GC clipped to only the new areas to be
+   * painted. Without this style, the entire client area will be repainted.
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int NO_REDRAW_RESIZE = 1 << 20;
 
   /**
    * A constant known to be zero (0), typically used in operations which take
