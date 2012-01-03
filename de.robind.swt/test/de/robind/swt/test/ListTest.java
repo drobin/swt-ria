@@ -122,6 +122,34 @@ public class ListTest {
     list.removeAll();
   }
 
+  @Test
+  public void setItemsNullItems() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    List list = new List(this.shell, 4711);
+    list.setItems(null);
+  }
+
+  @Test
+  public void setItemsNullElement() {
+    exception.expect(swtCode(SWT.ERROR_INVALID_ARGUMENT));
+
+    List list = new List(this.shell, 4711);
+    list.setItems(new String[] { null });
+  }
+
+  @Test
+  public void setItems() {
+    List list = new List(this.shell, 4711);
+    list.setItems(new String[] { "foo", "bar" });
+  }
+
+  @Test
+  public void setTopIndex() {
+    List list = new List(this.shell, 4711);
+    list.setTopIndex(0);
+  }
+
   private TestClientTasks getClientTasks() {
     DisplayPool pool = DisplayPool.getInstance();
     return ((TestClientTasks)pool.getClientTasks());

@@ -94,6 +94,8 @@ public class InvalidAccessTest {
         { List.class, "getTopIndex", p(), a() },
         { List.class, "deselectAll", p(), a() },
         { List.class, "removeAll", p(), a() },
+        { List.class, "setItems", p(String[].class), a((Object)(new String[] {})) },
+        { List.class, "setTopIndex", p(int.class), a(0) },
         { TestWidget.class, "getStyle", p(), a() },
         { TestWidget.class, "addListener", p(int.class, Listener.class), a(0, new TestListener()) },
         { TestWidget.class, "removeListener", p(int.class, Listener.class), a(0, new TestListener()) },

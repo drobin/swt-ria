@@ -133,4 +133,62 @@ public class List extends Scrollable {
     checkWidget();
     getDisplay().callMethod(getId(), "removeAll");
   }
+
+  /**
+   * Sets the receiver's items to be the given array of items.
+   *
+   * @param items the array of items
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_NULL_ARGUMENT} -
+   *      if the items array is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_INVALID_ARGUMENT} -
+   *      if an item in the items array is null
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void setItems(String[] items) throws SWTException {
+    if (items == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    for (String item: items) {
+      if (item == null) {
+        throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+      }
+    }
+
+    checkWidget();
+
+    getDisplay().callMethod(getId(), "setItems", (Object)items);
+  }
+
+  /**
+   * Sets the zero-relative index of the item which is currently at the top of
+   * the receiver. This index can change when items are scrolled or new items
+   * are added and removed.
+   *
+   * @param index the index of the top item
+   * @throws SWTException
+   *  @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void setTopIndex(int index) throws SWTException {
+    checkWidget();
+    getDisplay().callMethod(getId(), "setTopIndex", index);
+  }
 }
