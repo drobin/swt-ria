@@ -120,4 +120,22 @@ public class List extends Scrollable {
     checkWidget();
     getDisplay().callMethod(getId(), "deselectAll");
   }
+
+  /**
+   * Removes all of the items from the receiver.
+   *
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void removeAll() throws SWTException {
+    checkWidget();
+    getDisplay().callMethod(getId(), "removeAll");
+  }
 }

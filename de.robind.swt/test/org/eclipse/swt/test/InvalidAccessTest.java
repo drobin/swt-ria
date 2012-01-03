@@ -91,6 +91,7 @@ public class InvalidAccessTest {
         { List.class, "getSelectionIndices", p(), a() },
         { List.class, "getTopIndex", p(), a() },
         { List.class, "deselectAll", p(), a() },
+        { List.class, "removeAll", p(), a() },
         { TestWidget.class, "getStyle", p(), a() },
         { TestWidget.class, "addListener", p(int.class, Listener.class), a(0, new TestListener()) },
         { TestWidget.class, "removeListener", p(int.class, Listener.class), a(0, new TestListener()) },

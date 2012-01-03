@@ -58,7 +58,7 @@ public class ListTest {
   public void ctorNullParent() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
 
-    new List(null, 0) {};
+    new List(null, 0);
   }
 
   @Test
@@ -68,7 +68,7 @@ public class ListTest {
     Shell shell = new Shell(this.display);
     shell.dispose();
 
-    new List(shell, 0) {};
+    new List(shell, 0);
   }
 
   @Test
@@ -77,7 +77,7 @@ public class ListTest {
 
     asyncExec(new Callable<Widget>() {
       public List call() throws Exception {
-        return (new List(shell, 0) {});
+        return (new List(shell, 0));
       }
     });
   }
@@ -89,7 +89,7 @@ public class ListTest {
 
   @Test
   public void ctorStyle() {
-    List list = new List(this.shell, 4711) {};
+    List list = new List(this.shell, 4711);
     assertThat(list.getStyle(), is(4711));
   }
 
@@ -97,7 +97,7 @@ public class ListTest {
   public void getSelectionIndices() {
     getClientTasks().setCallMethodResult(new Object[] {});
 
-    List list = new List(this.shell, 4711) {};
+    List list = new List(this.shell, 4711);
     assertThat(list.getSelectionIndices().length, is(0));
   }
 
@@ -105,14 +105,20 @@ public class ListTest {
   public void getTopIndex() {
     getClientTasks().setCallMethodResult(0);
 
-    List list = new List(this.shell, 4711) {};
+    List list = new List(this.shell, 4711);
     assertThat(list.getTopIndex(), is(0));
   }
 
   @Test
   public void deselectAll() {
-    List list = new List(this.shell, 4711) {};
+    List list = new List(this.shell, 4711);
     list.deselectAll();
+  }
+
+  @Test
+  public void removeAll() {
+    List list = new List(this.shell, 4711);
+    list.removeAll();
   }
 
   private TestClientTasks getClientTasks() {
