@@ -31,6 +31,11 @@ class DataTypeUtils {
   static final byte DT_BOOL = 4;
 
   /**
+   * A null-type.
+   */
+  static final byte DT_NULL = 5;
+
+  /**
    * No flags are set.
    */
   static final byte FLAG_NONE = 0x0;
