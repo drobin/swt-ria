@@ -86,44 +86,12 @@ public class SWTException extends RuntimeException {
     return (this.throwable);
   }
 
-  /**
-   * Returns the string describing this SWTException object.
-   * <p>
-   * It is combined with the message string of the Throwable which caused this
-   * {@link SWTException} (if this information is available).
-   *
-   *  @return the error message string of this {@link SWTException} object
-   */
-  @Override
-  public String getMessage() {
-    if (this.throwable == null) {
-      return super.getMessage ();
-    }
-
-    return (super.getMessage () + " (" + this.throwable.toString () + ")");
-  }
-
-  /**
-   * Outputs a printable representation of this exception's stack trace on the
-   * standard error stream.
-   * <p>
-   * Note: printStackTrace(PrintStream) and printStackTrace(PrintWriter) are
-   * not provided in order to maintain compatibility with CLDC.
-   */
-  @Override
-  public void printStackTrace() {
-    super.printStackTrace();
-
-    // TODO SWT on MacOS makes the followin check:
-    // TODO if (Library.JAVA_VERSION < Library.JAVA_VERSION(1, 4, 0) && throwable != null) {
-    // TODO We will assume that the java-version is always greater than 1.4.0
-  }
-
   /* (non-Javadoc)
    * @see java.lang.Throwable#toString()
    */
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "[code=" + this.code + "]";
+    return getClass().getSimpleName() +
+        "[code=" + SWT.errorToString(this.code) + "]";
   }
 }

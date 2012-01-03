@@ -494,4 +494,29 @@ public class SWT {
    * Style constant for automatic line wrap behavior (value is 1<<6).
    */
   public static final int WRAP = 1 << 6;
+
+  /**
+   * Creates a string-representation of the given error-code.
+   *
+   * @param code the requested error-code
+   * @return The relatated string
+   * @throws SWTError
+   */
+  static String errorToString(int code) throws SWTError {
+    switch (code) {
+      case SWT.ERROR_DEVICE_DISPOSED: return ("DEVICE_DISPOSED");
+      case SWT.ERROR_FAILED_EXEC: return ("FAILED_EXEC");
+      case SWT.ERROR_INVALID_ARGUMENT: return ("INVALID_ARGUMENT");
+      case SWT.ERROR_INVALID_MESSAGE: return ("INVALID_MESSAGE");
+      case SWT.ERROR_INVALID_SUBCLASS: return ("INVALID_SUBCLASS");
+      case SWT.ERROR_NOT_IMPLEMENTED: return ("NOT_IMPLEMENTED");
+      case SWT.ERROR_NULL_ARGUMENT: return ("NULL_ARGUMENT");
+      case SWT.ERROR_THREAD_INVALID_ACCESS: return ("THREAD_INVALID_ACCESS");
+      case SWT.ERROR_UNSPECIFIED: return ("UNSPECIFIED");
+      case SWT.ERROR_WIDGET_DISPOSED: return ("WIDGET_DISPOSED");
+    }
+
+    throw new SWTError(SWT.ERROR_INVALID_ARGUMENT,
+        "Unknown error-code ( " + code + ")");
+  }
 }
