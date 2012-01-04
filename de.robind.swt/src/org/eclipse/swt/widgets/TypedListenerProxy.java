@@ -61,6 +61,9 @@ public class TypedListenerProxy implements Listener {
    */
   public void handleEvent(Event e) {
     switch (e.type) {
+      case SWT.DefaultSelection:
+        ((SelectionListener)listener).widgetDefaultSelected(new SelectionEvent(e));
+        break;
       case SWT.Dispose:
         ((DisposeListener)listener).widgetDisposed(new DisposeEvent(e));
         break;

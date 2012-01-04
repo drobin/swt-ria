@@ -21,11 +21,13 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.test.TestWidget;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -59,6 +61,7 @@ import de.robind.swt.test.utils.TestMouseMoveListener;
 import de.robind.swt.test.utils.TestMouseTrackListener;
 import de.robind.swt.test.utils.TestMouseWheelListener;
 import de.robind.swt.test.utils.TestPaintListener;
+import de.robind.swt.test.utils.TestSelectionListener;
 import de.robind.swt.test.utils.TestTraverseListener;
 
 
@@ -88,12 +91,16 @@ public class DisposeTest {
   @Parameters
   public static Collection<Object[]>testData() {
     Object[][] data = new Object[][] {
+        { Button.class, "addSelectionListener", p(SelectionListener.class), a(new TestSelectionListener()) },
+        { Button.class, "removeSelectionListener", p(SelectionListener.class), a(new TestSelectionListener()) },
+
         { List.class, "getSelectionIndices", p(), a() },
         { List.class, "getTopIndex", p(), a() },
         { List.class, "deselectAll", p(), a() },
         { List.class, "removeAll", p(), a() },
         { List.class, "setItems", p(String[].class), a((Object)(new String[] {})) },
         { List.class, "setTopIndex", p(int.class), a(0) },
+
         { TestWidget.class, "getStyle", p(), a() },
         { TestWidget.class, "addListener", p(int.class, Listener.class), a(0, new TestListener()) },
         { TestWidget.class, "removeListener", p(int.class, Listener.class), a(0, new TestListener()) },
@@ -108,6 +115,7 @@ public class DisposeTest {
         { TestWidget.class, "setData", p(String.class, Object.class), a("foo", "bar") },
         { TestWidget.class, "getDisplay", p(), a() },
         { TestWidget.class, "reskin", p(int.class), a(0) },
+
         { TestControl.class, "addControlListener", p(ControlListener.class), a(new TestControlListener()) },
         { TestControl.class, "addDragDetectListener", p(DragDetectListener.class), a(new TestDragDetectListener()) },
         { TestControl.class, "addFocusListener", p(FocusListener.class), a(new TestFocusListener()) },
