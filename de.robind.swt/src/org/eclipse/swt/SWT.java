@@ -23,6 +23,11 @@ public class SWT {
   public static final int ALL = 1 << 0;
 
   /**
+   * Style constant for arrow button behavior (value is 1<<2).
+   */
+  public static final int ARROW = 1 << 2;
+
+  /**
    * Style constant for vertical alignment or orientation behavior
    * (value is 1).
    */
@@ -45,6 +50,11 @@ public class SWT {
    * Style constant for align center behavior (value is 1<<24).
    */
   public static final int CENTER = 1 << 24;
+
+  /**
+   * Style constant for check box behavior (value is 1<<5).
+   */
+  public static final int CHECK = 1 << 5;
 
   /**
    * Style constant for close box trim (value is 1<<6, since we do not
@@ -178,6 +188,13 @@ public class SWT {
    * operation using a widget which had already been disposed (value is 24).
    */
   public static final int ERROR_WIDGET_DISPOSED = 24;
+
+  /**
+   * Style constant for flat appearance. (value is 1<<23).
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int FLAT = 1 << 23;
 
   /**
    * The focus in event type (value is 15).
@@ -396,6 +413,11 @@ public class SWT {
   public static final int PUSH = 1 << 3;
 
   /**
+   * Style constant for radio button behavior (value is 1<<4).
+   */
+  public static final int RADIO = 1 << 4;
+
+  /**
    * Style constant for read-only behavior (value is 1<<3).
    */
   public static final int READ_ONLY = 1 << 3;
@@ -484,6 +506,11 @@ public class SWT {
   public static final String SKIN_ID = "org.eclipse.swt.skin.id";
 
   /**
+   * Style constant for toggle button behavior (value is 1<<1).
+   */
+  public static final int TOGGLE =  1 << 1;
+
+  /**
    * Style constant for align top behavior (value is 1<<7), since align UP and
    * align TOP are considered the same).
    */
@@ -570,6 +597,12 @@ public class SWT {
    * pressed; typically, this is the SHIFT-TAB key sequence (value is 1<<3).
    */
   public static final int TRAVERSE_TAB_PREVIOUS = 1 << 3;
+
+  /**
+   * Style constant for align up behavior (value is 1<<7, since align UP and
+   * align TOP are considered the same).
+   */
+  public static final int UP = TOP;
 
   /**
    * Style constant for vertical alignment or orientation behavior
