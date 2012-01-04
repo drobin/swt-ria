@@ -67,6 +67,50 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class FormLayout extends Layout {
   /**
+   * marginLeft specifies the number of pixels of horizontal margin that will
+   * be placed along the left edge of the layout. The default value is 0.
+   */
+  public int marginLeft;
+
+  /**
+   * marginRight specifies the number of pixels of horizontal margin that will
+   * be placed along the right edge of the layout. The default value is 0.
+   */
+  public int marginRight;
+
+  /**
+   * marginTop specifies the number of pixels of vertical margin that will be
+   * placed along the top edge of the layout. The default value is 0.
+   */
+  public int marginTop;
+
+  /**
+   * marginBottom specifies the number of pixels of vertical margin that will
+   * be placed along the bottom edge of the layout. The default value is 0.
+   */
+  public int marginBottom;
+
+  /**
+   * marginWidth specifies the number of pixels of horizontal margin that will
+   * be placed along the left and right edges of the layout. The default value
+   * is 0.
+   */
+  public int marginWidth;
+
+  /**
+   * marginHeight specifies the number of pixels of vertical margin that will
+   * be placed along the top and bottom edges of the layout. The default value
+   * is 0.
+   */
+  public int marginHeight;
+
+  /**
+   * spacing specifies the number of pixels between the edge of one control and
+   * the edge of its neighbouring control. The default value is 0.
+   */
+  public int spacing;
+
+  /**
    * Constructs a new instance of this class.
    */
   public FormLayout() {
