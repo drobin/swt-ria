@@ -72,6 +72,16 @@ public class Composite extends Scrollable {
     // remove check, this class can be subclassed
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.widgets.Widget#getCreateClass()
+   */
+  @Override
+  protected Class<? extends Widget> getCreateClass() {
+    // This class can be subclasses, subclasses are unknown by the client
+    // They are always created as a Composite on client-side
+    return (Composite.class);
+  }
+
   /**
    * Returns layout which is associated with the receiver, or <code>null</code>
    * if one has not been set.

@@ -7,6 +7,7 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.TypedListener;
+import org.eclipse.swt.server.ClientTasks;
 
 /**
  * This class is the abstract superclass of all user interface objects.
@@ -109,7 +110,7 @@ public abstract class Widget extends SWTObject {
     Display display = getDisplay();
     if (display != null) {
       checkThread();
-      display.createObject(getId(), getClass(), this.parent, this.style);
+      display.createObject(getId(), getCreateClass(), this.parent, this.style);
     }
   }
 
@@ -307,6 +308,25 @@ public abstract class Widget extends SWTObject {
     checkThread();
     getDisplay().callMethod(getId(), "dispose");
     this.disposed = true;
+  }
+
+  /**
+   * Returns the class which is passed the the
+   * {@link ClientTasks#createObject(org.eclipse.swt.server.Key, int, Class, Object...) object-creation-request}.
+   * <p>
+   * Normally is should be {@link #getClass() this class}, but if you create
+   * your own widgets (derivated from {@link Composite}), this (new) class is
+   * not known by the client. So it needs to be transformed into a class from
+   * the SWT-framework. This methes is responsible for that.
+   * <p>
+   * Classes, which can be subclassed, should overwrite this method and return
+   * the correct class.
+   *
+   * @return The class, which is used for the create-request send to the
+   *         client.
+   */
+  protected Class<? extends Widget> getCreateClass() {
+    return (getClass());
   }
 
   /**
