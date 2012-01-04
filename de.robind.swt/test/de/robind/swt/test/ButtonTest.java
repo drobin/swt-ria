@@ -227,4 +227,28 @@ public class ButtonTest {private Display display = null;
     assertThat(listener.selectedEvents.size(), is(0));
     assertThat(listener.defaultSelectedEvents.size(), is(0));
   }
+
+  @Test
+  public void getText() {
+    Button button = new Button(this.shell, 0);
+    assertThat(button.getText(), is(equalTo("")));
+  }
+
+  @Test
+  public void setTextNullArgument() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+
+    Button button = new Button(this.shell, 0);
+    button.setText(null);
+  }
+
+  @Test
+  public void setText() {
+    Button button = new Button(this.shell, 0);
+
+    assertThat(button.getText(), is(equalTo("")));
+
+    button.setText("foo");
+    assertThat(button.getText(), is(equalTo("foo")));
+  }
 }

@@ -94,7 +94,9 @@ public class InvalidAccessTest {
   public static Collection<Object[]>testData() {
     Object[][] data = new Object[][] {
         { Button.class, "addSelectionListener", p(SelectionListener.class), a(new TestSelectionListener()) },
+        { Button.class, "getText", p(), a() },
         { Button.class, "removeSelectionListener", p(SelectionListener.class), a(new TestSelectionListener()) },
+        { Button.class, "setText", p(String.class), a("") },
 
         { List.class, "getSelectionIndices", p(), a() },
         { List.class, "getTopIndex", p(), a() },
