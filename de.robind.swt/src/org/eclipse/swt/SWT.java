@@ -195,6 +195,11 @@ public class SWT {
   public static final int Help = 28;
 
   /**
+   * Style constant for horizontal scrollbar behavior (value is 1<<8).
+   */
+  public static final int H_SCROLL = 1 << 8;
+
+  /**
    * Style constant for horizontal alignment or orientation behavior
    * (value is 1<<8).
    */
@@ -309,6 +314,12 @@ public class SWT {
   public static final int Move = 10;
 
   /**
+   * Style constant for multi-selection behavior in lists and multiple line
+   * support on text fields (value is 1<<1).
+   */
+  public static final int MULTI = 1 << 1;
+
+  /**
    * Style constant for no background behavior (value is 1<<18).
    * <p>
    * By default, before a widget paints, the client area is filled with the
@@ -357,6 +368,16 @@ public class SWT {
    * Note that this is a <i>HINT</i>.
    */
   public static final int NO_REDRAW_RESIZE = 1 << 20;
+
+  /**
+   * Style constant for no scrollbar behavior (value is 1<<4).
+   * <p>
+   * When neither {@link #H_SCROLL} or {@link #V_SCROLL} are specified,
+   * controls are free to create the default scroll bars for the control.
+   * Using NO_SCROLL overrides the default and forces the control to have no
+   * scroll bars.
+   */
+  public static final int NO_SCROLL = 1 << 4;
 
   /**
    * A constant known to be zero (0), typically used in operations which take
@@ -445,6 +466,12 @@ public class SWT {
    * appearance (value is CLOSE|TITLE|MIN|MAX|RESIZE).
    */
   public static final int SHELL_TRIM = CLOSE|TITLE|MIN|MAX|RESIZE;
+
+  /**
+   * Style constant for single selection behavior in lists and single line
+   * support on text fields (value is 1<<2).
+   */
+  public static final int SINGLE = 1 << 2;
 
   /**
    * Key value for setting and getting the skin class of a widget.
@@ -549,6 +576,11 @@ public class SWT {
    * (value is 1<<9).
    */
   public static final int VERTICAL = 1 << 9;
+
+  /**
+   * Style constant for vertical scrollbar behavior (value is 1<<9).
+   */
+  public static final int V_SCROLL = 1 << 9;
 
   /**
    * Style constant for automatic line wrap behavior (value is 1<<6).
