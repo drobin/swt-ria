@@ -3,10 +3,13 @@ package de.robind.swt.protocol.datatype;
 import static de.robind.swt.protocol.datatype.DataTypeUtils.DT_BOOL;
 import static de.robind.swt.protocol.datatype.DataTypeUtils.DT_BYTE;
 import static de.robind.swt.protocol.datatype.DataTypeUtils.DT_INT;
+import static de.robind.swt.protocol.datatype.DataTypeUtils.DT_MAP;
 import static de.robind.swt.protocol.datatype.DataTypeUtils.DT_NULL;
 import static de.robind.swt.protocol.datatype.DataTypeUtils.DT_STRING;
 import static de.robind.swt.protocol.datatype.DataTypeUtils.DT_SWTOBJ;
 import static de.robind.swt.protocol.datatype.DataTypeUtils.FLAG_ARRAY;
+
+import java.util.Map;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 
@@ -56,6 +59,7 @@ public class SWTAny {
           return (SWTInteger.readInteger(buffer));
         }
       }
+      case DT_MAP:    return (SWTMap.readMap(buffer));
       case DT_NULL:   {
         SWTNull.readNull(buffer);
         return (null);
@@ -105,6 +109,7 @@ public class SWTAny {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private static void writeSimple(ChannelBuffer buffer, Object value)
       throws SWTProtocolException {
 
@@ -114,6 +119,8 @@ public class SWTAny {
       SWTByte.writeByte(buffer, (Byte)value);
     } else if (value instanceof Integer) {
       SWTInteger.writeInteger(buffer, (Integer)value);
+    } else if (value instanceof Map) {
+      SWTMap.writeMap(buffer, (Map<String, Object>)value);
     } else if (value instanceof String) {
       SWTString.writeString(buffer, (String)value);
     } else if (value instanceof SWTObjectId) {

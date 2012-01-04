@@ -7,6 +7,9 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.jboss.netty.buffer.ChannelBuffers.dynamicBuffer;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,6 +21,7 @@ import de.robind.swt.protocol.datatype.SWTAny;
 import de.robind.swt.protocol.datatype.SWTBoolean;
 import de.robind.swt.protocol.datatype.SWTByte;
 import de.robind.swt.protocol.datatype.SWTInteger;
+import de.robind.swt.protocol.datatype.SWTMap;
 import de.robind.swt.protocol.datatype.SWTNull;
 import de.robind.swt.protocol.datatype.SWTObj;
 import de.robind.swt.protocol.datatype.SWTString;
@@ -95,6 +99,24 @@ public class SWTAnyTest {
     assertThat(result.getClass().isArray(), is(true));
     assertThat(((int[])result)[0], is((1)));
     assertThat(((int[])result)[1], is((2)));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void readAnyMap() throws SWTProtocolException {
+    ChannelBuffer buffer = dynamicBuffer();
+    Map<String, Object> mappings = new HashMap<String, Object>();
+
+    mappings.put("1", 1);
+    mappings.put("2", "hmmm");
+
+    SWTMap.writeMap(buffer, mappings);
+
+    Object result = SWTAny.readAny(buffer);
+    assertThat(result, is(instanceOf(Map.class)));
+    assertThat(((Map<String, Object>)result).size(), is(2));
+    assertThat((Integer)((Map<String, Object>)result).get("1"), is(1));
+    assertThat((String)((Map<String, Object>)result).get("2"), is(equalTo("hmmm")));
   }
 
   @Test
@@ -194,6 +216,22 @@ public class SWTAnyTest {
     int result[] = SWTInteger.readIntegerArray(buffer);
     assertThat(result[0], is(1));
     assertThat(result[1], is(2));
+  }
+
+  @Test
+  public void writeAnyMap() throws SWTProtocolException {
+    ChannelBuffer buffer = dynamicBuffer();
+
+    Map<String, Object> src = new HashMap<String, Object>();
+    src.put("1", true);
+    src.put("2", "foo");
+
+    SWTAny.writeAny(buffer, src);
+
+    Map<String, Object> dest = SWTMap.readMap(buffer);
+    assertThat(dest.size(), is(2));
+    assertThat((Boolean)dest.get("1"), is(true));
+    assertThat((String)dest.get("2"), is(equalTo("foo")));
   }
 
   @Test
