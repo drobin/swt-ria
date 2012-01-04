@@ -512,6 +512,13 @@ public class SWT {
   public static final String SKIN_ID = "org.eclipse.swt.skin.id";
 
   /**
+   * Style constant for smooth appearance. (value is 1<<16).
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int SMOOTH = 1 << 16;
+
+  /**
    * Style constant for toggle button behavior (value is 1<<1).
    */
   public static final int TOGGLE =  1 << 1;

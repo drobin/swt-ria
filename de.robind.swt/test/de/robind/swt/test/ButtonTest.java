@@ -29,7 +29,8 @@ import de.robind.swt.test.utils.TestClientTasks;
 import de.robind.swt.test.utils.TestEvent;
 import de.robind.swt.test.utils.TestSelectionListener;
 
-public class ButtonTest {private Display display = null;
+public class ButtonTest {
+  private Display display = null;
   private Shell shell = null;
 
   @Rule
