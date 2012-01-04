@@ -42,6 +42,11 @@ class DataTypeUtils {
   static final byte DT_SWTOBJ = 6;
 
   /**
+   * A map-type
+   */
+  static final byte DT_MAP = 7;
+
+  /**
    * No flags are set.
    */
   static final byte FLAG_NONE = 0x0;
