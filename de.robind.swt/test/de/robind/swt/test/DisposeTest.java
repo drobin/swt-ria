@@ -134,6 +134,7 @@ public class DisposeTest {
         { TestControl.class, "addMouseWheelListener", p(MouseWheelListener.class), a(new TestMouseWheelListener()) },
         { TestControl.class, "addPaintListener", p(PaintListener.class), a(new TestPaintListener()) },
         { TestControl.class, "addTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
+        { TestControl.class, "getBounds", p(), a() },
         { TestControl.class, "getLayoutData", p(), a() },
         { TestControl.class, "removeControlListener", p(ControlListener.class), a(new TestControlListener()) },
         { TestControl.class, "removeDragDetectListener", p(DragDetectListener.class), a(new TestDragDetectListener()) },
@@ -147,6 +148,7 @@ public class DisposeTest {
         { TestControl.class, "removeMouseWheelListener", p(MouseWheelListener.class), a(new TestMouseWheelListener()) },
         { TestControl.class, "removePaintListener", p(PaintListener.class), a(new TestPaintListener()) },
         { TestControl.class, "removeTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
+        { TestControl.class, "setBounds", p(int.class, int.class, int.class, int.class), a(0, 0, 0, 0) },
         { TestControl.class, "setLayoutData", p(Object.class), a((Object)null) },
         { TestControl.class, "setRedraw", p(boolean.class), a(true) },
     };

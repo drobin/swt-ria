@@ -1,5 +1,7 @@
 package org.eclipse.swt.widgets;
 
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ControlListener;
@@ -15,6 +17,7 @@ import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Drawable;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.DisplayPool;
@@ -378,6 +381,36 @@ public abstract class Control extends Widget implements Drawable {
   }
 
   /**
+   * Returns a rectangle describing the receiver's size and location relative
+   * to its parent (or its display if its parent is null), unless the receiver
+   * is a shell. In this case, the location is relative to the display.
+   *
+   * @return the receiver's bounding rectangle
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public Rectangle getBounds() throws SWTException {
+    checkWidget();
+    @SuppressWarnings("unchecked")
+    Map<String, Object> bounds =
+        (Map<String, Object>)getDisplay().callMethod(getId(), "getBounds");
+
+    int x = (Integer)bounds.get("x");
+    int y = (Integer)bounds.get("y");
+    int width = (Integer)bounds.get("width");
+    int height = (Integer)bounds.get("height");
+
+    return (new Rectangle(x, y, width, height));
+  }
+
+  /**
    * Returns layout data which is associated with the receiver.
    *
    * @return the receiver's layout data
@@ -674,6 +707,36 @@ public abstract class Control extends Widget implements Drawable {
       throws SWTException {
 
     removeTypedListener(listener, SWT.Traverse);
+  }
+
+  /**
+   * Sets the receiver's size and location to the rectangular area specified by
+   * the arguments. The x and y arguments are relative to the receiver's parent
+   * (or its display if its parent is null), unless the receiver is a shell. In
+   * this case, the x and y arguments are relative to the display.
+   * <p>
+   * Note: Attempting to set the width or height of the receiver to a negative
+   * number will cause that value to be set to zero instead.
+   *
+   * @param x the new x coordinate for the receiver
+   * @param y the new y coordinate for the receiver
+   * @param width the new width for the receiver
+   * @param height the new height for the receiver
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void setBounds(int x, int y, int width, int height)
+      throws SWTException {
+
+    checkWidget();
+    getDisplay().callMethod(getId(), "setBounds", x, y, width, height);
   }
 
   /**

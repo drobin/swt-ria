@@ -9,10 +9,12 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
@@ -994,5 +996,35 @@ public class ControlTest {
     assertThat(control.getLayoutData(), is(nullValue()));
     control.setLayoutData(data);
     assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));
+  }
+
+  @Test
+  public void getBounds() {
+    HashMap<String, Object> bounds = new HashMap<String, Object>();
+    bounds.put("x", 1);
+    bounds.put("y", 2);
+    bounds.put("width", 3);
+    bounds.put("height", 4);
+
+    getClientTasks().setCallMethodResult(bounds);
+
+    Control control = new TestControl(this.shell, 0);
+    Rectangle rect = control.getBounds();
+
+    assertThat(rect.x, is(1));
+    assertThat(rect.y, is(2));
+    assertThat(rect.width, is(3));
+    assertThat(rect.height, is(4));
+  }
+
+  @Test
+  public void setBounds() {
+    Control control = new TestControl(this.shell, 0);
+    control.setBounds(1, 2, 3, 4);
+  }
+
+  protected TestClientTasks getClientTasks() {
+    DisplayPool pool = DisplayPool.getInstance();
+    return ((TestClientTasks)pool.getClientTasks());
   }
 }
