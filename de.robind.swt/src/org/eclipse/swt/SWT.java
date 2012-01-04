@@ -80,6 +80,12 @@ public class SWT {
   public static final int DOWN = 1 << 10;
 
   /**
+   * Indicates that a user-interface component is being dragged, for example
+   * dragging the thumb of a scroll bar (value is 1).
+   */
+  public static final int DRAG = 1;
+
+  /**
    * Style constant for vertical alignment or orientation behavior
    * (value is 4).
    */

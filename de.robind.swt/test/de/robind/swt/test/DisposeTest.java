@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.After;
@@ -102,6 +103,9 @@ public class DisposeTest {
         { List.class, "removeAll", p(), a() },
         { List.class, "setItems", p(String[].class), a((Object)(new String[] {})) },
         { List.class, "setTopIndex", p(int.class), a(0) },
+
+        { Sash.class, "addSelectionListener", p(SelectionListener.class), a(new TestSelectionListener()) },
+        { Sash.class, "removeSelectionListener", p(SelectionListener.class), a(new TestSelectionListener()) },
 
         { TestWidget.class, "getStyle", p(), a() },
         { TestWidget.class, "addListener", p(int.class, Listener.class), a(0, new TestListener()) },
