@@ -127,6 +127,12 @@ public class SWT {
   public static final int END = (1 << 24) + 8;
 
   /**
+   * SWT error constant indicating that a value which can not be zero was
+   * found to be (value is 7).
+   */
+  public static final int ERROR_CANNOT_BE_ZERO = 7;
+
+  /**
    * SWT error constant indicating that an attempt was made to invoke an SWT
    * operation using a device which had already been disposed (value is 45).
    */
@@ -629,6 +635,7 @@ public class SWT {
    */
   static String errorToString(int code) throws SWTError {
     switch (code) {
+      case SWT.ERROR_CANNOT_BE_ZERO: return ("CANNOT_BE_ZERO");
       case SWT.ERROR_DEVICE_DISPOSED: return ("DEVICE_DISPOSED");
       case SWT.ERROR_FAILED_EXEC: return ("FAILED_EXEC");
       case SWT.ERROR_INVALID_ARGUMENT: return ("INVALID_ARGUMENT");
