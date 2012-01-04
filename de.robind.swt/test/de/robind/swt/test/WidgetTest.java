@@ -11,58 +11,19 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestWidget;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import de.robind.swt.test.utils.TestClientTasks;
 import de.robind.swt.test.utils.TestDisposeListener;
 import de.robind.swt.test.utils.TestEvent;
 import de.robind.swt.test.utils.TestListener;
 
 
-public class WidgetTest {
-  private Display display = null;
-  private Shell shell = null;
-
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
-  @Before
-  public void before() {
-    DisplayPool.getInstance().offerKey(new Key() {});
-    this.display = new Display();
-    this.shell = new Shell(this.display);
-  }
-
-  @After
-  public void after() {
-    this.shell = null;
-    this.display = null;
-  }
-
+public class WidgetTest extends AbstractWidgetTest {
   @Test
   public void ctorNullParent() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));

@@ -8,52 +8,12 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import de.robind.swt.test.utils.TestClientTasks;
-
-public class ListTest {
-  private Display display = null;
-  private Shell shell = null;
-
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
-  @Before
-  public void before() {
-    DisplayPool.getInstance().offerKey(new Key() {});
-    this.display = new Display();
-    this.shell = new Shell(this.display);
-  }
-
-  @After
-  public void after() {
-    this.shell = null;
-    this.display = null;
-  }
-
+public class ListTest extends AbstractWidgetTest {
   @Test
   public void ctorNullParent() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
@@ -148,10 +108,5 @@ public class ListTest {
   public void setTopIndex() {
     List list = new List(this.shell, 4711);
     list.setTopIndex(0);
-  }
-
-  private TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
   }
 }

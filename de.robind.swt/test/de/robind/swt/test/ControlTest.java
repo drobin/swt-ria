@@ -16,22 +16,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.LayoutData;
-import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import de.robind.swt.test.utils.TestClientTasks;
 import de.robind.swt.test.utils.TestControlListener;
 import de.robind.swt.test.utils.TestDragDetectListener;
 import de.robind.swt.test.utils.TestEvent;
@@ -47,36 +37,7 @@ import de.robind.swt.test.utils.TestPaintListener;
 import de.robind.swt.test.utils.TestTraverseListener;
 
 
-public class ControlTest {
-  private Display display = null;
-  private Shell shell = null;
-
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
-
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
-  @Before
-  public void before() {
-    DisplayPool.getInstance().offerKey(new Key() {});
-    this.display = new Display();
-    this.shell = new Shell(this.display);
-  }
-
-  @After
-  public void after() {
-    this.shell = null;
-    this.display = null;
-  }
-
+public class ControlTest extends AbstractWidgetTest {
   @Test
   public void ctorNullParent() {
     exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
@@ -1021,10 +982,5 @@ public class ControlTest {
   public void setBounds() {
     Control control = new TestControl(this.shell, 0);
     control.setBounds(1, 2, 3, 4);
-  }
-
-  protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
   }
 }
