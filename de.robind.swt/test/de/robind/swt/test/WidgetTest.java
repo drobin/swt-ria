@@ -263,4 +263,16 @@ public class WidgetTest extends AbstractWidgetTest {
     assertThat(widget.getData("foo"), is(nullValue()));
     assertThat(widget.getData("bar"), is(nullValue()));
   }
+
+  @Test
+  public void getParent() {
+    Widget widget = new TestWidget(this.shell, 0);
+    assertThat(this.shell.getParent(), is(nullValue()));
+    assertThat(widget.getParent(), is(sameInstance((Widget)this.shell)));
+
+    Widget other = new TestWidget(widget, 0);
+    assertThat(other.getParent(), is(sameInstance(widget)));
+    assertThat(widget.getParent(), is(sameInstance((Widget)this.shell)));
+    assertThat(this.shell.getParent(), is(nullValue()));
+  }
 }

@@ -439,6 +439,28 @@ public abstract class Widget extends SWTObject {
   }
 
   /**
+   * Returns the parent (if any) of this widget.
+   * <p>
+   * NOTE: This method not not part of the official SWT-API.
+   *
+   * @return The parent widget. If this widget is the top of the object tree,
+   *         <code>null</code> is returned.
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public Widget getParent() throws SWTException {
+    checkWidget();
+    return (this.parent);
+  }
+
+  /**
    * Returns the receiver's style information.
    * <p>
    * Note that the value which is returned by this method may not match the
