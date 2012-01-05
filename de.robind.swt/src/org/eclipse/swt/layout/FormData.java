@@ -1,7 +1,9 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DelayedCreation;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
@@ -26,7 +28,7 @@ import org.eclipse.swt.widgets.Control;
  * of the control. FormData objects also allow you to set the width and height
  * of controls within a {@link FormLayout}.
  */
-public class FormData extends LayoutData {
+public class FormData extends SWTObject implements DelayedCreation {
   /**
    * Arguments passed to the creation-message.
    * @see #createLayout(Key)
@@ -92,10 +94,9 @@ public class FormData extends LayoutData {
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.layout.LayoutData#createLayoutData(org.eclipse.swt.server.Key)
+   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
    */
-  @Override
-  public void createLayoutData(Key key) throws Throwable {
+  public void createObject(Key key) throws Throwable {
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     clientTasks.createObject(key, getId(), getClass(), this.createArguments);
   }

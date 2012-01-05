@@ -1,7 +1,9 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DelayedCreation;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
@@ -42,7 +44,7 @@ import org.eclipse.swt.widgets.Control;
  * If the layout data for a control in a GridLayout is null at layout time,
  * a unique {@link GridData} object is created for it.
  */
-public class GridData extends LayoutData {
+public class GridData extends SWTObject implements DelayedCreation {
   /**
    * Arguments passed to the creation-message.
    * @see #createLayout(Key)
@@ -503,10 +505,9 @@ public class GridData extends LayoutData {
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.layout.LayoutData#createLayoutData(org.eclipse.swt.server.Key)
+   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
    */
-  @Override
-  public void createLayoutData(Key key) throws Throwable {
+  public void createObject(Key key) throws Throwable {
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     clientTasks.createObject(key, getId(), getClass(), this.createArguments);
   }

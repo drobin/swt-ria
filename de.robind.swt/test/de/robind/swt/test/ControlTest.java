@@ -14,9 +14,10 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.LayoutData;
+import org.eclipse.swt.server.DelayedCreation;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.widgets.Control;
@@ -948,16 +949,16 @@ public class ControlTest extends AbstractWidgetTest {
 
   @Test
   public void getsetLayoutDataSuccess() {
-    LayoutData data = new LayoutData() {
-      @Override
-      public void createLayoutData(Key key) throws Throwable {
+    class Foo extends SWTObject implements DelayedCreation {
+      public void createObject(Key key) throws Throwable {
       }
     };
+    Object data = new Foo();
 
     Control control = new TestControl(this.shell, 0);
     assertThat(control.getLayoutData(), is(nullValue()));
     control.setLayoutData(data);
-    assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));
+    assertThat(control.getLayoutData(), is(sameInstance(data)));
 
     // TODO Check what send to the client
   }

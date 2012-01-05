@@ -44,10 +44,9 @@ public class FillLayout extends Layout {
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.widgets.Layout#createLayout(org.eclipse.swt.server.Key)
+   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
    */
-  @Override
-  protected void createLayout(Key key) throws Throwable {
+  public void createObject(Key key) throws Throwable {
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     clientTasks.createObject(key, getId(), getClass(), type);
   }

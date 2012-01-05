@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.FocusListener;
@@ -18,8 +19,8 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.LayoutData;
 import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DelayedCreation;
 import org.eclipse.swt.server.DisplayPool;
 
 /**
@@ -752,22 +753,26 @@ public abstract class Control extends Widget implements Drawable {
    *      if not called from the thread that created the receiver
    *    </li>
    *    <li>{@link SWT#ERROR_INVALID_ARGUMENT} -
-   *      if <code>layoutData</code> is not derivated from {@link LayoutData}
+   *      invalid layoutData-instance. If must be an {@link SWTObject} and
+   *      needs to implement the {@link DelayedCreation}-interface.
    *    </li>
    *  </ul>
    */
   public void setLayoutData(Object layoutData) throws SWTException {
     checkWidget();
 
-    if (layoutData != null && !(layoutData instanceof LayoutData)) {
+    if ((layoutData != null) &&
+        (!(layoutData instanceof SWTObject) ||
+            !(layoutData instanceof DelayedCreation))) {
+
       throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
     }
 
-    LayoutData data = (LayoutData)layoutData;
+    DelayedCreation data = (DelayedCreation)layoutData;
 
     try {
       // Create the layout-data
-      data.createLayoutData(getDisplay().getKey());
+      data.createObject(getDisplay().getKey());
 
       // Assign the layout-data to this object
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();

@@ -358,7 +358,7 @@ public class Composite extends Scrollable {
 
     try {
       // Create the layout
-      layout.createLayout(getDisplay().getKey());
+      layout.createObject(getDisplay().getKey());
 
       // Assign the layout to this object
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
