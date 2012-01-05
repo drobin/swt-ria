@@ -39,6 +39,7 @@ public class AbstractWidgetTest {
 
   @After
   public void after() {
+    getClientTasks().clearState();
     this.shell = null;
     this.display = null;
   }
