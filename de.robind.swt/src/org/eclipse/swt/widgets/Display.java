@@ -2,6 +2,7 @@ package org.eclipse.swt.widgets;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -32,10 +33,9 @@ public class Display extends Device {
   Thread thread;
 
   /**
-   * Event received from the client.
-   * Needs to be handled.
+   * Things to do on the user-thread
    */
-  private Event nextEvent = null;
+  private Queue<ToDo> dispatcherQueue = new LinkedList<Display.ToDo>();
 
   /**
    * Constructs a new instance of this class.
@@ -77,6 +77,41 @@ public class Display extends Device {
   }
 
   /**
+   * Causes the {@link Runnable#run()} method of the runnable to be invoked by
+   * the user-interface thread at the next reasonable opportunity. The caller
+   * of this method continues to run in parallel, and is not notified when the
+   * runnable has completed. Specifying <code>null</code> as the runnable
+   * simply wakes the user-interface thread when run.
+   * <p>
+   * Note that at the time the runnable is invoked, widgets that have the
+   * receiver as their display may have been disposed. Therefore, it is
+   * necessary to check for this case inside the runnable before accessing
+   * the widget.
+   *
+   * @param runnable code to run on the user-interface thread or
+   *                 <code>null</code>
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_DEVICE_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public void asyncExec(Runnable runnable) throws SWTException {
+    super.checkDevice();
+
+    if (runnable == null) {
+      runnable = new Runnable() {
+        public void run() {
+        }
+      };
+    }
+
+    ToDo todo = new ToDo(runnable);
+    this.dispatcherQueue.offer(todo);
+  }
+
+  /**
    * Reads an event from the operating system's event queue, dispatches it
    * appropriately, and returns <code>true</code> if there is potentially more
    * work to do, or <code>false</code> if the caller can sleep until another
@@ -106,11 +141,16 @@ public class Display extends Device {
   public boolean readAndDispatch() throws SWTException {
     checkDevice();
     // TODO Check for ERROR_FAILED_EXEC
-    if (this.nextEvent != null) {
-      Widget widget = (Widget)SWTObject.findObjectById(this.nextEvent.swtObjectId);
-      widget.notifyListeners(this.nextEvent.type, this.nextEvent);
+    ToDo todo = null;
+    while ((todo = this.dispatcherQueue.poll()) != null) {
+      if (todo.event != null) {
+        Widget widget = (Widget)SWTObject.findObjectById(todo.event.swtObjectId);
+        widget.notifyListeners(todo.event.type, todo.event);
+      }
 
-      this.nextEvent = null;
+      if (todo.asyncExec != null) {
+        todo.asyncExec.run();
+      }
     }
 
     return (false);
@@ -138,8 +178,14 @@ public class Display extends Device {
 
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     try {
-      this.nextEvent = clientTasks.waitForEvent(key);
-      return (this.nextEvent != null);
+      Event event = clientTasks.waitForEvent(key);
+      if (event != null) {
+        ToDo todo = new ToDo(event);
+        this.dispatcherQueue.offer(todo);
+        return (true);
+      } else {
+        return (false);
+      }
     } catch (Exception e) {
       // TODO What is the best fitting exception-code
       SWTException exc = new SWTException();
@@ -325,6 +371,23 @@ public class Display extends Device {
   protected void destroy() {
     synchronized (Device.class) {
       Display.displayList.remove(this);
+    }
+  }
+
+  /**
+   * Something to do next on the user-thread.
+   * @see #readAndDispatch()
+   */
+  private static class ToDo {
+    Event event = null;
+    Runnable asyncExec = null;
+
+    ToDo(Event event) {
+      this.event = event;
+    }
+
+    ToDo(Runnable async) {
+      this.asyncExec = async;
     }
   }
 }
