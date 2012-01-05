@@ -98,6 +98,12 @@ public class DisposeTest {
         { Button.class, "removeSelectionListener", p(SelectionListener.class), a(new TestSelectionListener()) },
         { Button.class, "setText", p(String.class), a("") },
 
+        { Composite.class, "layout", p(), a() },
+        { Composite.class, "layout", p(boolean.class), a(true) },
+        { Composite.class, "layout", p(boolean.class, boolean.class), a(true, true) },
+        { Composite.class, "layout", p(Control[].class), a((Object)(new Control[] {})) },
+        { Composite.class, "layout", p(Control[].class, int.class), a((Object)(new Control[] {}), 1) },
+
         { List.class, "getSelectionIndices", p(), a() },
         { List.class, "getTopIndex", p(), a() },
         { List.class, "deselectAll", p(), a() },

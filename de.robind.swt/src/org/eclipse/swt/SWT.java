@@ -52,6 +52,11 @@ public class SWT {
   public static final int CENTER = 1 << 24;
 
   /**
+   * A constant indicating that widgets have changed. (value is 1<<1).
+   */
+  public static final int CHANGED = 1 << 1;
+
+  /**
    * Style constant for check box behavior (value is 1<<5).
    */
   public static final int CHECK = 1 << 5;
@@ -72,6 +77,12 @@ public class SWT {
    * Indicates that a default should be used (value is -1).
    */
   public static final int DEFAULT = -1;
+
+  /**
+   * A constant indicating that a given operation should be deferred.
+   * (value is 1<<2).
+   */
+  public static final int DEFER = 1 << 2;
 
   /**
    * Style constant for align down behavior (value is 1<<10), since align
@@ -155,6 +166,12 @@ public class SWT {
    * (value is 5).
    */
   public static final int ERROR_INVALID_ARGUMENT = 5;
+
+  /**
+   * SWT error constant indicating that a provided widget can not be used as a
+   * parent in the current operation (value is 32).
+   */
+  public static final int ERROR_INVALID_PARENT = 32;
 
   /**
    * SWT error constant indicating that an attempt was made to subclass an SWT
@@ -653,6 +670,7 @@ public class SWT {
       case SWT.ERROR_FAILED_EXEC: return ("FAILED_EXEC");
       case SWT.ERROR_INVALID_ARGUMENT: return ("INVALID_ARGUMENT");
       case SWT.ERROR_INVALID_MESSAGE: return ("INVALID_MESSAGE");
+      case SWT.ERROR_INVALID_PARENT: return ("INVALID_PARENT");
       case SWT.ERROR_INVALID_SUBCLASS: return ("INVALID_SUBCLASS");
       case SWT.ERROR_NOT_IMPLEMENTED: return ("NOT_IMPLEMENTED");
       case SWT.ERROR_NULL_ARGUMENT: return ("NULL_ARGUMENT");

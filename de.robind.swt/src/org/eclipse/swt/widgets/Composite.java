@@ -103,6 +103,241 @@ public class Composite extends Scrollable {
   }
 
   /**
+   * If the receiver has a layout, asks the layout to lay out (that is, set
+   * the size and location of) the receiver's children. If the receiver does
+   * not have a layout, do nothing.
+   * <p>
+   * This is equivalent to calling {@link #layout(true)}.
+   * <p>
+   * Note: Layout is different from painting. If a child is moved or resized
+   * such that an area in the parent is exposed, then the parent will paint.
+   * If no child is affected, the parent will not paint.
+   *
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   * @see #layout(boolean)
+   */
+  public void layout() throws SWTException {
+    checkWidget();
+    layout(true);
+  }
+
+  /**
+   * If the receiver has a layout, asks the layout to lay out (that is, set
+   * the size and location of) the receiver's children. If the argument is
+   * <code>true</code> the layout must not rely on any information it has
+   * cached about the immediate children. If it is <code>false</code> the
+   * layout may (potentially) optimize the work it is doing by assuming that
+   * none of the receiver's children has changed state since the last layout.
+   * If the receiver does not have a layout, do nothing.
+   * <p>
+   * If a child is resized as a result of a call to layout, the resize event
+   * will invoke the layout of the child. The layout will cascade down through
+   * all child widgets in the receiver's widget tree until a child is
+   * encountered that does not resize. Note that a layout due to a resize will
+   * not flush any cached information (same as {@link #layout(false)}).
+   * <p>
+   * Note: Layout is different from painting. If a child is moved or resized
+   * such that an area in the parent is exposed, then the parent will paint. If
+   * no child is affected, the parent will not paint.
+   *
+   * @param changed <code>true</code> if the layout must flush its caches, and
+   *                <code>false</code> otherwise.
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void layout(boolean changed) throws SWTException {
+    checkWidget();
+    layout(changed, false);
+  }
+
+  /**
+   * If the receiver has a layout, asks the layout to lay out (that is, set the
+   * size and location of) the receiver's children. If the changed argument is
+   * <code>true</code> the layout must not rely on any information it has
+   * cached about its children. If it is <code>false</code> the layout may
+   * (potentially) optimize the work it is doing by assuming that none of the
+   * receiver's children has changed state since the last layout. If the all
+   * argument is <code>true</code> the layout will cascade down through all
+   * child widgets in the receiver's widget tree, regardless of whether the
+   * child has changed size. The changed argument is applied to all layouts. If
+   * the all argument is <code>false</code>, the layout will not cascade down
+   * through all child widgets in the receiver's widget tree. However, if a
+   * child is resized as a result of a call to layout, the resize event will
+   * invoke the layout of the child. Note that a layout due to a resize will
+   * not flush any cached information (same as {@link #layout(false)}).
+   * <p>
+   * Note: Layout is different from painting. If a child is moved or resized
+   * such that an area in the parent is exposed, then the parent will paint. If
+   * no child is affected, the parent will not paint.
+   *
+   * @param changed <code>true</code> if the layout must flush its caches, and
+   *                <code>false</code> otherwise
+   * @param all <code>true</code> if all children in the receiver's widget tree
+   *            should be laid out, and <code>false</code> otherwise
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void layout(boolean changed, boolean all) throws SWTException {
+    checkWidget();
+
+    getDisplay().callMethod(getId(), "layout", changed, all);
+  }
+
+  /**
+   * Forces a lay out (that is, sets the size and location) of all widgets that
+   * are in the parent hierarchy of the changed control up to and including the
+   * receiver. The layouts in the hierarchy must not rely on any information
+   * cached about the changed control or any of its ancestors. The layout may
+   * (potentially) optimize the work it is doing by assuming that none of the
+   * peers of the changed control have changed state since the last layout. If
+   * an ancestor does not have a layout, skip it.
+   * <p>
+   * Note: Layout is different from painting. If a child is moved or resized
+   * such that an area in the parent is exposed, then the parent will paint. If
+   * no child is affected, the parent will not paint.
+   *
+   * @param changed a control that has had a state change which requires a
+   *                recalculation of its size
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_INVALID_ARGUMENT} -
+   *      if the changed array is null any of its controls are null or have
+   *      been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_INVALID_PARENT} -
+   *      if any control in changed is not in the widget tree of the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void layout(Control[] changed) throws SWTException {
+    checkWidget();
+    layout(changed, SWT.NONE);
+  }
+
+  /**
+   * Forces a lay out (that is, sets the size and location) of all widgets that
+   * are in the parent hierarchy of the changed control up to and including the
+   * receiver.
+   * <p>
+   * The parameter <code>flags</code> may be a combination of:
+   *
+   * <dl>
+   *  <dt><b>{@link SWT#ALL}</b></dt>
+   *  <dd>all children in the receiver's widget tree should be laid out</dd>
+   *  <dt><b>{@link SWT#CHANGED}</b></dt>
+   *  <dd>the layout must flush its caches</dd>
+   *  <dt><b>{@link SWT#DEFER}</b></dt>
+   *  <dd>layout will be deferred</dd>
+   * </dl>
+   *
+   * When the changed array is specified, the flags {@link SWT#ALL} and
+   * {@link SWT#CHANGED} have no effect. In this case, the layouts in the
+   * hierarchy must not rely on any information cached about the changed
+   * control or any of its ancestors. The layout may (potentially) optimize the
+   * work it is doing by assuming that none of the peers of the changed control
+   * have changed state since the last layout. If an ancestor does not have a
+   * layout, skip it.
+   * <p>
+   * When the <code>changed</code> array is not specified, the flag
+   * {@link SWT#ALL} indicates that the whole widget tree should be laid out.
+   * And the flag {@link SWT#CHANGED} indicates that the layouts should flush
+   * any cached information for all controls that are laid out.
+   * <p>
+   * The {@link SWT#DEFER} flag always causes the layout to be deferred by
+   * calling <code>Composite.setLayoutDeferred(true)</code> and scheduling a
+   * call to <code>Composite.setLayoutDeferred(false)</code>, which will happen
+   * when appropriate (usually before the next event is handled). When this
+   * flag is set, the application should not call
+   * <code>Composite.setLayoutDeferred(boolean)</code>.
+   * <p>
+   * Note: Layout is different from painting. If a child is moved or resized
+   * such that an area in the parent is exposed, then the parent will paint.
+   * If no child is affected, the parent will not paint.
+   *
+   * @param changed a control that has had a state change which requires a
+   *                recalculation of its size
+   * @param flags the flags specifying how the layout should happen
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_INVALID_ARGUMENT} -
+   *      if the changed array is null any of its controls are null or have
+   *      been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_INVALID_PARENT} -
+   *      if any control in changed is not in the widget tree of the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void layout(Control[] changed, int flags) throws SWTException {
+    checkWidget();
+
+    if (changed == null) {
+      throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+    }
+
+    for (Control control: changed) {
+      if (control == null) {
+        throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+      }
+
+      if (control.isDisposed()) {
+        throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+      }
+
+      Widget composite = control.getParent();
+      boolean detected = false;
+      while (composite != null) {
+        if (composite == this) {
+          detected = true;
+          break;
+        }
+
+        composite = composite.getParent();
+      }
+
+      if (!detected) {
+        throw new SWTException(SWT.ERROR_INVALID_PARENT);
+      }
+    }
+
+
+  }
+
+  /**
    * Sets the layout which is associated with the receiver to be the argument
    * which may be <code>null</code>.
    *
