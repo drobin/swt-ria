@@ -28,6 +28,7 @@ import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
+import org.eclipse.swt.test.TestScrollable;
 import org.eclipse.swt.test.TestWidget;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -105,20 +106,6 @@ public class InvalidAccessTest {
         { List.class, "setItems", p(String[].class), a((Object)(new String[] {})) },
         { List.class, "setTopIndex", p(int.class), a(0) },
 
-        { TestWidget.class, "getStyle", p(), a() },
-        { TestWidget.class, "addListener", p(int.class, Listener.class), a(0, new TestListener()) },
-        { TestWidget.class, "removeListener", p(int.class, Listener.class), a(0, new TestListener()) },
-        { TestWidget.class, "isListening", p(int.class), a(0) },
-        { TestWidget.class, "notifyListeners", p(int.class, Event.class), a(0, new Event()) },
-        { TestWidget.class, "getListeners", p(int.class), a(0) },
-        { TestWidget.class, "addDisposeListener", p(DisposeListener.class), a(new TestDisposeListener()) },
-        { TestWidget.class, "removeDisposeListener", p(DisposeListener.class), a(new TestDisposeListener()) },
-        { TestWidget.class, "getData", p(), a() },
-        { TestWidget.class, "getData", p(String.class), a("foo") },
-        { TestWidget.class, "setData", p(Object.class), a((Object)null) },
-        { TestWidget.class, "setData", p(String.class, Object.class), a("foo", "bar") },
-        { TestWidget.class, "reskin", p(int.class), a(0) },
-
         { TestControl.class, "addControlListener", p(ControlListener.class), a(new TestControlListener()) },
         { TestControl.class, "addDragDetectListener", p(DragDetectListener.class), a(new TestDragDetectListener()) },
         { TestControl.class, "addFocusListener", p(FocusListener.class), a(new TestFocusListener()) },
@@ -148,6 +135,22 @@ public class InvalidAccessTest {
         { TestControl.class, "setBounds", p(int.class, int.class, int.class, int.class), a(0, 0, 0, 0) },
         { TestControl.class, "setLayoutData", p(Object.class), a((Object)null) },
         { TestControl.class, "setRedraw", p(boolean.class), a(true) },
+
+        { TestScrollable.class, "getClientArea", p(), a() },
+
+        { TestWidget.class, "getStyle", p(), a() },
+        { TestWidget.class, "addListener", p(int.class, Listener.class), a(0, new TestListener()) },
+        { TestWidget.class, "removeListener", p(int.class, Listener.class), a(0, new TestListener()) },
+        { TestWidget.class, "isListening", p(int.class), a(0) },
+        { TestWidget.class, "notifyListeners", p(int.class, Event.class), a(0, new Event()) },
+        { TestWidget.class, "getListeners", p(int.class), a(0) },
+        { TestWidget.class, "addDisposeListener", p(DisposeListener.class), a(new TestDisposeListener()) },
+        { TestWidget.class, "removeDisposeListener", p(DisposeListener.class), a(new TestDisposeListener()) },
+        { TestWidget.class, "getData", p(), a() },
+        { TestWidget.class, "getData", p(String.class), a("foo") },
+        { TestWidget.class, "setData", p(Object.class), a((Object)null) },
+        { TestWidget.class, "setData", p(String.class, Object.class), a("foo", "bar") },
+        { TestWidget.class, "reskin", p(int.class), a(0) },
     };
     return (Arrays.asList(data));
   }

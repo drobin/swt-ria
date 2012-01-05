@@ -5,9 +5,12 @@ import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.test.TestScrollable;
 import org.eclipse.swt.widgets.Scrollable;
 import org.junit.Test;
@@ -48,5 +51,25 @@ public class ScrollableTest extends AbstractWidgetTest {
   public void ctorStyle() {
     TestScrollable scrollable = new TestScrollable(this.shell, 4711);
     assertThat(scrollable.getStyle(), is(4711));
+  }
+
+  @Test
+  public void getClientArea() {
+    Map<String, Object> clientArea = new HashMap<String, Object>();
+    clientArea.put("x", 1);
+    clientArea.put("y", 2);
+    clientArea.put("width", 3);
+    clientArea.put("height", 4);
+
+    getClientTasks().setCallMethodResult(clientArea);
+
+    Scrollable scrollable = new TestScrollable(this.shell, 0);
+    Rectangle rect = scrollable.getClientArea();
+
+    assertThat(rect.x, is(1));
+    assertThat(rect.y, is(2));
+    assertThat(rect.width, is(3));
+    assertThat(rect.height, is(4));
+
   }
 }
