@@ -1,5 +1,7 @@
 package org.eclipse.swt.layout;
 
+import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
@@ -122,7 +124,7 @@ public class FormLayout extends Layout {
    */
   @Override
   protected void createLayout(Key key) throws Throwable {
-    // TODO Auto-generated method stub
-
+    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    clientTasks.createObject(key, getId(), getClass());
   }
 }
