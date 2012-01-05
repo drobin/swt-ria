@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static de.robind.swt.test.utils.TypedEventMatcher.event;
@@ -957,6 +958,8 @@ public class ControlTest extends AbstractWidgetTest {
     assertThat(control.getLayoutData(), is(nullValue()));
     control.setLayoutData(data);
     assertThat((LayoutData)control.getLayoutData(), is(sameInstance(data)));
+
+    // TODO Check what send to the client
   }
 
   @Test
@@ -976,11 +979,15 @@ public class ControlTest extends AbstractWidgetTest {
     assertThat(rect.y, is(2));
     assertThat(rect.width, is(3));
     assertThat(rect.height, is(4));
+
+    assertThat(getClientTasks(), is(callRequest(control, "getBounds")));
   }
 
   @Test
   public void setBounds() {
     Control control = new TestControl(this.shell, 0);
     control.setBounds(1, 2, 3, 4);
+
+    assertThat(getClientTasks(), is(callRequest(control, "setBounds", 1, 2, 3, 4)));
   }
 }

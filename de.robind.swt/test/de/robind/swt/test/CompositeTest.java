@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static org.hamcrest.core.Is.is;
@@ -51,18 +52,21 @@ public class CompositeTest extends AbstractWidgetTest {
   public void layout() {
     Composite composite = new Composite(this.shell, 4711);
     composite.layout();
+    assertThat(getClientTasks(), is(callRequest(composite, "layout", true, false)));
   }
 
   @Test
   public void layoutBoolean() {
     Composite composite = new Composite(this.shell, 4711);
     composite.layout(true);
+    assertThat(getClientTasks(), is(callRequest(composite, "layout", true, false)));
   }
 
   @Test
   public void layoutBooleanBoolean() {
     Composite composite = new Composite(this.shell, 4711);
     composite.layout(true, true);
+    assertThat(getClientTasks(), is(callRequest(composite, "layout", true, true)));
   }
 
   @Test
@@ -119,6 +123,7 @@ public class CompositeTest extends AbstractWidgetTest {
     };
 
     composite.layout(changed);
+    assertThat(getClientTasks(), is(callRequest(composite, "layout", changed, SWT.NONE)));
   }
 
   @Test
@@ -175,5 +180,6 @@ public class CompositeTest extends AbstractWidgetTest {
     };
 
     composite.layout(changed, SWT.NONE);
+    assertThat(getClientTasks(), is(callRequest(composite, "layout", changed, SWT.NONE)));
   }
 }

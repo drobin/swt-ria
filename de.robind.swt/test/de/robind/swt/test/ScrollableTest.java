@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static org.hamcrest.core.Is.is;
@@ -71,5 +72,6 @@ public class ScrollableTest extends AbstractWidgetTest {
     assertThat(rect.width, is(3));
     assertThat(rect.height, is(4));
 
+    assertThat(getClientTasks(), is(callRequest(scrollable, "getClientArea")));
   }
 }

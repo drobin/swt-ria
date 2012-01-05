@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static org.hamcrest.core.Is.is;
@@ -60,6 +61,7 @@ public class ListTest extends AbstractWidgetTest {
 
     List list = new List(this.shell, 4711);
     assertThat(list.getSelectionIndices().length, is(0));
+    assertThat(getClientTasks(), is(callRequest(list, "getSelectionIndices")));
   }
 
   @Test
@@ -68,18 +70,21 @@ public class ListTest extends AbstractWidgetTest {
 
     List list = new List(this.shell, 4711);
     assertThat(list.getTopIndex(), is(0));
+    assertThat(getClientTasks(), is(callRequest(list, "getTopIndex")));
   }
 
   @Test
   public void deselectAll() {
     List list = new List(this.shell, 4711);
     list.deselectAll();
+    assertThat(getClientTasks(), is(callRequest(list, "deselectAll")));
   }
 
   @Test
   public void removeAll() {
     List list = new List(this.shell, 4711);
     list.removeAll();
+    assertThat(getClientTasks(), is(callRequest(list, "removeAll")));
   }
 
   @Test
@@ -100,13 +105,16 @@ public class ListTest extends AbstractWidgetTest {
 
   @Test
   public void setItems() {
+    String[] items = new String[] { "foo", "bar" };
     List list = new List(this.shell, 4711);
-    list.setItems(new String[] { "foo", "bar" });
+    list.setItems(items);
+    assertThat(getClientTasks(), is(callRequest(list, "setItems", (Object)items)));
   }
 
   @Test
   public void setTopIndex() {
     List list = new List(this.shell, 4711);
     list.setTopIndex(0);
+    assertThat(getClientTasks(), is(callRequest(list, "setTopIndex", 0)));
   }
 }

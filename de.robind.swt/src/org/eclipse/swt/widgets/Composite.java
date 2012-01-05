@@ -334,7 +334,7 @@ public class Composite extends Scrollable {
       }
     }
 
-
+    getDisplay().callMethod(getId(), "layout", changed, flags);
   }
 
   /**

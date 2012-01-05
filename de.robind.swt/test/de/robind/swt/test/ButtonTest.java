@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static de.robind.swt.test.utils.TypedEventMatcher.event;
@@ -211,5 +212,6 @@ public class ButtonTest extends AbstractWidgetTest {
 
     button.setText("foo");
     assertThat(button.getText(), is(equalTo("foo")));
+    assertThat(getClientTasks(), is(callRequest(button, "setText", "foo")));
   }
 }
