@@ -1,6 +1,8 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
 
@@ -25,6 +27,12 @@ import org.eclipse.swt.widgets.Control;
  * of controls within a {@link FormLayout}.
  */
 public class FormData extends LayoutData {
+  /**
+   * Arguments passed to the creation-message.
+   * @see #createLayout(Key)
+   */
+  private Object createArguments[] = {};
+
   /**
    * left specifies the attachment of the left side of the control.
    */
@@ -77,6 +85,10 @@ public class FormData extends LayoutData {
   public FormData(int width, int height) {
     this.width = width;
     this.height = height;
+    this.createArguments = new Object[] {
+      this.width,
+      this.height
+    };
   }
 
   /* (non-Javadoc)
@@ -84,7 +96,7 @@ public class FormData extends LayoutData {
    */
   @Override
   public void createLayoutData(Key key) throws Throwable {
-    // TODO Auto-generated method stub
+    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    clientTasks.createObject(key, getId(), getClass(), this.createArguments);
   }
-
 }
