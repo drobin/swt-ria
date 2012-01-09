@@ -110,7 +110,7 @@ public class ClientTasksImpl implements ClientTasks {
     SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
     SWTAttrRequest request = app.getMessageFactory().createAttrRequest(
-        id, attrName, attrValue);
+        id, attrName, normalizeArgument(attrValue));
 
     Channels.write(app.getChannel(), request);
     SWTResponse response = app.getResponseQueue().take();
@@ -150,6 +150,24 @@ public class ClientTasksImpl implements ClientTasks {
   }
 
   /**
+   * Normalizes a single argument.
+   * <p>
+   * If a {@link SWTObject} is passed to the method, the the related
+   * {@link SWTObjectId} is returned. Otherwise the argument is simply
+   * returned.
+   *
+   * @param arg The argument to check
+   * @return The normalized argument
+   */
+  private Object normalizeArgument(Object arg) {
+    if (arg instanceof SWTObject) {
+      return new SWTObjectId(((SWTObject)arg).getId());
+    } else {
+      return (arg);
+    }
+  }
+
+  /**
    * Normalize the given argument-list.
    * <p>
    * If a {@link SWTObject} is placed into the array, it is replaced by the
@@ -162,11 +180,7 @@ public class ClientTasksImpl implements ClientTasks {
     Object result[] = new Object[args.length];
 
     for (int i = 0; i < args.length; i++) {
-      if (args[i] instanceof SWTObject) {
-        result[i] = new SWTObjectId(((SWTObject)args[i]).getId());
-      } else {
-        result[i] = args[i];
-      }
+      result[i] = normalizeArgument(args[i]);
     }
 
     return (result);
