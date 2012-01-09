@@ -1,5 +1,8 @@
 package org.eclipse.swt.layout;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
@@ -42,6 +45,12 @@ public class FormData extends SWTObject implements DelayedCreation {
    * Flag shows if the object is already created on the client.
    */
   private boolean created = false;
+
+  /**
+   * Queue holds name of attributes, which where updated while the object
+   * was not created at the client.
+   */
+  private Queue<String> updateAttributeQueue = new LinkedList<String>();
 
   /**
    * left specifies the attachment of the left side of the control.
@@ -128,6 +137,14 @@ public class FormData extends SWTObject implements DelayedCreation {
     if (this.bottom != null) {
       this.bottom.createObject(key);
     }
+
+    while (!this.updateAttributeQueue.isEmpty()) {
+      // Some attributes where updated before the object was created, perform
+      // operation now.
+      String field = this.updateAttributeQueue.poll();
+      Display display = Display.getCurrent();
+      display.updateAttribute(this, field);
+    }
   }
 
   /**
@@ -142,6 +159,9 @@ public class FormData extends SWTObject implements DelayedCreation {
       // related update-message now.
       Display display = Display.getCurrent();
       display.updateAttribute(this, field);
+    } else {
+      // The object is currently not created, schedule operation for later
+      this.updateAttributeQueue.offer(field);
     }
   }
 }
