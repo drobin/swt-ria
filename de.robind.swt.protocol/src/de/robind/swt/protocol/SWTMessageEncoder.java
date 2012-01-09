@@ -14,6 +14,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
 import de.robind.swt.msg.SWTAttrRequest;
+import de.robind.swt.msg.SWTAttrResponse;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTEvent;
@@ -163,6 +164,8 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       return (SWTProtocol.OP_NEW);
     } else if (msg instanceof SWTRegResponse) {
       return (SWTProtocol.OP_REG);
+    } else if (msg instanceof SWTAttrResponse) {
+      return (SWTProtocol.OP_ATTR);
     }
 
     throw new SWTProtocolException(
