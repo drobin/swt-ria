@@ -2,6 +2,11 @@ package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
+import org.eclipse.swt.SWTObject;
+import org.eclipse.swt.server.ClientTasks;
+import org.eclipse.swt.server.DelayedCreation;
+import org.eclipse.swt.server.DisplayPool;
+import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
 
 /**
@@ -64,7 +69,13 @@ import org.eclipse.swt.widgets.Control;
  * centered between the left and right sides of the button control. If the
  * alignment is not specified, the default is to attach to the adjacent side.
  */
-public class FormAttachment {
+public class FormAttachment extends SWTObject implements DelayedCreation {
+  /**
+   * Arguments passed to the creation-message.
+   * @see #createLayout(Key)
+   */
+  private Object createArguments[] = {};
+
   /**
    * alignment specifies the alignment of the control side that is attached to
    * a control.
@@ -205,6 +216,12 @@ public class FormAttachment {
     this.control = control;
     this.offset = offset;
     this.alignment = alignment;
+
+    this.createArguments = new Object[] {
+        this.control,
+        this.offset,
+        this.alignment
+    };
   }
 
   /**
@@ -248,5 +265,19 @@ public class FormAttachment {
     this.numerator = numerator;
     this.denominator = denominator;
     this.offset = offset;
+
+    this.createArguments = new Object[] {
+      this.numerator,
+      this.denominator,
+      this.offset
+    };
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
+   */
+  public void createObject(Key key) throws Throwable {
+    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    clientTasks.createObject(key, getId(), getClass(), this.createArguments);
   }
 }
