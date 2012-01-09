@@ -29,6 +29,11 @@ public class SWTProtocol {
   public static final byte OP_REG = 3;
 
   /**
+   * Operation: update an attribute
+   */
+  public static final byte OP_ATTR = 4;
+
+  /**
    * A request-message.
    */
   public static final byte TYPE_REQ = 0x00;

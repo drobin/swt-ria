@@ -78,7 +78,7 @@ public class SWTMessageDecoder extends FrameDecoder {
     }
 
     if (operation != SWTProtocol.OP_NEW && operation != SWTProtocol.OP_CALL &&
-        operation != SWTProtocol.OP_REG) {
+        operation != SWTProtocol.OP_REG && operation != SWTProtocol.OP_ATTR) {
 
       buffer.resetReaderIndex();
       throw new SWTProtocolException("Invalid operation: " + operation);
@@ -203,6 +203,17 @@ public class SWTMessageDecoder extends FrameDecoder {
       boolean enable = readBoolean(buffer);
 
       return (this.factory.createRegRequest(objId, eventType, enable));
+    } else if (operation == SWTProtocol.OP_ATTR) {
+      int objId = readInteger(buffer);
+      String attrName = readString(buffer);
+
+      if (attrName.length() == 0) {
+        throw new SWTProtocolException("Name of attribute cannot be empty");
+      }
+
+      Object attrValue = readAny(buffer);
+
+      return (this.factory.createAttrRequest(objId, attrName, attrValue));
     } else {
       return (null);
     }
