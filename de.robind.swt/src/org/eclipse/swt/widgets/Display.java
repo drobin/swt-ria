@@ -321,7 +321,7 @@ public class Display extends Device {
     checkDevice();
 
     try {
-      Object attrValue = obj.getClass().getField(attrName).get(attrName);
+      Object attrValue = obj.getClass().getField(attrName).get(obj);
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
 
       clientTasks.updateAttribute(getKey(), obj.getId(), attrName, attrValue);
