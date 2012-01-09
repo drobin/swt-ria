@@ -91,7 +91,14 @@ public class SWTException extends RuntimeException {
    */
   @Override
   public String toString() {
-    return getClass().getSimpleName() +
-        "[code=" + SWT.errorToString(this.code) + "]";
+    String message = getMessage();
+
+    if (message != null && message.length() > 0) {
+      return getClass().getSimpleName() +
+          "[code=" + SWT.errorToString(this.code) + "]: " + message;
+    } else {
+      return getClass().getSimpleName() +
+          "[code=" + SWT.errorToString(this.code) + "]";
+    }
   }
 }
