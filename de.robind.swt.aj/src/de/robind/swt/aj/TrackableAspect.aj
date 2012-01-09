@@ -1,7 +1,7 @@
 package de.robind.swt.aj;
 
-import org.eclipse.swt.server.Trackable;
 import org.aspectj.lang.Signature;
+import org.eclipse.swt.server.Trackable;
 
 /**
  * Aspect tracks fields annotated with the {@link Trackable}-annotation.
@@ -14,15 +14,21 @@ public aspect TrackableAspect {
   /**
    * The pointcut tracks fields annotated with the
    * {@link Trackable}-annotation.
+   * 
+   * @param obj The object, where the field is located
+   * @param value The new value
    */
-  pointcut setTrackable():
-    set(@Trackable * *);
-  
+  pointcut setTrackable(Object obj, Object value):
+    (set(@Trackable * *)) && target(obj) && args(value);
+
   /**
    * Hook into after {@link Trackable}-annotated fields are updated.
    */
-  after(): setTrackable() {
+  after(Object obj, Object value): setTrackable(obj, value) {
     Signature sig = thisJoinPoint.getSignature();
-    System.err.println("Updated: " + sig);
+
+    System.err.println(
+        "Updated: " + obj.getClass().getName() + "." + sig.getName() +
+        " with " + value);
   }
 }
