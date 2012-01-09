@@ -1,6 +1,7 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.ClientTasks;
 import org.eclipse.swt.server.DelayedCreation;
@@ -8,6 +9,7 @@ import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * Instances of this class are used to define the attachments of a control in
@@ -35,6 +37,11 @@ public class FormData extends SWTObject implements DelayedCreation {
    * @see #createLayout(Key)
    */
   private Object createArguments[] = {};
+
+  /**
+   * Flag shows if the object is already created on the client.
+   */
+  private boolean created = false;
 
   /**
    * left specifies the attachment of the left side of the control.
@@ -106,6 +113,7 @@ public class FormData extends SWTObject implements DelayedCreation {
   public void createObject(Key key) throws Throwable {
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     clientTasks.createObject(key, getId(), getClass(), this.createArguments);
+    this.created = true;
 
     // If attributes are already assigned, create them now
     if (this.left != null) {
@@ -126,7 +134,14 @@ public class FormData extends SWTObject implements DelayedCreation {
    * Invoked, if an attribute of the class has changed.
    *
    * @param field The name of the attribute-field, which has changed
+   * @throws SWTException if the attribute was not updated at the client
    */
-  public void attributeChanged(String field) {
+  public void attributeChanged(String field) throws SWTException {
+    if (this.created) {
+      // The object is already known by the client, it's safe to generate the
+      // related update-message now.
+      Display display = Display.getCurrent();
+      display.updateAttribute(this, field);
+    }
   }
 }
