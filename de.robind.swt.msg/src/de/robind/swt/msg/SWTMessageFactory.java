@@ -2,6 +2,7 @@ package de.robind.swt.msg;
 
 import java.util.Map;
 
+import de.robind.swt.msg.impl.SWTAttrRequestImpl;
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
 import de.robind.swt.msg.impl.SWTCallResponseImpl;
 import de.robind.swt.msg.impl.SWTEventImpl;
@@ -126,5 +127,29 @@ public class SWTMessageFactory {
    */
   public SWTEvent createEvent(int objId, Map<String, Object> attributes) {
     return (new SWTEventImpl(objId, attributes));
+  }
+
+  /**
+   * Creates a new {@link SWTAttrRequest}-message.
+   *
+   * @param objId The id of the destination object
+   * @param attrName The name of the attribute
+   * @param attrValue The new value of the attribute
+   * @return The new message
+   * @throws NullPointerException if <code>attrName</code> is <code>null</code>
+   */
+  public SWTAttrRequest createAttrRequest(
+      int objId, String attrName, Object attrValue)
+          throws NullPointerException {
+
+    if (attrName == null) {
+      throw new NullPointerException("attrName cannot be null");
+    }
+
+    if (attrName.length() == 0) {
+      throw new IllegalArgumentException("attrName cannot be empty");
+    }
+
+    return (new SWTAttrRequestImpl(objId, attrName, attrValue));
   }
 }
