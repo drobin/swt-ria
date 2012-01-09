@@ -1,6 +1,12 @@
 package de.robind.swt.aj;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.log4j.Logger;
 import org.aspectj.lang.Signature;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.Trackable;
 
@@ -12,6 +18,11 @@ import org.eclipse.swt.server.Trackable;
  * @author Robin Doer
  */
 public aspect TrackableAspect {
+  /**
+   * The logger of the aspect
+   */
+  private static final Logger logger = Logger.getLogger(TrackableAspect.class);
+  
   /**
    * The pointcut tracks fields annotated with the
    * {@link Trackable}-annotation.
@@ -29,9 +40,22 @@ public aspect TrackableAspect {
     SWTObject obj = checkTarget(target);
     Signature sig = thisJoinPoint.getSignature();
 
-    System.err.println(
-        "Updated: " + obj.getClass().getName() + "." + sig.getName() +
-        " with " + value);
+    logger.debug("Attribute change tracked: " +
+        obj.getClass().getName() + "." + sig.getName());
+
+    try {
+      callChangedMethod(obj, sig.getName());
+    } catch (InvocationTargetException e) {
+      // TODO Here we need a better error-code
+      SWTException exc = new SWTException(SWT.ERROR_UNSPECIFIED);
+      exc.throwable = e.getCause();
+      throw exc;
+    } catch (Exception e) {
+      // TODO Here we need a better error-code
+      SWTException exc = new SWTException(SWT.ERROR_UNSPECIFIED);
+      exc.throwable = e;
+      throw exc;
+    }
   }
   
   /**
@@ -53,5 +77,22 @@ public aspect TrackableAspect {
           target.getClass().getName() + " must be a subclass of " +
           SWTObject.class.getName());
     }
+  }
+  
+  /**
+   * Invokes a method <code>attributeChanged</code> on the destination-object.
+   * 
+   * @param obj The object, which is invoked
+   * @param field The name of the field, which has changed
+   * @throws NoSuchMethodException if no such method exists
+   * @throws InvocationTargetException if the method has thrown an exception
+   * @throws IllegalAccessException if the method is not accessible
+   */
+  private static void callChangedMethod(SWTObject obj, String field)
+      throws NoSuchMethodException, InvocationTargetException,
+             IllegalAccessException {
+
+    Method m = obj.getClass().getMethod("attributeChanged", String.class);
+    m.invoke(obj, field);
   }
 }
