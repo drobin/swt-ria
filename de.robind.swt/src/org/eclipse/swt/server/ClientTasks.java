@@ -44,6 +44,18 @@ public interface ClientTasks {
       throws Throwable;
 
   /**
+   * Asks the client to update an attribute.
+   *
+   * @param key The key of the client-connection
+   * @param id The if of the destination object
+   * @param attrName The name of the attribute to update
+   * @param attrValue The new value of the attribute
+   * @throws Throwable failed to update the attribute
+   */
+  void updateAttribute(Key key, int id, String attrName, Object attrValue)
+      throws Throwable;
+
+  /**
    * Receives an event from the client.
    * <p>
    * The method blocks the calling thread until an event arrives.

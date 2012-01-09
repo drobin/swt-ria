@@ -9,21 +9,32 @@ import org.eclipse.swt.widgets.Event;
 
 public class TestClientTasks implements ClientTasks {
   private Object callMethodResult = null;
-  Queue<RequestStore> callRequestQueue = new LinkedList<TestClientTasks.RequestStore>();
+  Queue<CallRequestStore> callRequestQueue = new LinkedList<TestClientTasks.CallRequestStore>();
+  Queue<AttrRequestStore> attrRequestQueue = new LinkedList<TestClientTasks.AttrRequestStore>();
 
-  enum RequestType {
-    Call
-  };
-
-  static class RequestStore {
-    RequestType type;
+  static abstract class AbstractRequestStore {
     Key key;
     int id;
+
+    protected boolean matches(int id) {
+      if (this.id != id) {
+        return (false);
+      }
+
+      return (true);
+    }
+  }
+
+  static class CallRequestStore extends AbstractRequestStore {
     String method;
     Object args[];
 
     boolean matches(int id, String m, Object args[]) {
-      if (this.id != id || !m.equals(this.method)) {
+      if (!super.matches(id)) {
+        return (false);
+      }
+
+      if (!m.equals(this.method)) {
         return (false);
       }
 
@@ -41,6 +52,26 @@ public class TestClientTasks implements ClientTasks {
     }
   }
 
+  static class AttrRequestStore extends AbstractRequestStore {
+    String attrName;
+    Object attrValue;
+
+    boolean matches(int id, String attrName, Object attrValue) {
+      if (!super.matches(id)) {
+        return (false);
+      }
+
+      if (!attrName.equals(this.attrName)) {
+        return (false);
+      }
+
+      if (!attrValue.equals(this.attrValue)) {
+        return (false);
+      }
+
+      return (true);
+    }
+  }
   public void setCallMethodResult(Object result) {
     this.callMethodResult = result;
   }
@@ -62,8 +93,7 @@ public class TestClientTasks implements ClientTasks {
     Object result = this.callMethodResult;
     this.callMethodResult = null;
 
-    RequestStore store = new RequestStore();
-    store.type = RequestType.Call;
+    CallRequestStore store = new CallRequestStore();
     store.key = key;
     store.id = id;
     store.method = method;
@@ -71,6 +101,17 @@ public class TestClientTasks implements ClientTasks {
     this.callRequestQueue.offer(store);
 
     return (result);
+  }
+
+  public void updateAttribute(Key key, int id, String attrName, Object attrValue)
+      throws Throwable {
+
+    AttrRequestStore store = new AttrRequestStore();
+    store.key = key;
+    store.id = id;
+    store.attrName = attrName;
+    store.attrValue = attrValue;
+    this.attrRequestQueue.offer(store);
   }
 
   public void registerEvent(Key key, int id, int eventType, boolean enable)

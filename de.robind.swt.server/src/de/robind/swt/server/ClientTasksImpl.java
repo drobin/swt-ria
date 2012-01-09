@@ -8,6 +8,8 @@ import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Event;
 import org.jboss.netty.channel.Channels;
 
+import de.robind.swt.msg.SWTAttrRequest;
+import de.robind.swt.msg.SWTAttrResponse;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTEvent;
@@ -94,6 +96,30 @@ public class ClientTasksImpl implements ClientTasks {
     }
 
     if (!(response instanceof SWTRegResponse)) {
+      throw new Exception("Illegal response of type " +
+          response.getClass().getName() + " received");
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.server.ClientTasks#updateAttribute(org.eclipse.swt.server.Key, int, java.lang.String, java.lang.Object)
+   */
+  public void updateAttribute(Key key, int id, String attrName,
+      Object attrValue) throws Throwable {
+
+    SWTApplicationKey appKey = checkKey(key);
+    SWTApplication app = appKey.getApplication();
+    SWTAttrRequest request = app.getMessageFactory().createAttrRequest(
+        id, attrName, attrValue);
+
+    Channels.write(app.getChannel(), request);
+    SWTResponse response = app.getResponseQueue().take();
+
+    if (response instanceof SWTException) {
+      throw ((SWTException)response).getCause();
+    }
+
+    if (!(response instanceof SWTAttrResponse)) {
       throw new Exception("Illegal response of type " +
           response.getClass().getName() + " received");
     }
