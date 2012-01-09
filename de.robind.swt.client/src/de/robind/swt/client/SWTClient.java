@@ -13,6 +13,7 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
+import de.robind.swt.msg.SWTAttrRequest;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTNewRequest;
@@ -93,6 +94,8 @@ public class SWTClient {
     } else if (request instanceof SWTRegRequest) {
       return (handleRegRequest(messageFactory, listenerFactory, objMap,
           (SWTRegRequest)request));
+    } else if (request instanceof SWTAttrRequest) {
+      return (handleAttrRequest(messageFactory, objMap, (SWTAttrRequest)request));
     } else {
       IllegalArgumentException e = new IllegalArgumentException(
           "Usupported request received from server: " +
@@ -146,6 +149,19 @@ public class SWTClient {
       return (messageFactory.createRegResponse());
     } catch (Exception e) {
       logger.error("handleRegRequest catches exception", e);
+      return (messageFactory.createException(e));
+    }
+  }
+
+  private static SWTResponse handleAttrRequest(SWTMessageFactory messageFactory,
+      SWTObjectMap objMap, SWTAttrRequest request) {
+
+    try {
+      SWTObject.updateAttribute(objMap, request.getObjId(),
+          request.getAttrName(), request.getAttrValue());
+      return (messageFactory.createAttrResponse());
+    } catch (Exception e) {
+      logger.error("handleAttrRequest catches exception", e);
       return (messageFactory.createException(e));
     }
   }

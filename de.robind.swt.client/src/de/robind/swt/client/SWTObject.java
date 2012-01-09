@@ -1,6 +1,7 @@
 package de.robind.swt.client;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -120,6 +121,28 @@ public class SWTObject {
         widget.removeListener(eventType, listener);
       }
     }
+  }
+
+  /**
+   * Updates an attribute of an {@link SWTObject}.
+   *
+   * @param objMap The mapping between object-id and object. If one of the
+   *               arguments points to a SWT-object, then the method searches
+   *               for the object inside this mapping.
+   * @param id The id of the object inside <code>objMap</code>
+   * @param attrName The name of the attribute to update
+   * @param attrValue The new value
+   * @throws NoSuchFieldException of no such attribute exists
+   * @throws IllegalAccessException if <code>attrName</code> is not defined in
+   *         the object
+   */
+  public static void updateAttribute(SWTObjectMap objMap, int id,
+      String attrName, Object attrValue)
+          throws NoSuchFieldException, IllegalAccessException {
+
+    Object obj = objMap.get(id);
+    Field field = obj.getClass().getField(attrName);
+    field.set(obj, normalizeArgument(objMap, attrValue));
   }
 
   /**
@@ -250,6 +273,28 @@ public class SWTObject {
   }
 
   /**
+   * Transforms the given argument into a usable form.
+   * <p>
+   * If the argument is a {@link SWTObjectId}, which is unknown in the
+   * SWT-framework, then the if is replaced with the related SWT-object located
+   * in the given object-map.
+   *
+   * @param objMap The mapping from object-id to object
+   * @param argument The argument to check
+   * @return
+   */
+  private static Object normalizeArgument(SWTObjectMap objMap, Object argument) {
+
+    if (argument instanceof SWTObjectId) {
+      // Need to transform it into the SWT-object with the given id
+      int id = ((SWTObjectId)argument).getId();
+      return (objMap.get(id));
+    } else {
+      return (argument);
+    }
+  }
+
+  /**
    * Transforms the given argument-list into a usable form.
    * <p>
    * The argument-list can contain instances of {@link SWTObjectId}, which are
@@ -264,13 +309,7 @@ public class SWTObject {
     Object result[] = new Object[arguments.length];
 
     for (int i = 0; i < arguments.length; i++) {
-      if (arguments[i] instanceof SWTObjectId) {
-        // Need to transform it into the SWT-object with the given id
-        int id = ((SWTObjectId)arguments[i]).getId();
-        result[i] = objMap.get(id);
-      } else {
-        result[i] = arguments[i];
-      }
+      result[i] = normalizeArgument(objMap, arguments[i]);
     }
 
     return (result);
