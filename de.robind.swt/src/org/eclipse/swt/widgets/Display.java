@@ -1,5 +1,6 @@
 package org.eclipse.swt.widgets;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -314,18 +315,21 @@ public class Display extends Device {
     }
   }
 
-  public void updateAttribute(int id, String attrName, Object attrValue)
+  public void updateAttribute(SWTObject obj, String attrName)
       throws SWTException {
 
     checkDevice();
 
     try {
+      Object attrValue = obj.getClass().getField(attrName).get(attrName);
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-      clientTasks.updateAttribute(getKey(), id, attrName, attrValue);
+
+      clientTasks.updateAttribute(getKey(), obj.getId(), attrName, attrValue);
     } catch (Throwable t) {
       // TODO Do you need a special code for the exception?
       SWTException e = new SWTException();
-      e.throwable = t;
+      e.throwable = (t instanceof InvocationTargetException) ?
+          ((InvocationTargetException)t).getCause() : t;
       throw e;
     }
   }
