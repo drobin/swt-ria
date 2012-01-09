@@ -3,6 +3,7 @@ package de.robind.swt.msg;
 import java.util.Map;
 
 import de.robind.swt.msg.impl.SWTAttrRequestImpl;
+import de.robind.swt.msg.impl.SWTAttrResponseImpl;
 import de.robind.swt.msg.impl.SWTCallRequestImpl;
 import de.robind.swt.msg.impl.SWTCallResponseImpl;
 import de.robind.swt.msg.impl.SWTEventImpl;
@@ -151,5 +152,14 @@ public class SWTMessageFactory {
     }
 
     return (new SWTAttrRequestImpl(objId, attrName, attrValue));
+  }
+
+  /**
+   * Returns a new {@link SWTAttrResponse}.
+   *
+   * @return A new message
+   */
+  public SWTAttrResponse createAttrResponse() {
+    return (new SWTAttrResponseImpl());
   }
 }
