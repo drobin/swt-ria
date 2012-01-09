@@ -106,5 +106,27 @@ public class FormData extends SWTObject implements DelayedCreation {
   public void createObject(Key key) throws Throwable {
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     clientTasks.createObject(key, getId(), getClass(), this.createArguments);
+
+    // If attributes are already assigned, create them now
+    if (this.left != null) {
+      this.left.createObject(key);
+    }
+    if (this.right != null) {
+      this.right.createObject(key);
+    }
+    if (this.top != null) {
+      this.top.createObject(key);
+    }
+    if (this.bottom != null) {
+      this.bottom.createObject(key);
+    }
+  }
+
+  /**
+   * Invoked, if an attribute of the class has changed.
+   *
+   * @param field The name of the attribute-field, which has changed
+   */
+  public void attributeChanged(String field) {
   }
 }
