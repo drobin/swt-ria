@@ -13,6 +13,7 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 
+import de.robind.swt.msg.SWTAttrRequest;
 import de.robind.swt.msg.SWTCallRequest;
 import de.robind.swt.msg.SWTCallResponse;
 import de.robind.swt.msg.SWTEvent;
@@ -125,6 +126,14 @@ public class SWTMessageEncoder extends SimpleChannelHandler {
       writeBoolean(buffer, request.enable());
 
       return (SWTProtocol.OP_REG);
+    } else if (msg instanceof SWTAttrRequest) {
+      SWTAttrRequest request = (SWTAttrRequest)msg;
+
+      writeInteger(buffer, request.getObjId());
+      writeString(buffer, request.getAttrName());
+      writeAny(buffer, request.getAttrValue());
+
+      return (SWTProtocol.OP_ATTR);
     }
 
     throw new SWTProtocolException(
