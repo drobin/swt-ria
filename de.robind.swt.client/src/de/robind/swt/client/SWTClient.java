@@ -94,7 +94,11 @@ public class SWTClient {
       return (handleRegRequest(messageFactory, listenerFactory, objMap,
           (SWTRegRequest)request));
     } else {
-      return (null);
+      IllegalArgumentException e = new IllegalArgumentException(
+          "Usupported request received from server: " +
+          request.getClass().getName());
+      logger.error("Unsupported request received from server", e);
+      return (messageFactory.createException(e));
     }
   }
 
