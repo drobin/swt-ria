@@ -266,7 +266,7 @@ public class Display extends Device {
     return (Display.findDisplay(Thread.currentThread()));
   }
 
-  void createObject(int id, Class<?> objClass, Object... args)
+  public void createObject(int id, Class<?> objClass, Object... args)
       throws SWTException {
 
     checkDevice();
@@ -282,7 +282,7 @@ public class Display extends Device {
     }
   }
 
-  Object callMethod(int id, String method, Object... args)
+  public Object callMethod(int id, String method, Object... args)
       throws SWTException {
 
     checkDevice();
@@ -298,7 +298,7 @@ public class Display extends Device {
     }
   }
 
-  void registerEvent(int id, int eventType, boolean enable)
+  public void registerEvent(int id, int eventType, boolean enable)
       throws SWTException {
 
     checkDevice();
@@ -306,6 +306,22 @@ public class Display extends Device {
     try {
       ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
       clientTasks.registerEvent(getKey(), id, eventType, enable);
+    } catch (Throwable t) {
+      // TODO Do you need a special code for the exception?
+      SWTException e = new SWTException();
+      e.throwable = t;
+      throw e;
+    }
+  }
+
+  public void updateAttribute(int id, String attrName, Object attrValue)
+      throws SWTException {
+
+    checkDevice();
+
+    try {
+      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+      clientTasks.updateAttribute(getKey(), id, attrName, attrValue);
     } catch (Throwable t) {
       // TODO Do you need a special code for the exception?
       SWTException e = new SWTException();
