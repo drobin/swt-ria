@@ -243,6 +243,8 @@ public class SWTMessageDecoder extends FrameDecoder {
       }
     } else if (operation == SWTProtocol.OP_REG) {
       return (this.factory.createRegResponse());
+    } else if (operation == SWTProtocol.OP_ATTR) {
+      return (this.factory.createAttrResponse());
     } else {
       return (null);
     }
