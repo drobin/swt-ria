@@ -39,4 +39,13 @@ public class SWTAttrRequestImpl implements SWTAttrRequest {
     return (this.attrValue);
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() +
+        " (objId=" + getObjId() + ", attrName=" + getAttrName() +
+        ", attrValue=" + getAttrValue() + ")";
+  }
 }
