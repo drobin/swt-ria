@@ -119,7 +119,7 @@ public class SWTObjectTest {
     SWTObject obj = new SWTObject(key) {};
     obj.createObject(1, 2, 3);
 
-    assertThat(getClientTasks(), is(createRequest(obj, SWTObject.class, 1, 2, 3)));
+    assertThat(getClientTasks(), is(createRequest(obj, obj.getClass(), 1, 2, 3)));
   }
 
   @Test
@@ -132,7 +132,29 @@ public class SWTObjectTest {
 
     obj.setKey(key);
     assertThat(getClientTasks().getQueueSize(), is(1));
-    assertThat(getClientTasks(), is(createRequest(obj, SWTObject.class, 1, 2, 3)));
+    assertThat(getClientTasks(), is(createRequest(obj, obj.getClass(), 1, 2, 3)));
+  }
+
+  @Test
+  public void createObjectAsWithKey() {
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject(key) {};
+    obj.createObject(Integer.class, 1, 2, 3);
+
+    assertThat(getClientTasks(), is(createRequest(obj, Integer.class, 1, 2, 3)));
+  }
+
+  @Test
+  public void createObjectAsDelayed() {
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject() {};
+
+    obj.createObject(Integer.class, 1, 2, 3);
+    assertThat(getClientTasks().getQueueSize(), is(0));
+
+    obj.setKey(key);
+    assertThat(getClientTasks().getQueueSize(), is(1));
+    assertThat(getClientTasks(), is(createRequest(obj, Integer.class, 1, 2, 3)));
   }
 
   @Test

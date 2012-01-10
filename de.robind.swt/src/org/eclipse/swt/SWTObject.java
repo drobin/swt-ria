@@ -138,8 +138,22 @@ public class SWTObject {
    * @throws SWTException failed to send or schedule creation-request
    */
   public void createObject(Object... args) throws SWTException {
-    ChangeLogEntry entry =
-        new CreateChangeLogEntry(getId(), SWTObject.class, args);
+    createObject(getClass(), args);
+  }
+
+  /**
+   * Sends an object-creation-request of an object of class <code>as</code>
+   * to the client.
+   * <p>
+   * If a {@link #getKey() key} is assigned to the object, then the request
+   * is send immediately. Otherwise the request is scheduled until a
+   * {@link #setKey(Key) key is available}.
+   *
+   * @param args Arguments passed to the constructor of the class
+   * @throws SWTException failed to send or schedule creation-request
+   */
+  public void createObject(Class<?> as, Object... args) throws SWTException {
+    ChangeLogEntry entry = new CreateChangeLogEntry(getId(), as, args);
 
     if (getKey() != null) {
       entry.run(getKey());
