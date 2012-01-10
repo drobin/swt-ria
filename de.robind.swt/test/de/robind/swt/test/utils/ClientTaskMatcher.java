@@ -10,6 +10,7 @@ import org.junit.internal.matchers.TypeSafeMatcher;
 import de.robind.swt.test.utils.TestClientTasks.AttrRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.CallRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.CreateRequestStore;
+import de.robind.swt.test.utils.TestClientTasks.RegisterRequestStore;
 
 public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
   int id;
@@ -24,6 +25,11 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
     String method;
     Object args[];
   };
+
+  private static class RegArgs {
+    int eventType;
+    boolean enable;
+  }
 
   private static class AttrArgs {
     String attrName;
@@ -50,6 +56,11 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
       description.appendText(" and arguments ");
 
       description.appendValue(Arrays.toString(((CallArgs)this.args).args));
+    } else if (this.args instanceof RegArgs) {
+      description.appendText("Event registration with event-type ");
+      description.appendValue(((RegArgs)this.args).eventType);
+      description.appendText(" and enable-state ");
+      description.appendValue(((RegArgs)this.args).enable);
     } else if (this.args instanceof AttrArgs) {
       description.appendText("An attribute update of the attribute ");
       description.appendValue(((AttrArgs)this.args).attrName);
@@ -83,6 +94,15 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
 
       return (store.matches(this.id,
           ((CallArgs)this.args).method, ((CallArgs)this.args).args));
+    } else if (this.args instanceof RegArgs) {
+      RegisterRequestStore store;
+
+      if ((store = clientTasks.registerRequestQueue.poll()) == null) {
+        return (false);
+      }
+
+      return (store.matches(this.id,
+          ((RegArgs)this.args).eventType, ((RegArgs)this.args).enable));
     } else if (this.args instanceof AttrArgs) {
       AttrRequestStore store;
 
@@ -111,6 +131,14 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
     callArgs.args = args;
 
     return (new ClientTaskMatcher(obj.getId(), callArgs));
+  }
+
+  public static Matcher<TestClientTasks> registerRequest(SWTObject obj, int eventType, boolean enable) {
+    RegArgs regArgs = new RegArgs();
+    regArgs.eventType = eventType;
+    regArgs.enable = enable;
+
+    return (new ClientTaskMatcher(obj.getId(), regArgs));
   }
 
   public static Matcher<TestClientTasks> attrRequest(SWTObject obj, String attrName, Object attrValue) {

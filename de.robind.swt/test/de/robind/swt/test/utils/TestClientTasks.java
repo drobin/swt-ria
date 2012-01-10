@@ -11,6 +11,7 @@ public class TestClientTasks implements ClientTasks {
   private Object callMethodResult = null;
   Queue<CreateRequestStore> createRequestQueue = new LinkedList<TestClientTasks.CreateRequestStore>();
   Queue<CallRequestStore> callRequestQueue = new LinkedList<TestClientTasks.CallRequestStore>();
+  Queue<RegisterRequestStore> registerRequestQueue = new LinkedList<TestClientTasks.RegisterRequestStore>();
   Queue<AttrRequestStore> attrRequestQueue = new LinkedList<TestClientTasks.AttrRequestStore>();
 
   static abstract class AbstractRequestStore {
@@ -80,6 +81,27 @@ public class TestClientTasks implements ClientTasks {
     }
   }
 
+  static class RegisterRequestStore extends AbstractRequestStore {
+    int eventType;
+    boolean enable;
+
+    boolean matches(int id, int eventType, boolean enable) {
+      if (!super.matches(id)) {
+        return (false);
+      }
+
+      if (this.eventType != eventType) {
+        return (false);
+      }
+
+      if (this.enable != enable) {
+        return (false);
+      }
+
+      return (true);
+    }
+  }
+
   static class AttrRequestStore extends AbstractRequestStore {
     String attrName;
     Object attrValue;
@@ -108,11 +130,13 @@ public class TestClientTasks implements ClientTasks {
     this.callMethodResult = null;
     this.createRequestQueue.clear();
     this.callRequestQueue.clear();
+    this.registerRequestQueue.clear();
     this.attrRequestQueue.clear();
   }
 
   public int getQueueSize() {
-    return (this.createRequestQueue.size() + this.callRequestQueue.size() + this.attrRequestQueue.size());
+    return (this.createRequestQueue.size() + this.callRequestQueue.size() +
+        this.registerRequestQueue.size() + this.attrRequestQueue.size());
   }
 
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
@@ -155,8 +179,13 @@ public class TestClientTasks implements ClientTasks {
 
   public void registerEvent(Key key, int id, int eventType, boolean enable)
       throws Throwable {
-    // TODO Auto-generated method stub
 
+    RegisterRequestStore store = new RegisterRequestStore();
+    store.key = key;
+    store.id = id;
+    store.eventType = eventType;
+    store.enable = enable;
+    this.registerRequestQueue.offer(store);
   }
 
   public Event waitForEvent(Key key) throws Exception {

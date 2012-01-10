@@ -2,6 +2,7 @@ package de.robind.swt.test;
 
 import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
+import static de.robind.swt.test.utils.ClientTaskMatcher.registerRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -151,6 +152,29 @@ public class SWTObjectTest {
     exception.expect(swtCode(SWT.ERROR_FAILED_EXEC));
 
     obj.callMethod("foo", 1, 2, 3);
+  }
+
+  @Test
+  public void registerEventWithKey() {
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject(key) {};
+
+    obj.registerEvent(4711, true);
+    assertThat(getClientTasks().getQueueSize(), is(1));
+    assertThat(getClientTasks(), is(registerRequest(obj, 4711, true)));
+  }
+
+  @Test
+  public void registerEventDelayed() {
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject() {};
+
+    obj.registerEvent(4711, true);
+    assertThat(getClientTasks().getQueueSize(), is(0));
+
+    obj.setKey(key);
+    assertThat(getClientTasks().getQueueSize(), is(1));
+    assertThat(getClientTasks(), is(registerRequest(obj, 4711, true)));
   }
 
   protected TestClientTasks getClientTasks() {
