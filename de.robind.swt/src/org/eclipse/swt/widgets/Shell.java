@@ -94,7 +94,7 @@ public class Shell extends Decorations {
     }
 
     this.display = display;
-    this.display.createObject(getId(), getClass(), this.display);
+    setKey(display.getKey());
 
     // TODO Check for SWTException
   }

@@ -45,8 +45,14 @@ public class TestClientTasks implements ClientTasks {
       }
 
       for (int i = 0; i < this.args.length; i++) {
-        if (this.args[i] != args[i]) {
-          return (false);
+        if (this.args[i] != null) {
+          if (!this.args[i].equals(args[i])) {
+            return (false);
+          }
+        } else {
+          if (this.args[i] != args[i]) {
+            return (false);
+          }
         }
       }
 
@@ -72,8 +78,14 @@ public class TestClientTasks implements ClientTasks {
       }
 
       for (int i = 0; i < this.args.length; i++) {
-        if (this.args[i] != args[i]) {
-          return (false);
+        if (this.args[i] != null) {
+          if (!this.args[i].equals(args[i])) {
+            return (false);
+          }
+        } else {
+          if (this.args[i] != args[i]) {
+            return (false);
+          }
         }
       }
 

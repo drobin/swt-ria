@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static de.robind.swt.test.utils.TypedEventMatcher.event;
@@ -12,6 +13,7 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.test.TestWidget;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -56,6 +58,14 @@ public class WidgetTest extends AbstractWidgetTest {
   public void ctorInvalidSubclass() {
     exception.expect(swtCode(SWT.ERROR_INVALID_SUBCLASS));
     new Widget(this.shell, 0) {};
+  }
+
+  @Test
+  public void ctorRequest() {
+    Widget widget = new TestWidget(this.shell, 4711);
+    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
+    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, null, SWT.SHELL_TRIM)));
+    assertThat(getClientTasks(), is(createRequest(widget, TestWidget.class, this.shell, 4711)));
   }
 
   @Test

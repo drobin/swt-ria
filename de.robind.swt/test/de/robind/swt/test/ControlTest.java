@@ -1,6 +1,7 @@
 package de.robind.swt.test;
 
 import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
+import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static de.robind.swt.test.utils.TypedEventMatcher.event;
@@ -21,6 +22,8 @@ import org.eclipse.swt.server.DelayedCreation;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
@@ -69,6 +72,14 @@ public class ControlTest extends AbstractWidgetTest {
   public void ctorInvalidSubclass() {
     exception.expect(swtCode(SWT.ERROR_INVALID_SUBCLASS));
     new Control(this.shell, 0) {};
+  }
+
+  @Test
+  public void ctorRequest() {
+    Control control = new TestControl(this.shell, 4711);
+    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
+    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, null, SWT.SHELL_TRIM)));
+    assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 4711)));
   }
 
   @Test

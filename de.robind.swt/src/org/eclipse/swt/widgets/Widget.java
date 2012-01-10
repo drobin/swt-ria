@@ -110,8 +110,10 @@ public abstract class Widget extends SWTObject {
     Display display = getDisplay();
     if (display != null) {
       checkThread();
-      display.createObject(getId(), getCreateClass(), this.parent, this.style);
+      setKey(display.getKey());
     }
+
+    createObjectAs(getCreateClass(), this.parent, this.style);
   }
 
   /**

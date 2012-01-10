@@ -1,6 +1,7 @@
 package de.robind.swt.test;
 
 import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
+import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static org.hamcrest.core.Is.is;
@@ -9,6 +10,7 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
@@ -47,6 +49,14 @@ public class ListTest extends AbstractWidgetTest {
   public void ctorInvalidSubclass() {
     exception.expect(swtCode(SWT.ERROR_INVALID_SUBCLASS));
     new List(this.shell, 0 ) {};
+  }
+
+  @Test
+  public void ctorRequest() {
+    List list = new List(this.shell, 4711);
+    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
+    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, null, SWT.SHELL_TRIM)));
+    assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
   }
 
   @Test

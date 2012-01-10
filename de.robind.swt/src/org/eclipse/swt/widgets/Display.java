@@ -24,11 +24,6 @@ public class Display extends Device {
   private static List<Display> displayList = new LinkedList<Display>();
 
   /**
-   * The assigned key.
-   */
-  private Key key;
-
-  /**
    * The thread which has created the display
    */
   Thread thread;
@@ -179,7 +174,7 @@ public class Display extends Device {
 
     ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
     try {
-      Event event = clientTasks.waitForEvent(key);
+      Event event = clientTasks.waitForEvent(getKey());
       if (event != null) {
         ToDo todo = new ToDo(event);
         this.dispatcherQueue.offer(todo);
@@ -211,7 +206,7 @@ public class Display extends Device {
    */
   public Key getKey() throws SWTException {
     checkDevice();
-    return (this.key);
+    return (super.getKey());
   }
 
   /**
@@ -231,7 +226,7 @@ public class Display extends Device {
     }
 
     synchronized (Device.class) {
-      this.key = key;
+      super.setKey(key);
     }
   }
 
@@ -265,22 +260,6 @@ public class Display extends Device {
    */
   public static Display getCurrent() {
     return (Display.findDisplay(Thread.currentThread()));
-  }
-
-  public void createObject(int id, Class<?> objClass, Object... args)
-      throws SWTException {
-
-    checkDevice();
-
-    try {
-      ClientTasks tasks = DisplayPool.getInstance().getClientTasks();
-      tasks.createObject(getKey(), id, objClass, args);
-    } catch (Throwable t) {
-      // TODO Do you need a special code for the exception?
-      SWTException e = new SWTException();
-      e.throwable = t;
-      throw e;
-    }
   }
 
   public Object callMethod(int id, String method, Object... args)
@@ -359,13 +338,7 @@ public class Display extends Device {
     this.thread = Thread.currentThread();
     Display.displayList.add(this);
 
-    try {
-      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-      clientTasks.createObject(getKey(), getId(), getClass());
-    } catch (Throwable t) {
-      // TODO What should you do with the exception?
-      throw new Error(t);
-    }
+    createObject();
   }
 
   /* (non-Javadoc)

@@ -65,4 +65,12 @@ public class Decorations extends Canvas {
     getDisplay().callMethod(getId(), "setText", string);
     this.text = string;
   }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.widgets.Widget#getCreateClass()
+   */
+  @Override
+  protected Class<? extends Widget> getCreateClass() {
+    return (getClass());
+  }
 }

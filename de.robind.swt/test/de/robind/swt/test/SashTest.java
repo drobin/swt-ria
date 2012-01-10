@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static de.robind.swt.test.utils.SWTTestUtils.asyncExec;
 import static de.robind.swt.test.utils.TypedEventMatcher.event;
@@ -11,7 +12,9 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Sash;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
@@ -48,6 +51,14 @@ public class SashTest extends AbstractWidgetTest {
   public void ctorInvalidSubclass() {
     exception.expect(swtCode(SWT.ERROR_INVALID_SUBCLASS));
     new Sash(this.shell, 0) {};
+  }
+
+  @Test
+  public void ctorRequest() {
+    Sash sash = new Sash(this.shell, 4711);
+    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
+    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, null, SWT.SHELL_TRIM)));
+    assertThat(getClientTasks(), is(createRequest(sash, Sash.class, this.shell, 4711)));
   }
 
   @Test
