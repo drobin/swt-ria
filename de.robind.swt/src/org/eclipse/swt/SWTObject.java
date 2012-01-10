@@ -138,7 +138,7 @@ public class SWTObject {
    * @throws SWTException failed to send or schedule creation-request
    */
   public void createObject(Object... args) throws SWTException {
-    createObject(getClass(), args);
+    createObjectAs(getClass(), args);
   }
 
   /**
@@ -152,7 +152,7 @@ public class SWTObject {
    * @param args Arguments passed to the constructor of the class
    * @throws SWTException failed to send or schedule creation-request
    */
-  public void createObject(Class<?> as, Object... args) throws SWTException {
+  public void createObjectAs(Class<?> as, Object... args) throws SWTException {
     ChangeLogEntry entry = new CreateChangeLogEntry(getId(), as, args);
 
     if (getKey() != null) {

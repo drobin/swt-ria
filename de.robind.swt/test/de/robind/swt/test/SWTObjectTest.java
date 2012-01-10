@@ -139,7 +139,7 @@ public class SWTObjectTest {
   public void createObjectAsWithKey() {
     Key key = new Key() {};
     SWTObject obj = new SWTObject(key) {};
-    obj.createObject(Integer.class, 1, 2, 3);
+    obj.createObjectAs(Integer.class, 1, 2, 3);
 
     assertThat(getClientTasks(), is(createRequest(obj, Integer.class, 1, 2, 3)));
   }
@@ -149,7 +149,7 @@ public class SWTObjectTest {
     Key key = new Key() {};
     SWTObject obj = new SWTObject() {};
 
-    obj.createObject(Integer.class, 1, 2, 3);
+    obj.createObjectAs(Integer.class, 1, 2, 3);
     assertThat(getClientTasks().getQueueSize(), is(0));
 
     obj.setKey(key);
