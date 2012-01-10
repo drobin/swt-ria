@@ -1,5 +1,7 @@
 package org.eclipse.swt;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -187,6 +189,42 @@ public class SWTObject {
 
     RegisterChangeLogEntry entry =
         new RegisterChangeLogEntry(getId(), eventType, enable);
+
+    if (getKey() != null) {
+      entry.run(getKey());
+    } else {
+      this.changeLog.offer(entry);
+    }
+  }
+
+  /**
+   * Updates the value of the given attribute.
+   * <p>
+   * If a {@link #getKey() key} is assigned to the object, then the request
+   * is send immediately. Otherwise the request is scheduled until a
+   * {@link #setKey(Key) key is available}.
+   *
+   * @param fieldName The field-name of the attribute to update
+   * @throws SWTException failed to send or schedule the request
+   */
+  public void updateAttribute(String fieldName) throws SWTException {
+    Object value;
+
+    try {
+      Field f = getClass().getDeclaredField(fieldName);
+      f.setAccessible(true);
+      value = f.get(this);
+    } catch (Exception e) {
+      Throwable cause =
+          (e instanceof InvocationTargetException) ? e.getCause() : e;
+      // TODO Do you need a special code for the exception?
+      SWTException exc = new SWTException(SWT.ERROR_UNSPECIFIED);
+      exc.throwable = cause;
+      throw exc;
+    }
+
+    AttributeChangeLogEntry entry =
+        new AttributeChangeLogEntry(getId(), fieldName, value);
 
     if (getKey() != null) {
       entry.run(getKey());

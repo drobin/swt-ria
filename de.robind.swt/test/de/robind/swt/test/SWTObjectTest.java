@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.attrRequest;
 import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.ClientTaskMatcher.registerRequest;
@@ -177,8 +178,58 @@ public class SWTObjectTest {
     assertThat(getClientTasks(), is(registerRequest(obj, 4711, true)));
   }
 
+  @Test
+  public void updateAttributeNoSuchField() {
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject(key) {};
+
+    exception.expect(swtCode(SWT.ERROR_UNSPECIFIED));
+
+    obj.updateAttribute("foo");
+  }
+
+  @Test
+  public void updateAttributeWithKey() {
+    class TestObject extends SWTObject {
+      TestObject(Key key) {
+        super(key);
+      }
+
+      public int foo;
+    }
+
+    Key key = new Key() {};
+    TestObject obj = new TestObject(key);
+
+    obj.foo = 4711;
+    obj.updateAttribute("foo");
+
+    assertThat(getClientTasks().getQueueSize(), is(1));
+    assertThat(getClientTasks(), is(attrRequest(obj, "foo", 4711)));
+  }
+
+  @Test
+  public void updateAttributeDelayed() {
+    class TestObject extends SWTObject {
+      public int foo;
+    }
+
+    Key key = new Key() {};
+    TestObject obj = new TestObject();
+
+    obj.foo = 4711;
+    obj.updateAttribute("foo");
+    assertThat(getClientTasks().getQueueSize(), is(0));
+
+    obj.setKey(key);
+    assertThat(getClientTasks().getQueueSize(), is(1));
+    assertThat(getClientTasks(), is(attrRequest(obj, "foo", 4711)));
+  }
+
   protected TestClientTasks getClientTasks() {
     DisplayPool pool = DisplayPool.getInstance();
     return ((TestClientTasks)pool.getClientTasks());
   }
+
+
 }
