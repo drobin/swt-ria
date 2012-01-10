@@ -1,9 +1,11 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.callRequest;
 import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 
@@ -129,6 +131,26 @@ public class SWTObjectTest {
     obj.setKey(key);
     assertThat(getClientTasks().getQueueSize(), is(1));
     assertThat(getClientTasks(), is(createRequest(obj, SWTObject.class, 1, 2, 3)));
+  }
+
+  @Test
+  public void callMethodWithKey() {
+    getClientTasks().setCallMethodResult("xxx");
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject(key) {};
+
+    Object result = obj.callMethod("foo", 1, 2, 3);
+    assertThat((String)result, is(equalTo("xxx")));
+    assertThat(getClientTasks(), is(callRequest(obj, "foo", 1, 2, 3)));
+  }
+
+  @Test
+  public void callMethodDelayed() {
+    SWTObject obj = new SWTObject() {};
+
+    exception.expect(swtCode(SWT.ERROR_FAILED_EXEC));
+
+    obj.callMethod("foo", 1, 2, 3);
   }
 
   protected TestClientTasks getClientTasks() {

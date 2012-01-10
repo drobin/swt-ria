@@ -147,6 +147,30 @@ public class SWTObject {
   }
 
   /**
+   * Invokes a method.
+   * <p>
+   * <b>NOTE:</b> A method-invocation cannot be scheduled! So, if no key is
+   * assigned, a {@link SWTException} with code {@link SWT#ERROR_FAILED_EXEC}
+   * is thrown.
+   *
+   * @param method Name of method to invoke
+   * @param args Arguments which should be passed to the method
+   * @return Result returned by the method-invocation
+   * @throws SWTException failed to send the call-request
+   */
+  public Object callMethod(String method, Object... args)
+      throws SWTException {
+
+    if (getKey() == null) {
+      throw new SWTException(SWT.ERROR_FAILED_EXEC);
+    }
+
+    CallChangeLogEntry entry = new CallChangeLogEntry(getId(), method, args);
+    entry.run(getKey());
+    return (entry.getResult());
+  }
+
+  /**
    * Generates a unique identifier.
    *
    * @return A unique identifier
