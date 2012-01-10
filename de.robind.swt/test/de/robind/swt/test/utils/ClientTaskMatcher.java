@@ -9,10 +9,16 @@ import org.junit.internal.matchers.TypeSafeMatcher;
 
 import de.robind.swt.test.utils.TestClientTasks.AttrRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.CallRequestStore;
+import de.robind.swt.test.utils.TestClientTasks.CreateRequestStore;
 
 public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
   int id;
   private Object args = null;
+
+  private static class CreateArgs {
+    Class<?> objClass;
+    Object args[];
+  };
 
   private static class CallArgs {
     String method;
@@ -33,7 +39,12 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
    * @see org.hamcrest.SelfDescribing#describeTo(org.hamcrest.Description)
    */
   public void describeTo(Description description) {
-    if (this.args instanceof CallArgs) {
+    if (this.args instanceof CreateArgs) {
+      description.appendText("Create request with class ");
+      description.appendValue(((CreateArgs)this.args).objClass);
+      description.appendText(" and arguments ");
+      description.appendValue(Arrays.toString(((CreateArgs)this.args).args));
+    } else if (this.args instanceof CallArgs) {
       description.appendText("A method invocation with methodname ");
       description.appendValue(((CallArgs)this.args).method);
       description.appendText(" and arguments ");
@@ -54,7 +65,16 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
    */
   @Override
   public boolean matchesSafely(TestClientTasks clientTasks) {
-    if (this.args instanceof CallArgs) {
+    if (this.args instanceof CreateArgs) {
+      CreateRequestStore store;
+
+      if ((store = clientTasks.createRequestQueue.poll()) == null) {
+        return (false);
+      }
+
+      return (store.matches(this.id,
+          ((CreateArgs)this.args).objClass, ((CreateArgs)this.args).args));
+    } else if (this.args instanceof CallArgs) {
       CallRequestStore store;
 
       if ((store = clientTasks.callRequestQueue.poll()) == null) {
@@ -75,6 +95,14 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
     } else {
       throw new Error("add matcher for " + this.args.getClass().getName());
     }
+  }
+
+  public static Matcher<TestClientTasks> createRequest(SWTObject obj, Class<?> objClass, Object... args) {
+    CreateArgs createArgs = new CreateArgs();
+    createArgs.objClass = objClass;
+    createArgs.args = args;
+
+    return (new ClientTaskMatcher(obj.getId(), createArgs));
   }
 
   public static Matcher<TestClientTasks> callRequest(SWTObject obj, String method, Object... args) {

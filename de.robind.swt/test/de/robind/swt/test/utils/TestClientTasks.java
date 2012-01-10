@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Event;
 
 public class TestClientTasks implements ClientTasks {
   private Object callMethodResult = null;
+  Queue<CreateRequestStore> createRequestQueue = new LinkedList<TestClientTasks.CreateRequestStore>();
   Queue<CallRequestStore> callRequestQueue = new LinkedList<TestClientTasks.CallRequestStore>();
   Queue<AttrRequestStore> attrRequestQueue = new LinkedList<TestClientTasks.AttrRequestStore>();
 
@@ -19,6 +20,33 @@ public class TestClientTasks implements ClientTasks {
     protected boolean matches(int id) {
       if (this.id != id) {
         return (false);
+      }
+
+      return (true);
+    }
+  }
+
+  static class CreateRequestStore extends AbstractRequestStore {
+    Class<?> objClass;
+    Object args[];
+
+    boolean matches(int id, Class<?> c, Object args[]) {
+      if (!super.matches(id)) {
+        return (false);
+      }
+
+      if (!c.equals(this.objClass)) {
+        return (false);
+      }
+
+      if (this.args.length != args.length) {
+        return (false);
+      }
+
+      for (int i = 0; i < this.args.length; i++) {
+        if (this.args[i] != args[i]) {
+          return (false);
+        }
       }
 
       return (true);
@@ -78,13 +106,20 @@ public class TestClientTasks implements ClientTasks {
 
   public void clearState() {
     this.callMethodResult = null;
+    this.createRequestQueue.clear();
     this.callRequestQueue.clear();
+    this.attrRequestQueue.clear();
   }
 
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
       throws Throwable {
-    // TODO Auto-generated method stub
 
+    CreateRequestStore store = new CreateRequestStore();
+    store.key = key;
+    store.id = id;
+    store.objClass = objClass;
+    store.args = args;
+    this.createRequestQueue.offer(store);
   }
 
   public Object callMethod(Key key, int id, String method, Object... args)
