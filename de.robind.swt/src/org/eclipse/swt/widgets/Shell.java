@@ -96,6 +96,9 @@ public class Shell extends Decorations {
     this.display = display;
     setKey(display.getKey());
 
+    // Widget does not create Shell-instances. It must be performed now!
+    createObject(this.display);
+
     // TODO Check for SWTException
   }
 

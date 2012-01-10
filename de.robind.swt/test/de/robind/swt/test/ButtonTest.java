@@ -58,7 +58,7 @@ public class ButtonTest extends AbstractWidgetTest {
   public void ctorRequest() {
     Button button = new Button(this.shell, 4711);
     assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, null, SWT.SHELL_TRIM)));
+    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(button, Button.class, this.shell, 4711)));
   }
 

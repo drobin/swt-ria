@@ -55,7 +55,7 @@ public class ScrollableTest extends AbstractWidgetTest {
   public void ctorRequest() {
     TestScrollable scrollable = new TestScrollable(this.shell, 4711);
     assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, null, SWT.SHELL_TRIM)));
+    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(scrollable, TestScrollable.class, this.shell, 4711)));
   }
 

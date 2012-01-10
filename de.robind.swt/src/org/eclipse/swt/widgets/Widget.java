@@ -113,7 +113,12 @@ public abstract class Widget extends SWTObject {
       setKey(display.getKey());
     }
 
-    createObjectAs(getCreateClass(), this.parent, this.style);
+    Class<?> clientClass = getCreateClass();
+    if (!clientClass.equals(Shell.class)) {
+      // Creating a shell was requested, but the Shell always uses a special
+      // constructor. This is handled by Shell directly
+      createObjectAs(clientClass, this.parent, this.style);
+    }
   }
 
   /**
