@@ -262,22 +262,6 @@ public class Display extends Device {
     return (Display.findDisplay(Thread.currentThread()));
   }
 
-  public void registerEvent(int id, int eventType, boolean enable)
-      throws SWTException {
-
-    checkDevice();
-
-    try {
-      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-      clientTasks.registerEvent(getKey(), id, eventType, enable);
-    } catch (Throwable t) {
-      // TODO Do you need a special code for the exception?
-      SWTException e = new SWTException();
-      e.throwable = t;
-      throw e;
-    }
-  }
-
   public void updateAttribute(SWTObject obj, String attrName)
       throws SWTException {
 

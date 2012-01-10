@@ -33,7 +33,7 @@ class ListenerTable {
     List<Listener> list = getListenerList(eventType);
 
     if (list.isEmpty()) {
-      this.widget.getDisplay().registerEvent(widget.getId(), eventType, true);
+      this.widget.registerEvent(eventType, true);
     }
 
     list.add(listener);
@@ -51,7 +51,7 @@ class ListenerTable {
     list.remove(listener);
 
     if (list.isEmpty()) {
-      this.widget.getDisplay().registerEvent(widget.getId(), eventType, false);
+      this.widget.registerEvent(eventType, false);
     }
   }
 
