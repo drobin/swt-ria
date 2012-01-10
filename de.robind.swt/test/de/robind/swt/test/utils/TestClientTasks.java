@@ -111,6 +111,10 @@ public class TestClientTasks implements ClientTasks {
     this.attrRequestQueue.clear();
   }
 
+  public int getQueueSize() {
+    return (this.createRequestQueue.size() + this.callRequestQueue.size() + this.attrRequestQueue.size());
+  }
+
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
       throws Throwable {
 

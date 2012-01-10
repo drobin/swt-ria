@@ -1,5 +1,6 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -11,15 +12,31 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTObject;
+import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import de.robind.swt.test.utils.TestClientTasks;
+
 public class SWTObjectTest {
   @Rule
   public ExpectedException exception = ExpectedException.none();
+
+  @BeforeClass
+  public static void beforeClass() {
+    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
+  }
+
+  @AfterClass
+  public static void afterClass() {
+    System.clearProperty("de.robind.swt.clienttasks");
+  }
 
   @SuppressWarnings("unchecked")
   @Before
@@ -33,6 +50,11 @@ public class SWTObjectTest {
     f = SWTObject.class.getDeclaredField("objMap");
     f.setAccessible(true);
     ((Map<Integer, SWTObject>)f.get(null)).clear();
+  }
+
+  @After
+  public void after() {
+    getClientTasks().clearState();
   }
 
   @Test
@@ -76,24 +98,41 @@ public class SWTObjectTest {
   public void setKey() {
     Key key1 = new Key() {};
     Key key2 = new Key() {};
-    class TestSWTObject extends SWTObject {
-      public TestSWTObject(Key key) {
-        super(key);
-      }
-
-      public void setKeyTest(Key key) {
-        setKey(key);
-      }
-    };
-
-    TestSWTObject obj = new TestSWTObject(key1);
+    SWTObject obj = new SWTObject(key1) {};
 
     assertThat(obj.getKey(), is(sameInstance(key1)));
 
-    obj.setKeyTest(null);
+    obj.setKey(null);
     assertThat(obj.getKey(), is(nullValue()));
 
-    obj.setKeyTest(key2);
+    obj.setKey(key2);
     assertThat(obj.getKey(), is(sameInstance(key2)));
+  }
+
+  @Test
+  public void createObjectWithKey() {
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject(key) {};
+    obj.createObject(1, 2, 3);
+
+    assertThat(getClientTasks(), is(createRequest(obj, SWTObject.class, 1, 2, 3)));
+  }
+
+  @Test
+  public void createObjectDelayed() {
+    Key key = new Key() {};
+    SWTObject obj = new SWTObject() {};
+
+    obj.createObject(1, 2, 3);
+    assertThat(getClientTasks().getQueueSize(), is(0));
+
+    obj.setKey(key);
+    assertThat(getClientTasks().getQueueSize(), is(1));
+    assertThat(getClientTasks(), is(createRequest(obj, SWTObject.class, 1, 2, 3)));
+  }
+
+  protected TestClientTasks getClientTasks() {
+    DisplayPool pool = DisplayPool.getInstance();
+    return ((TestClientTasks)pool.getClientTasks());
   }
 }

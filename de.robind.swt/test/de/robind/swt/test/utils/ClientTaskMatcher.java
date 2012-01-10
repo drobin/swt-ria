@@ -55,9 +55,9 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
       description.appendValue(((AttrArgs)this.args).attrName);
       description.appendText(" with the value ");
       description.appendValue(((AttrArgs)this.args).attrValue);
+    } else {
+      throw new Error("Add description for " + this.args.getClass().getName());
     }
-
-    throw new Error("Add description for " + this.args.getClass().getName());
   }
 
   /* (non-Javadoc)

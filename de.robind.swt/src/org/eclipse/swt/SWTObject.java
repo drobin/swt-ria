@@ -1,7 +1,9 @@
 package org.eclipse.swt;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import org.eclipse.swt.server.Key;
 
@@ -35,6 +37,12 @@ public class SWTObject {
    * The key assigned to the object.
    */
   private Key key = null;
+
+  /**
+   * The changelog collects actions until a
+   * {@link #setKey(Key) key is assigned}.
+   */
+  private Queue<ChangeLogEntry> changeLog = new LinkedList<ChangeLogEntry>();
 
   /**
    * Creates a new {@link SWTObject}-instance and assigns an unique
@@ -104,8 +112,38 @@ public class SWTObject {
    *
    * @param key The key to assign or <code>null</code> to remove assignment
    */
-  protected void setKey(Key key) {
-    this.key = key;
+  public void setKey(Key key) {
+    if (key != null) {
+      this.key = key;
+
+      while (!this.changeLog.isEmpty()) {
+        ChangeLogEntry entry = this.changeLog.poll();
+        entry.run(key);
+      }
+    } else {
+      this.key = null;
+    }
+  }
+
+  /**
+   * Sends an object-creation-request to the client.
+   * <p>
+   * If a {@link #getKey() key} is assigned to the object, then the request
+   * is send immediately. Otherwise the request is scheduled until a
+   * {@link #setKey(Key) key is available}.
+   *
+   * @param args Arguments passed to the constructor of the class
+   * @throws SWTException failed to send or schedule creation-request
+   */
+  public void createObject(Object... args) throws SWTException {
+    ChangeLogEntry entry =
+        new CreateChangeLogEntry(getId(), SWTObject.class, args);
+
+    if (getKey() != null) {
+      entry.run(getKey());
+    } else {
+      this.changeLog.offer(entry);
+    }
   }
 
   /**
