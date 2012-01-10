@@ -1,18 +1,10 @@
 package org.eclipse.swt.layout;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DelayedCreation;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * Instances of this class are used to define the attachments of a control in
@@ -34,24 +26,7 @@ import org.eclipse.swt.widgets.Display;
  * of the control. FormData objects also allow you to set the width and height
  * of controls within a {@link FormLayout}.
  */
-public class FormData extends SWTObject implements DelayedCreation {
-  /**
-   * Arguments passed to the creation-message.
-   * @see #createLayout(Key)
-   */
-  private Object createArguments[] = {};
-
-  /**
-   * Flag shows if the object is already created on the client.
-   */
-  private boolean created = false;
-
-  /**
-   * Queue holds name of attributes, which where updated while the object
-   * was not created at the client.
-   */
-  private Queue<String> updateAttributeQueue = new LinkedList<String>();
-
+public class FormData extends SWTObject {
   /**
    * left specifies the attachment of the left side of the control.
    */
@@ -96,7 +71,7 @@ public class FormData extends SWTObject implements DelayedCreation {
    * Constructs a new instance of FormData using default values.
    */
   public FormData() {
-
+    createObject();
   }
 
   /**
@@ -108,43 +83,10 @@ public class FormData extends SWTObject implements DelayedCreation {
    * @param height a minimum height for the control
    */
   public FormData(int width, int height) {
+    createObject(width, height);
+
     this.width = width;
     this.height = height;
-    this.createArguments = new Object[] {
-      this.width,
-      this.height
-    };
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
-   */
-  public void createObject(Key key) throws Throwable {
-    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-    clientTasks.createObject(key, getId(), getClass(), this.createArguments);
-    this.created = true;
-
-    // If attributes are already assigned, create them now
-    if (this.left != null) {
-      this.left.createObject(key);
-    }
-    if (this.right != null) {
-      this.right.createObject(key);
-    }
-    if (this.top != null) {
-      this.top.createObject(key);
-    }
-    if (this.bottom != null) {
-      this.bottom.createObject(key);
-    }
-
-    while (!this.updateAttributeQueue.isEmpty()) {
-      // Some attributes where updated before the object was created, perform
-      // operation now.
-      String field = this.updateAttributeQueue.poll();
-      Display display = Display.getCurrent();
-      display.updateAttribute(this, field);
-    }
   }
 
   /**
@@ -154,14 +96,6 @@ public class FormData extends SWTObject implements DelayedCreation {
    * @throws SWTException if the attribute was not updated at the client
    */
   public void attributeChanged(String field) throws SWTException {
-    if (this.created) {
-      // The object is already known by the client, it's safe to generate the
-      // related update-message now.
-      Display display = Display.getCurrent();
-      display.updateAttribute(this, field);
-    } else {
-      // The object is currently not created, schedule operation for later
-      this.updateAttributeQueue.offer(field);
-    }
+    updateAttribute(field);
   }
 }

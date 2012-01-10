@@ -2,9 +2,6 @@ package org.eclipse.swt.layout;
 
 import java.awt.Composite;
 
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Layout;
 
 /**
@@ -33,12 +30,6 @@ import org.eclipse.swt.widgets.Layout;
  * Composite.
  */
 public class GridLayout extends Layout {
-  /**
-   * Arguments passed to the creation-message.
-   * @see #createLayout(Key)
-   */
-  private Object createArguments[] = {};
-
   /**
    * horizontalSpacing specifies the number of pixels between the right edge of
    * one cell and the left edge of its neighbouring cell to the right. The
@@ -108,6 +99,7 @@ public class GridLayout extends Layout {
    * Constructs a new instance of this class.
    */
   public GridLayout() {
+    createObject();
   }
 
   /**
@@ -121,18 +113,10 @@ public class GridLayout extends Layout {
    *                              width
    */
   public GridLayout(int numColumns, boolean makeColumnsEqualWidth) {
+    createObject(numColumns, makeColumnsEqualWidth);
+
     this.numColumns = numColumns;
     this.makeColumnsEqualWidth = makeColumnsEqualWidth;
-
-    this.createArguments = new Object[] {numColumns, makeColumnsEqualWidth};
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
-   */
-  public void createObject(Key key) throws Throwable {
-    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-    clientTasks.createObject(key, getId(), getClass(), createArguments);
   }
 
   /**

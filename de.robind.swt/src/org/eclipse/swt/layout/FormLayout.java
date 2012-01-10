@@ -1,8 +1,5 @@
 package org.eclipse.swt.layout;
 
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
@@ -116,14 +113,6 @@ public class FormLayout extends Layout {
    * Constructs a new instance of this class.
    */
   public FormLayout() {
-
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
-   */
-  public void createObject(Key key) throws Throwable {
-    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-    clientTasks.createObject(key, getId(), getClass());
+    createObject();
   }
 }

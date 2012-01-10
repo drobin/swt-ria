@@ -18,8 +18,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.server.DelayedCreation;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -960,13 +958,9 @@ public class ControlTest extends AbstractWidgetTest {
 
   @Test
   public void getsetLayoutDataSuccess() {
-    class Foo extends SWTObject implements DelayedCreation {
-      public void createObject(Key key) throws Throwable {
-      }
-    };
-    Object data = new Foo();
-
+    Object data = new SWTObject() {};
     Control control = new TestControl(this.shell, 0);
+
     assertThat(control.getLayoutData(), is(nullValue()));
     control.setLayoutData(data);
     assertThat(control.getLayoutData(), is(sameInstance(data)));

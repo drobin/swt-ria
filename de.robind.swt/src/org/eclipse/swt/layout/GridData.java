@@ -2,10 +2,6 @@ package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTObject;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DelayedCreation;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
 
 /**
@@ -44,13 +40,7 @@ import org.eclipse.swt.widgets.Control;
  * If the layout data for a control in a GridLayout is null at layout time,
  * a unique {@link GridData} object is created for it.
  */
-public class GridData extends SWTObject implements DelayedCreation {
-  /**
-   * Arguments passed to the creation-message.
-   * @see #createLayout(Key)
-   */
-  private Object createArguments[] = {};
-
+public class GridData extends SWTObject {
   /**
    * Value for horizontalAlignment or verticalAlignment. Position the control
    * at the top or left of the cell. Not recommended. Use {@link SWT#BEGINNING},
@@ -387,6 +377,7 @@ public class GridData extends SWTObject implements DelayedCreation {
    * Constructs a new instance of GridData using default values.
    */
   public GridData() {
+    createObject();
   }
 
   /**
@@ -395,7 +386,7 @@ public class GridData extends SWTObject implements DelayedCreation {
    * @param style
    */
   public GridData(int style) {
-    this.createArguments = new Object[] {style};
+    createObject(style);
 
     if ((style & VERTICAL_ALIGN_BEGINNING) != 0) {
       verticalAlignment = BEGINNING;
@@ -442,7 +433,8 @@ public class GridData extends SWTObject implements DelayedCreation {
    * @param height a minimum height for the row
    */
   public GridData(int width, int height) {
-    this.createArguments = new Object[] {width, height};
+    createObject(width, height);
+
     this.widthHint = width;
     this.heightHint = height;
   }
@@ -491,10 +483,9 @@ public class GridData extends SWTObject implements DelayedCreation {
       boolean grabExcessHorizontalSpace, boolean grabExcessVerticalSpace,
       int horizontalSpan, int verticalSpan) {
 
-    this.createArguments = new Object[] {
-        horizontalAlignment, verticalAlignment,
-        grabExcessHorizontalSpace, grabExcessVerticalSpace,
-        horizontalSpan, verticalSpan};
+    createObject(horizontalAlignment, verticalAlignment,
+      grabExcessHorizontalSpace, grabExcessVerticalSpace,
+      horizontalSpan, verticalSpan);
 
     this.horizontalAlignment = horizontalAlignment;
     this.verticalAlignment = verticalAlignment;
@@ -502,14 +493,6 @@ public class GridData extends SWTObject implements DelayedCreation {
     this.grabExcessVerticalSpace = grabExcessVerticalSpace;
     this.horizontalSpan = horizontalSpan;
     this.verticalSpan = verticalSpan;
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
-   */
-  public void createObject(Key key) throws Throwable {
-    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-    clientTasks.createObject(key, getId(), getClass(), this.createArguments);
   }
 
   /**

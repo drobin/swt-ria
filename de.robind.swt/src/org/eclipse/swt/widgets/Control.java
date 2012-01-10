@@ -19,9 +19,6 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DelayedCreation;
-import org.eclipse.swt.server.DisplayPool;
 
 /**
  * Control is the abstract superclass of all windowed user interface classes.
@@ -752,37 +749,24 @@ public abstract class Control extends Widget implements Drawable {
    *      if not called from the thread that created the receiver
    *    </li>
    *    <li>{@link SWT#ERROR_INVALID_ARGUMENT} -
-   *      invalid layoutData-instance. If must be an {@link SWTObject} and
-   *      needs to implement the {@link DelayedCreation}-interface.
+   *      invalid layoutData-instance. If must be an {@link SWTObject}.
    *    </li>
    *  </ul>
    */
   public void setLayoutData(Object layoutData) throws SWTException {
     checkWidget();
 
-    if ((layoutData != null) &&
-        (!(layoutData instanceof SWTObject) ||
-            !(layoutData instanceof DelayedCreation))) {
-
+    if ((layoutData != null) && !(layoutData instanceof SWTObject)) {
       throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
     }
 
-    DelayedCreation data = (DelayedCreation)layoutData;
+    SWTObject data = (SWTObject)layoutData;
 
-    try {
-      // Create the layout-data
-      data.createObject(getDisplay().getKey());
+    // Assign the key of the control to the layoutData, so it is connected
+    // to the object-tree
+    data.setKey(getKey());
 
-      // Assign the layout-data to this object
-      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-      clientTasks.callMethod(getDisplay().getKey(), getId(), "setLayoutData", data);
-    } catch (Throwable t) {
-      // TODO Need a special code?
-      SWTException e = new SWTException();
-      e.throwable = t;
-      throw e;
-    }
-
+    callMethod("setLayoutData", layoutData);
     this.layoutData = layoutData;
   }
 

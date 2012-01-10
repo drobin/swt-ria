@@ -1,9 +1,6 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Layout;
 
 /**
@@ -40,14 +37,8 @@ public class FillLayout extends Layout {
    * @param type the type of fill layout
    */
   public FillLayout(int type) {
-    this.type = type;
-  }
+    createObject(type);
 
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
-   */
-  public void createObject(Key key) throws Throwable {
-    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-    clientTasks.createObject(key, getId(), getClass(), type);
+    this.type = type;
   }
 }

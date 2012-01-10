@@ -3,10 +3,7 @@ package org.eclipse.swt.layout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTObject;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DelayedCreation;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
+import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Control;
 
 /**
@@ -69,13 +66,7 @@ import org.eclipse.swt.widgets.Control;
  * centered between the left and right sides of the button control. If the
  * alignment is not specified, the default is to attach to the adjacent side.
  */
-public class FormAttachment extends SWTObject implements DelayedCreation {
-  /**
-   * Arguments passed to the creation-message.
-   * @see #createLayout(Key)
-   */
-  private Object createArguments[] = {};
-
+public class FormAttachment extends SWTObject {
   /**
    * alignment specifies the alignment of the control side that is attached to
    * a control.
@@ -141,6 +132,7 @@ public class FormAttachment extends SWTObject implements DelayedCreation {
    * attachment position. This is equivalent to the "b" term in the equation
    * y = ax + b. The default value is 0.
    */
+  @Trackable
   public int offset = 0;
 
   /**
@@ -150,6 +142,7 @@ public class FormAttachment extends SWTObject implements DelayedCreation {
    * zero.
    */
   public FormAttachment() {
+    createObject();
   }
 
   /**
@@ -213,15 +206,11 @@ public class FormAttachment extends SWTObject implements DelayedCreation {
    *                  to, one of TOP, BOTTOM, LEFT, RIGHT, CENTER, or DEFAULT
    */
   public FormAttachment(Control control, int offset, int alignment) {
+    createObject(control, offset, alignment);
+
     this.control = control;
     this.offset = offset;
     this.alignment = alignment;
-
-    this.createArguments = new Object[] {
-        this.control,
-        this.offset,
-        this.alignment
-    };
   }
 
   /**
@@ -262,22 +251,10 @@ public class FormAttachment extends SWTObject implements DelayedCreation {
       throw new SWTError(SWT.ERROR_CANNOT_BE_ZERO);
     }
 
+    createObject(numerator, denominator, offset);
+
     this.numerator = numerator;
     this.denominator = denominator;
     this.offset = offset;
-
-    this.createArguments = new Object[] {
-      this.numerator,
-      this.denominator,
-      this.offset
-    };
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.server.DelayedCreation#createObject(org.eclipse.swt.server.Key)
-   */
-  public void createObject(Key key) throws Throwable {
-    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-    clientTasks.createObject(key, getId(), getClass(), this.createArguments);
   }
 }

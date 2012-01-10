@@ -2,8 +2,6 @@ package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DisplayPool;
 
 /**
  * Instances of this class are controls which are capable of containing other
@@ -356,20 +354,10 @@ public class Composite extends Scrollable {
     checkWidget();
     // TODO Make sure that layout can be null
 
-    try {
-      // Create the layout
-      layout.createObject(getDisplay().getKey());
+    // Assign the key to the layout, so it becomes a part of the object-tree
+    layout.setKey(getKey());
 
-      // Assign the layout to this object
-      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-      clientTasks.callMethod(getDisplay().getKey(), getId(), "setLayout", layout);
-    } catch (Throwable t) {
-      // TODO Need a special code?
-      SWTException e = new SWTException();
-      e.throwable = t;
-      throw e;
-    }
-
+    callMethod("setLayout", layout);
     this.layout = layout;
   }
 }
