@@ -73,8 +73,7 @@ public class List extends Scrollable {
   public int[] getSelectionIndices() throws SWTException {
     checkWidget();
 
-    int indices[] =
-        (int[])getDisplay().callMethod(getId(), "getSelectionIndices");
+    int indices[] = (int[])callMethod("getSelectionIndices");
     return (indices);
   }
 
@@ -95,7 +94,8 @@ public class List extends Scrollable {
    *  </ul>
    */
   public int getTopIndex() throws SWTException {
-    return (Integer)getDisplay().callMethod(getId(), "getTopIndex");
+    checkWidget();
+    return (Integer)callMethod("getTopIndex");
   }
 
   /**
@@ -113,7 +113,7 @@ public class List extends Scrollable {
    */
   public void deselectAll() throws SWTException {
     checkWidget();
-    getDisplay().callMethod(getId(), "deselectAll");
+    callMethod("deselectAll");
   }
 
   /**
@@ -131,7 +131,7 @@ public class List extends Scrollable {
    */
   public void removeAll() throws SWTException {
     checkWidget();
-    getDisplay().callMethod(getId(), "removeAll");
+    callMethod("removeAll");
   }
 
   /**
@@ -167,7 +167,7 @@ public class List extends Scrollable {
 
     checkWidget();
 
-    getDisplay().callMethod(getId(), "setItems", (Object)items);
+    callMethod("setItems", (Object)items);
   }
 
   /**
@@ -189,6 +189,6 @@ public class List extends Scrollable {
    */
   public void setTopIndex(int index) throws SWTException {
     checkWidget();
-    getDisplay().callMethod(getId(), "setTopIndex", index);
+    callMethod("setTopIndex", index);
   }
 }

@@ -64,7 +64,7 @@ public class Text extends Scrollable {
     }
 
     checkWidget();
-    getDisplay().callMethod(getId(), "setText", string);
+    callMethod("setText", string);
     this.text = string;
   }
 }

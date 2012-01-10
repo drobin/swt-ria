@@ -223,6 +223,6 @@ public class Shell extends Decorations {
    * TODO Needs to be implemented!!
    */
   public void open() throws SWTException {
-    getDisplay().callMethod(getId(), "open");
+    callMethod("open");
   }
 }

@@ -62,7 +62,7 @@ public class Decorations extends Canvas {
     }
 
     checkWidget();
-    getDisplay().callMethod(getId(), "setText", string);
+    callMethod("setText", string);
     this.text = string;
   }
 

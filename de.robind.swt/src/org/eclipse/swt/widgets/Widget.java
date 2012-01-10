@@ -308,7 +308,7 @@ public abstract class Widget extends SWTObject {
    */
   public void dispose() throws SWTException {
     checkThread();
-    getDisplay().callMethod(getId(), "dispose");
+    callMethod("dispose");
     this.disposed = true;
   }
 
@@ -676,7 +676,7 @@ public abstract class Widget extends SWTObject {
    */
   public void reskin(int flags) throws SWTException {
     checkWidget();
-    getDisplay().callMethod(getId(), "reskin", flags);
+    callMethod("reskin", flags);
   }
 
   /**

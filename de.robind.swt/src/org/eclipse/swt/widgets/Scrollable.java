@@ -70,7 +70,7 @@ public abstract class Scrollable extends Control {
   public Rectangle getClientArea() throws SWTException {
     checkWidget();
 
-    Object result = getDisplay().callMethod(getId(), "getClientArea");
+    Object result = callMethod("getClientArea");
     @SuppressWarnings("unchecked")
     Map<String, Object> clientAreaMap = (Map<String, Object>)result;
     int x = (Integer)clientAreaMap.get("x");

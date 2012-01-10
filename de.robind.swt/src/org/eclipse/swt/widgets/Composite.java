@@ -202,7 +202,7 @@ public class Composite extends Scrollable {
   public void layout(boolean changed, boolean all) throws SWTException {
     checkWidget();
 
-    getDisplay().callMethod(getId(), "layout", changed, all);
+    callMethod("layout", changed, all);
   }
 
   /**
@@ -334,7 +334,7 @@ public class Composite extends Scrollable {
       }
     }
 
-    getDisplay().callMethod(getId(), "layout", changed, flags);
+    callMethod("layout", changed, flags);
   }
 
   /**

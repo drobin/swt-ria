@@ -400,8 +400,7 @@ public abstract class Control extends Widget implements Drawable {
   public Rectangle getBounds() throws SWTException {
     checkWidget();
     @SuppressWarnings("unchecked")
-    Map<String, Object> bounds =
-        (Map<String, Object>)getDisplay().callMethod(getId(), "getBounds");
+    Map<String, Object> bounds = (Map<String, Object>)callMethod("getBounds");
 
     int x = (Integer)bounds.get("x");
     int y = (Integer)bounds.get("y");
@@ -737,7 +736,7 @@ public abstract class Control extends Widget implements Drawable {
       throws SWTException {
 
     checkWidget();
-    getDisplay().callMethod(getId(), "setBounds", x, y, width, height);
+    callMethod("setBounds", x, y, width, height);
   }
 
   /**
@@ -808,6 +807,6 @@ public abstract class Control extends Widget implements Drawable {
    */
   public void setRedraw(boolean redraw) throws SWTException {
     checkWidget();
-    getDisplay().callMethod(getId(), "setRedraw", redraw);
+    callMethod("setRedraw", redraw);
   }
 }

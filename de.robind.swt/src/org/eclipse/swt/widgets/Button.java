@@ -187,7 +187,7 @@ public class Button extends Control {
 
     // TODO Test for ARROW
     checkWidget();
-    getDisplay().callMethod(getId(), "setText", string);
+    callMethod("setText", string);
     this.text = string;
   }
 }
