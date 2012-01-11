@@ -1,7 +1,9 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
+import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Control;
 
 /**
@@ -199,6 +201,7 @@ public class GridData extends SWTObject {
    * is <code>false</code>, the size and position of the control will be
    * computed and assigned. The default value is <code>false</code>.
    */
+  @Trackable
   public boolean exclude = false;
 
   /**
@@ -236,6 +239,7 @@ public class GridData extends SWTObject {
    *
    * The default value is <code>false</code>.
    */
+  @Trackable
   public boolean grabExcessHorizontalSpace = false;
 
   /**
@@ -272,6 +276,7 @@ public class GridData extends SWTObject {
    *
    * The default value is <code>false</code>.
    */
+  @Trackable
   public boolean grabExcessVerticalSpace = false;
 
   /**
@@ -279,6 +284,7 @@ public class GridData extends SWTObject {
    * hHint passed into Control.computeSize(int, int, boolean) to determine the
    * preferred size of the control. The default value is SWT.DEFAULT.
    */
+  @Trackable
   public int heightHint = SWT.DEFAULT;
 
   /**
@@ -301,18 +307,21 @@ public class GridData extends SWTObject {
    *  </li>
    * </ul>
    */
-  public int horizontalAlignment = SWT.BEGINNING;
+  @Trackable
+  public int horizontalAlignment = BEGINNING;
 
   /**
    * horizontalIndent specifies the number of pixels of indentation that will
    * be placed along the left side of the cell. The default value is 0.
    */
+  @Trackable
   public int horizontalIndent = 0;
 
   /**
    * horizontalSpan specifies the number of column cells that the control wil
    * take up. The default value is 1.
    */
+  @Trackable
   public int horizontalSpan = 1;
 
   /**
@@ -322,6 +331,7 @@ public class GridData extends SWTObject {
    * Control.computeSize(int, int, boolean) where hHint is determined by
    * GridData.heightHint. The default value is 0.
    */
+  @Trackable
   public int minimumHeight = 0;
 
   /**
@@ -331,6 +341,7 @@ public class GridData extends SWTObject {
    * Control.computeSize(int, int, boolean) where wHint is determined by
    * GridData.widthHint. The default value is 0.
    */
+  @Trackable
   public int minimumWidth = 0;
 
   /**
@@ -352,18 +363,21 @@ public class GridData extends SWTObject {
    *  </li>
    * </ul>
    */
-  public int verticalAlignment = SWT.CENTER;
+  @Trackable
+  public int verticalAlignment = CENTER;
 
   /**
    * verticalIndent specifies the number of pixels of indentation that will be
    * placed along the top side of the cell. The default value is 0.
    */
+  @Trackable
   public int verticalIndent = 0;
 
   /**
    * verticalSpan specifies the number of row cells that the control will take
    * up. The default value is 1.
    */
+  @Trackable
   public int verticalSpan = 1;
 
   /**
@@ -371,6 +385,7 @@ public class GridData extends SWTObject {
    * passed into Control.computeSize(int, int, boolean) to determine the
    * preferred size of the control. The default value is SWT.DEFAULT.
    */
+  @Trackable
   public int widthHint = SWT.DEFAULT;
 
   /**
@@ -493,6 +508,16 @@ public class GridData extends SWTObject {
     this.grabExcessVerticalSpace = grabExcessVerticalSpace;
     this.horizontalSpan = horizontalSpan;
     this.verticalSpan = verticalSpan;
+  }
+
+  /**
+   * Invoked, if an attribute of the class has changed.
+   *
+   * @param field The name of the attribute-field, which has changed
+   * @throws SWTException if the attribute was not updated at the client
+   */
+  public void attributeChanged(String field) throws SWTException {
+    updateAttribute(field);
   }
 
   /**
