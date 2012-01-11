@@ -1,7 +1,7 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.LayoutAdapter;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -64,7 +64,7 @@ import org.eclipse.swt.widgets.Shell;
  * <tt>button1</tt>. This will over constrain the layout, causing undefined
  * behavior. The algorithm will terminate, but the results are undefined.
  */
-public class FormLayout extends Layout {
+public class FormLayout extends LayoutAdapter {
   /**
    * marginLeft specifies the number of pixels of horizontal margin that will
    * be placed along the left edge of the layout. The default value is 0.

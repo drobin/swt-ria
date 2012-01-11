@@ -2,7 +2,7 @@ package org.eclipse.swt.layout;
 
 import java.awt.Composite;
 
-import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.LayoutAdapter;
 
 /**
  * Instances of this class lay out the control children of a {@link Composite}
@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Layout;
  * a new row is created when {@link #numColumns} + 1 controls are added to the
  * Composite.
  */
-public class GridLayout extends Layout {
+public class GridLayout extends LayoutAdapter {
   /**
    * horizontalSpacing specifies the number of pixels between the right edge of
    * one cell and the left edge of its neighbouring cell to the right. The

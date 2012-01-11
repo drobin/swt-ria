@@ -1,12 +1,12 @@
 package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.LayoutAdapter;
 
 /**
  * TODO Needs to be implemented!!
  */
-public class FillLayout extends Layout {
+public class FillLayout extends LayoutAdapter {
   /**
    * type specifies how controls will be positioned within the layout. The
    * default value is {@link SWT#HORIZONTAL}. Possible values are:
