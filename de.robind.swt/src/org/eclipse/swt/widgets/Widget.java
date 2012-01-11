@@ -255,11 +255,7 @@ public abstract class Widget extends SWTObject {
    *  </ul>
    */
   protected void checkSubclass() throws SWTException {
-    // The class needs to be located inside the "org.eclipse.swt"-package
-    String name = getClass().getPackage().getName();
-    if (!name.startsWith("org.eclipse.swt")) {
-      throw new SWTException(SWT.ERROR_INVALID_SUBCLASS);
-    }
+    performCheckSubclass();
   }
 
   /**
@@ -564,6 +560,20 @@ public abstract class Widget extends SWTObject {
 
     for (Listener listener: getListeners(eventType)) {
       listener.handleEvent(event);
+    }
+  }
+
+  /**
+   * Performs the {@link #checkSubclass()}-check.
+   * <p>
+   * This is extracted into a separate method. So it can be reused in a
+   * subclass.
+   */
+  final protected void performCheckSubclass() throws SWTException {
+    // The class needs to be located inside the "org.eclipse.swt"-package
+    String name = getClass().getPackage().getName();
+    if (!name.startsWith("org.eclipse.swt")) {
+      throw new SWTException(SWT.ERROR_INVALID_SUBCLASS);
     }
   }
 

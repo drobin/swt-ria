@@ -236,6 +236,14 @@ public class SWT {
   public static final int FocusOut = 16;
 
   /**
+   * Style constant for full row selection behavior and selection constant
+   * indicating that a full line should be drawn. (value is 1<<16).
+   * <p>
+   * Note that for some widgets this is a <i>HINT</i>.
+   */
+  public static final int FULL_SELECTION = 1 << 16;
+
+  /**
    * The help event type (value is 28).
    */
   public static final int Help = 28;
@@ -645,6 +653,11 @@ public class SWT {
    * (value is 1<<9).
    */
   public static final int VERTICAL = 1 << 9;
+
+  /**
+   * Style constant to allow virtual data (value is 1<<28).
+   */
+  public static final int VIRTUAL = 1 << 28;
 
   /**
    * Style constant for vertical scrollbar behavior (value is 1<<9).
