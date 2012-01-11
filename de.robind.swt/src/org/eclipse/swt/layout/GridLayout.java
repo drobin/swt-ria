@@ -2,6 +2,8 @@ package org.eclipse.swt.layout;
 
 import java.awt.Composite;
 
+import org.eclipse.swt.SWTException;
+import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.LayoutAdapter;
 
 /**
@@ -35,18 +37,21 @@ public class GridLayout extends LayoutAdapter {
    * one cell and the left edge of its neighbouring cell to the right. The
    * default value is 5.
    */
+  @Trackable
   public int horizontalSpacing = 5;
 
   /**
    * makeColumnsEqualWidth specifies whether all columns in the layout will be
    * forced to have the same width. The default value is false.
    */
+  @Trackable
   public boolean makeColumnsEqualWidth = false;
 
   /**
    * marginBottom specifies the number of pixels of vertical margin that will
    * be placed along the bottom edge of the layout. The default value is 0.
    */
+  @Trackable
   public int marginBottom = 0;
 
   /**
@@ -54,24 +59,28 @@ public class GridLayout extends LayoutAdapter {
    * be placed along the top and bottom edges of the layout. The default value
    * is 5.
    */
+  @Trackable
   public int marginHeight = 5;
 
   /**
    * marginLeft specifies the number of pixels of horizontal margin that will
    * be placed along the left edge of the layout. The default value is 0.
    */
+  @Trackable
   public int marginLeft = 0;
 
   /**
    * marginRight specifies the number of pixels of horizontal margin that will
    * be placed along the right edge of the layout. The default value is 0.
    */
+  @Trackable
   public int marginRight = 0;
 
   /**
    * marginTop specifies the number of pixels of vertical margin that will be
    * placed along the top edge of the layout. The default value is 0.
    */
+  @Trackable
   public int marginTop = 0;
 
   /**
@@ -79,6 +88,7 @@ public class GridLayout extends LayoutAdapter {
    * be placed along the left and right edges of the layout. The default value
    * is 5.
    */
+  @Trackable
   public int marginWidth = 5;
 
   /**
@@ -86,6 +96,7 @@ public class GridLayout extends LayoutAdapter {
    * numColumns has a value less than 1, the layout will not set the size
    * and position of any controls. The default value is 1.
    */
+  @Trackable
   public int numColumns = 1;
 
   /**
@@ -93,6 +104,7 @@ public class GridLayout extends LayoutAdapter {
    * one cell and the top edge of its neighbouring cell underneath. The default
    * value is 5.
    */
+  @Trackable
   public int verticalSpacing = 5;
 
   /**
@@ -117,6 +129,16 @@ public class GridLayout extends LayoutAdapter {
 
     this.numColumns = numColumns;
     this.makeColumnsEqualWidth = makeColumnsEqualWidth;
+  }
+
+  /**
+   * Invoked, if an attribute of the class has changed.
+   *
+   * @param field The name of the attribute-field, which has changed
+   * @throws SWTException if the attribute was not updated at the client
+   */
+  public void attributeChanged(String field) throws SWTException {
+    updateAttribute(field);
   }
 
   /**
