@@ -13,13 +13,13 @@ public class AddressBookDemo {
     shell.setText("Addressbook");
 
     ListViewer listViewer = new ListViewer(
-        shell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
+        shell, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
     listViewer.setLabelProvider(new AddressBookLabelProvider());
     listViewer.setContentProvider(new AddressBookContentProvider());
     listViewer.setInput(new AddressBookModel());
 
     AddressBookDetailsWidget detailsWidget =
-        new AddressBookDetailsWidget(shell, SWT.NO_SCROLL);
+        new AddressBookDetailsWidget(shell, SWT.NO_SCROLL | SWT.BORDER);
     listViewer.addSelectionChangedListener(detailsWidget);
 
     SashBuilder.buildSash(shell, listViewer.getList(), detailsWidget);
