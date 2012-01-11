@@ -2,6 +2,7 @@ package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Control;
@@ -105,23 +106,27 @@ public class FormAttachment extends SWTObject {
    *  </li>
    * </ul>
    */
+  @Trackable
   public int alignment;
 
   /**
    * control specifies the control to which the control side is attached.
    */
+  @Trackable
   public Control control;
 
   /**
    * denominator specifies the denominator of the "a" term in the equation,
    * y = ax + b, which defines the attachment. The default value is 100.
    */
+  @Trackable
   public int denominator = 100;
 
   /**
    * numerator specifies the numerator of the "a" term in the equation,
    * y = ax + b, which defines the attachment.
    */
+  @Trackable
   public int numerator;
 
   /**
@@ -256,5 +261,15 @@ public class FormAttachment extends SWTObject {
     this.numerator = numerator;
     this.denominator = denominator;
     this.offset = offset;
+  }
+
+  /**
+   * Invoked, if an attribute of the class has changed.
+   *
+   * @param field The name of the attribute-field, which has changed
+   * @throws SWTException if the attribute was not updated at the client
+   */
+  public void attributeChanged(String field) throws SWTException {
+    updateAttribute(field);
   }
 }
