@@ -3,6 +3,7 @@ package org.eclipse.swt.layout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.SWTObject;
+import org.eclipse.swt.server.Key;
 import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Control;
 
@@ -89,6 +90,29 @@ public class FormData extends SWTObject {
     this.height = height;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.SWTObject#setKey(org.eclipse.swt.server.Key)
+   */
+  @Override
+  public void setKey(Key key) {
+    if (key != null) {
+      if (this.left != null) {
+        this.left.setKey(key);
+      }
+      if (this.right != null) {
+        this.right.setKey(key);
+      }
+      if (this.top != null) {
+        this.top.setKey(key);
+      }
+      if (this.bottom != null) {
+        this.bottom.setKey(key);
+      }
+    }
+
+    super.setKey(key);
+  }
+
   /**
    * Invoked, if an attribute of the class has changed.
    *
@@ -96,6 +120,19 @@ public class FormData extends SWTObject {
    * @throws SWTException if the attribute was not updated at the client
    */
   public void attributeChanged(String field) throws SWTException {
+    if (field.equals("left") && this.left.getKey() == null) {
+      this.left.setKey(getKey());
+    }
+    if (field.equals("right") && this.right.getKey() == null) {
+      this.right.setKey(getKey());
+    }
+    if (field.equals("top") && this.top.getKey() == null) {
+      this.top.setKey(getKey());
+    }
+    if (field.equals("bottom") && this.bottom.getKey() == null) {
+      this.bottom.setKey(getKey());
+    }
+
     updateAttribute(field);
   }
 }
