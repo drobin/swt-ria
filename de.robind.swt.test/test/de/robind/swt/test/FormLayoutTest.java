@@ -6,31 +6,10 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.robind.swt.test.utils.TestClientTasks;
-
-public class FormLayoutTest {
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
-  @After
-  public void after() {
-    getClientTasks().clearState();
-  }
-
+public class FormLayoutTest extends ClientTasksSupport {
   @Test
   public void ctor() {
     FormLayout layout = new FormLayout();
@@ -139,10 +118,5 @@ public class FormLayoutTest {
     assertThat(getClientTasks().getQueueSize(), is(2));
     assertThat(getClientTasks(), is(createRequest(layout, FormLayout.class)));
     assertThat(getClientTasks(), is(attrRequest(layout, "spacing", 4711)));
-  }
-
-  protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
   }
 }

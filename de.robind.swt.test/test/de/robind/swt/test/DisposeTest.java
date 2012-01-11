@@ -39,9 +39,7 @@ import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -49,7 +47,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import de.robind.swt.test.utils.TestClientTasks;
 import de.robind.swt.test.utils.TestControlListener;
 import de.robind.swt.test.utils.TestDisposeListener;
 import de.robind.swt.test.utils.TestDragDetectListener;
@@ -68,7 +65,7 @@ import de.robind.swt.test.utils.TestTraverseListener;
 
 
 @RunWith(value = Parameterized.class)
-public class DisposeTest {
+public class DisposeTest extends ClientTasksSupport {
   private Class<? extends Widget> testClass = null;
   private String method = null;
   private Class<?>[] parameterTypes = null;
@@ -172,16 +169,6 @@ public class DisposeTest {
     return (arguments);
   }
 
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
   @Before
   public void before() throws Exception {
     DisplayPool.getInstance().offerKey(new Key() {});
@@ -201,7 +188,6 @@ public class DisposeTest {
 
   @After
   public void after() {
-    getClientTasks().clearState();
     this.widget = null;
     this.shell = null;
     this.display = null;
@@ -219,10 +205,5 @@ public class DisposeTest {
     } catch (InvocationTargetException e) {
       throw e.getCause();
     }
-  }
-
-  protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
   }
 }

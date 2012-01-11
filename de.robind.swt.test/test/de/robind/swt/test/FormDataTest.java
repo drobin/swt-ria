@@ -9,31 +9,10 @@ import static org.junit.Assert.assertThat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.robind.swt.test.utils.TestClientTasks;
-
-public class FormDataTest {
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
-  @After
-  public void after() {
-    getClientTasks().clearState();
-  }
-
+public class FormDataTest extends ClientTasksSupport {
   @Test
   public void stdCtor() {
     FormData data = new FormData();
@@ -206,10 +185,5 @@ public class FormDataTest {
     assertThat(getClientTasks().getQueueSize(), is(2));
     assertThat(getClientTasks(), is(createRequest(data, FormData.class)));
     assertThat(getClientTasks(), is(attrRequest(data, "height", 4711)));
-  }
-
-  protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
   }
 }

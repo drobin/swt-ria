@@ -7,32 +7,11 @@ import static org.junit.Assert.assertThat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.robind.swt.test.utils.TestClientTasks;
 
-
-public class FillLayoutTest {
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
-  @After
-  public void after() {
-    getClientTasks().clearState();
-  }
-
+public class FillLayoutTest extends ClientTasksSupport {
   @Test
   public void stdCtor() {
     FillLayout layout = new FillLayout();
@@ -101,10 +80,5 @@ public class FillLayoutTest {
     assertThat(getClientTasks().getQueueSize(), is(2));
     assertThat(getClientTasks(), is(createRequest(layout, FillLayout.class, SWT.HORIZONTAL)));
     assertThat(getClientTasks(), is(attrRequest(layout, "spacing", 4711)));
-  }
-
-  protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
   }
 }

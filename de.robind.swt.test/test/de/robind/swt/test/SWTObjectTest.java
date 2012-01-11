@@ -16,31 +16,15 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTObject;
-import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.robind.swt.test.utils.TestClientTasks;
-
-public class SWTObjectTest {
+public class SWTObjectTest extends ClientTasksSupport {
   @Rule
   public ExpectedException exception = ExpectedException.none();
-
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
 
   @SuppressWarnings("unchecked")
   @Before
@@ -54,11 +38,6 @@ public class SWTObjectTest {
     f = SWTObject.class.getDeclaredField("objMap");
     f.setAccessible(true);
     ((Map<Integer, SWTObject>)f.get(null)).clear();
-  }
-
-  @After
-  public void after() {
-    getClientTasks().clearState();
   }
 
   @Test
@@ -247,11 +226,4 @@ public class SWTObjectTest {
     assertThat(getClientTasks().getQueueSize(), is(1));
     assertThat(getClientTasks(), is(attrRequest(obj, "foo", 4711)));
   }
-
-  protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
-  }
-
-
 }

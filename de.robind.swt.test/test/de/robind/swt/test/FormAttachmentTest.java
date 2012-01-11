@@ -15,33 +15,15 @@ import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import de.robind.swt.test.utils.TestClientTasks;
 
-public class FormAttachmentTest {
+public class FormAttachmentTest extends ClientTasksSupport {
   @Rule
   public ExpectedException exception = ExpectedException.none();
-
-  @BeforeClass
-  public static void beforeClass() {
-    System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
-  }
-
-  @AfterClass
-  public static void afterClass() {
-    System.clearProperty("de.robind.swt.clienttasks");
-  }
-
-  @After
-  public void after() {
-    getClientTasks().clearState();
-  }
 
   @Test
   public void stdCtor() {
