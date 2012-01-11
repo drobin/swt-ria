@@ -5,8 +5,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
@@ -83,7 +86,8 @@ public class SWTObject {
     Object arguments[] = normalizeArguments(objMap, args);
     Method method = findMethod(objMap, obj.getClass(), methodName, arguments);
 
-    return (method.invoke(obj, arguments));
+    Object result = method.invoke(obj, arguments);
+    return (normalizeArgument(objMap, result));
   }
 
   /**
@@ -275,20 +279,27 @@ public class SWTObject {
   /**
    * Transforms the given argument into a usable form.
    * <p>
-   * If the argument is a {@link SWTObjectId}, which is unknown in the
-   * SWT-framework, then the if is replaced with the related SWT-object located
-   * in the given object-map.
+   * Some kind of arguments (like {@link SWTObject} or {@link Rectangle}
+   * cannot be transferred over the network. They must be converted into a
+   * correct form.
    *
    * @param objMap The mapping from object-id to object
    * @param argument The argument to check
-   * @return
+   * @return The normalized argument
    */
   private static Object normalizeArgument(SWTObjectMap objMap, Object argument) {
-
     if (argument instanceof SWTObjectId) {
       // Need to transform it into the SWT-object with the given id
       int id = ((SWTObjectId)argument).getId();
       return (objMap.get(id));
+    } else if (argument instanceof Rectangle) {
+      // A rectangle needs to be transformed into a mapping
+      Map<String, Object> mapping = new HashMap<String, Object>();
+      mapping.put("x", ((Rectangle)argument).x);
+      mapping.put("y", ((Rectangle)argument).y);
+      mapping.put("width", ((Rectangle)argument).width);
+      mapping.put("height", ((Rectangle)argument).height);
+      return (mapping);
     } else {
       return (argument);
     }
