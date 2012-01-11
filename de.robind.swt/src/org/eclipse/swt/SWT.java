@@ -249,6 +249,14 @@ public class SWT {
   public static final int Help = 28;
 
   /**
+   * Style constant for selection hiding behavior when the widget loses focus
+   * (value is 1<<15).
+   * <p>
+   * Note that this is a <i>HINT</i>.
+   */
+  public static final int HIDE_SELECTION = 1 << 15;
+
+  /**
    * Style constant for horizontal scrollbar behavior (value is 1<<8).
    */
   public static final int H_SCROLL = 1 << 8;
