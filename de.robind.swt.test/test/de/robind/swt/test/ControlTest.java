@@ -19,7 +19,9 @@ import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.test.TestControl;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
@@ -993,5 +995,17 @@ public class ControlTest extends AbstractWidgetTest {
 
     assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
     assertThat(getClientTasks(), is(callRequest(control, "setBounds", 1, 2, 3, 4)));
+  }
+
+  @Test
+  public void getParent() {
+    Composite control = new Composite(this.shell, 0);
+    assertThat(this.shell.getParent(), is(nullValue()));
+    assertThat(control.getParent(), is(sameInstance((Composite)this.shell)));
+
+    Text other = new Text(control, 0);
+    assertThat(other.getParent(), is(sameInstance(control)));
+    assertThat(control.getParent(), is(sameInstance((Composite)this.shell)));
+    assertThat(this.shell.getParent(), is(nullValue()));
   }
 }

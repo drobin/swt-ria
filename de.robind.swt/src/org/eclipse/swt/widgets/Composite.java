@@ -316,7 +316,7 @@ public class Composite extends Scrollable {
         throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
       }
 
-      Widget composite = control.getParent();
+      Composite composite = control.getParent();
       boolean detected = false;
       while (composite != null) {
         if (composite == this) {

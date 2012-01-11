@@ -427,6 +427,32 @@ public abstract class Control extends Widget implements Drawable {
   }
 
   /**
+   * Returns the receiver's parent, which must be a {@link Composite} or
+   * <code>null</code> when the receiver is a shell that was created with null
+   * or a display for a parent.
+   *
+   * @return the receiver's parent
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *  </ul>
+   */
+  public Composite getParent() throws SWTException {
+    checkWidget();
+
+    if (this.parent instanceof Composite) {
+      return ((Composite)this.parent);
+    } else {
+      return (null);
+    }
+  }
+
+  /**
    * Removes the listener from the collection of listeners who will be notified
    * when the control is moved or resized.
    *

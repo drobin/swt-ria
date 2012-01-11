@@ -125,6 +125,7 @@ public class DisposeTest extends ClientTasksSupport {
         { TestControl.class, "addTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
         { TestControl.class, "getBounds", p(), a() },
         { TestControl.class, "getLayoutData", p(), a() },
+        { TestControl.class, "getParent", p(), a() },
         { TestControl.class, "removeControlListener", p(ControlListener.class), a(new TestControlListener()) },
         { TestControl.class, "removeDragDetectListener", p(DragDetectListener.class), a(new TestDragDetectListener()) },
         { TestControl.class, "removeFocusListener", p(FocusListener.class), a(new TestFocusListener()) },
