@@ -1,7 +1,9 @@
-package org.eclipse.swt.widgets;
+package org.eclipse.swt.custom;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 /**
  * A TableTree is a selectable user interface object that displays a hierarchy

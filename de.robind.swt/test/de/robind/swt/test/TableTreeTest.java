@@ -3,7 +3,7 @@ package de.robind.swt.test;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.TableTree;
+import org.eclipse.swt.custom.TableTree;
 import org.junit.Test;
 
 @SuppressWarnings("deprecation")

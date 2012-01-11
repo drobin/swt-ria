@@ -1,7 +1,8 @@
-package org.eclipse.swt.widgets;
+package org.eclipse.swt.custom;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.widgets.Item;
 
 /**
  * A TableTreeItem is a selectable user interface object that represents an
