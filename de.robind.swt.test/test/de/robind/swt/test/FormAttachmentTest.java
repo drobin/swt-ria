@@ -15,6 +15,7 @@ import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -35,6 +36,11 @@ public class FormAttachmentTest {
   @AfterClass
   public static void afterClass() {
     System.clearProperty("de.robind.swt.clienttasks");
+  }
+
+  @After
+  public void after() {
+    getClientTasks().clearState();
   }
 
   @Test

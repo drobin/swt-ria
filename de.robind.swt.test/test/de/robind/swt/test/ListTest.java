@@ -10,7 +10,6 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
@@ -54,8 +53,6 @@ public class ListTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     List list = new List(this.shell, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
   }
 
@@ -71,6 +68,7 @@ public class ListTest extends AbstractWidgetTest {
 
     List list = new List(this.shell, 4711);
     assertThat(list.getSelectionIndices().length, is(0));
+    assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(list, "getSelectionIndices")));
   }
 
@@ -80,6 +78,7 @@ public class ListTest extends AbstractWidgetTest {
 
     List list = new List(this.shell, 4711);
     assertThat(list.getTopIndex(), is(0));
+    assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(list, "getTopIndex")));
   }
 
@@ -87,6 +86,7 @@ public class ListTest extends AbstractWidgetTest {
   public void deselectAll() {
     List list = new List(this.shell, 4711);
     list.deselectAll();
+    assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(list, "deselectAll")));
   }
 
@@ -94,6 +94,7 @@ public class ListTest extends AbstractWidgetTest {
   public void removeAll() {
     List list = new List(this.shell, 4711);
     list.removeAll();
+    assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(list, "removeAll")));
   }
 
@@ -118,6 +119,7 @@ public class ListTest extends AbstractWidgetTest {
     String[] items = new String[] { "foo", "bar" };
     List list = new List(this.shell, 4711);
     list.setItems(items);
+    assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(list, "setItems", (Object)items)));
   }
 
@@ -125,6 +127,7 @@ public class ListTest extends AbstractWidgetTest {
   public void setTopIndex() {
     List list = new List(this.shell, 4711);
     list.setTopIndex(0);
+    assertThat(getClientTasks(), is(createRequest(list, List.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(list, "setTopIndex", 0)));
   }
 }

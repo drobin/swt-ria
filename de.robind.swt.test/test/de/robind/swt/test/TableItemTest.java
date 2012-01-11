@@ -9,8 +9,6 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.junit.After;
@@ -64,8 +62,6 @@ public class TableItemTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     TableItem tableItem = new TableItem(this.table, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(this.table, Table.class, this.shell, SWT.DEFAULT)));
     assertThat(getClientTasks(), is(createRequest(tableItem, TableItem.class, this.table, 4711)));
   }

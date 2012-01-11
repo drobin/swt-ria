@@ -201,6 +201,7 @@ public class DisposeTest {
 
   @After
   public void after() {
+    getClientTasks().clearState();
     this.widget = null;
     this.shell = null;
     this.display = null;
@@ -218,5 +219,10 @@ public class DisposeTest {
     } catch (InvocationTargetException e) {
       throw e.getCause();
     }
+  }
+
+  protected TestClientTasks getClientTasks() {
+    DisplayPool pool = DisplayPool.getInstance();
+    return ((TestClientTasks)pool.getClientTasks());
   }
 }

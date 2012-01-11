@@ -12,9 +12,7 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Sash;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
@@ -56,8 +54,6 @@ public class SashTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     Sash sash = new Sash(this.shell, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(sash, Sash.class, this.shell, 4711)));
   }
 

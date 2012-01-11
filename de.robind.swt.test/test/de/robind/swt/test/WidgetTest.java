@@ -13,7 +13,6 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.test.TestWidget;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -63,8 +62,6 @@ public class WidgetTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     Widget widget = new TestWidget(this.shell, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(widget, TestWidget.class, this.shell, 4711)));
   }
 

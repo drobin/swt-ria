@@ -14,9 +14,7 @@ import java.util.concurrent.Callable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.test.TestScrollable;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Scrollable;
-import org.eclipse.swt.widgets.Shell;
 import org.junit.Test;
 
 public class ScrollableTest extends AbstractWidgetTest {
@@ -54,8 +52,6 @@ public class ScrollableTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     TestScrollable scrollable = new TestScrollable(this.shell, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(scrollable, TestScrollable.class, this.shell, 4711)));
   }
 
@@ -83,6 +79,7 @@ public class ScrollableTest extends AbstractWidgetTest {
     assertThat(rect.width, is(3));
     assertThat(rect.height, is(4));
 
+    assertThat(getClientTasks(), is(createRequest(scrollable, TestScrollable.class, this.shell, 0)));
     assertThat(getClientTasks(), is(callRequest(scrollable, "getClientArea")));
   }
 }

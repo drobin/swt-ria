@@ -198,6 +198,7 @@ public class InvalidAccessTest {
 
   @After
   public void after() {
+    getClientTasks().clearState();
     this.widget = null;
     this.shell = null;
     this.display = null;
@@ -224,5 +225,10 @@ public class InvalidAccessTest {
       }
     });
 
+  }
+
+  protected TestClientTasks getClientTasks() {
+    DisplayPool pool = DisplayPool.getInstance();
+    return ((TestClientTasks)pool.getClientTasks());
   }
 }

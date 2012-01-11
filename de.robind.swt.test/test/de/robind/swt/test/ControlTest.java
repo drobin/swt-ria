@@ -20,8 +20,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
@@ -75,8 +73,6 @@ public class ControlTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     Control control = new TestControl(this.shell, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 4711)));
   }
 
@@ -986,6 +982,7 @@ public class ControlTest extends AbstractWidgetTest {
     assertThat(rect.width, is(3));
     assertThat(rect.height, is(4));
 
+    assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
     assertThat(getClientTasks(), is(callRequest(control, "getBounds")));
   }
 
@@ -994,6 +991,7 @@ public class ControlTest extends AbstractWidgetTest {
     Control control = new TestControl(this.shell, 0);
     control.setBounds(1, 2, 3, 4);
 
+    assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
     assertThat(getClientTasks(), is(callRequest(control, "setBounds", 1, 2, 3, 4)));
   }
 }

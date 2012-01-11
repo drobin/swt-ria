@@ -11,6 +11,7 @@ import de.robind.swt.test.utils.TestClientTasks.AttrRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.CallRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.CreateRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.RegisterRequestStore;
+import de.robind.swt.test.utils.TestClientTasks.RequestStore;
 
 public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
   int id;
@@ -76,45 +77,31 @@ public class ClientTaskMatcher extends TypeSafeMatcher<TestClientTasks> {
    */
   @Override
   public boolean matchesSafely(TestClientTasks clientTasks) {
-    if (this.args instanceof CreateArgs) {
-      CreateRequestStore store;
+    RequestStore store;
 
-      if ((store = clientTasks.createRequestQueue.poll()) == null) {
-        return (false);
-      }
-
-      return (store.matches(this.id,
-          ((CreateArgs)this.args).objClass, ((CreateArgs)this.args).args));
-    } else if (this.args instanceof CallArgs) {
-      CallRequestStore store;
-
-      if ((store = clientTasks.callRequestQueue.poll()) == null) {
-        return (false);
-      }
-
-      return (store.matches(this.id,
-          ((CallArgs)this.args).method, ((CallArgs)this.args).args));
-    } else if (this.args instanceof RegArgs) {
-      RegisterRequestStore store;
-
-      if ((store = clientTasks.registerRequestQueue.poll()) == null) {
-        return (false);
-      }
-
-      return (store.matches(this.id,
-          ((RegArgs)this.args).eventType, ((RegArgs)this.args).enable));
-    } else if (this.args instanceof AttrArgs) {
-      AttrRequestStore store;
-
-      if ((store = clientTasks.attrRequestQueue.poll()) == null) {
-        return (false);
-      }
-
-      return (store.matches(id,
-          ((AttrArgs)this.args).attrName, ((AttrArgs)this.args).attrValue));
-    } else {
-      throw new Error("add matcher for " + this.args.getClass().getName());
+    if ((store = clientTasks.requestQueue.poll()) == null) {
+      return (false);
     }
+
+    if (this.args instanceof CreateArgs && store instanceof CreateRequestStore) {
+      CreateRequestStore createStore = (CreateRequestStore)store;
+      return (createStore.matches(this.id,
+          ((CreateArgs)this.args).objClass, ((CreateArgs)this.args).args));
+    } else if (this.args instanceof CallArgs && store instanceof CallRequestStore) {
+      CallRequestStore callStore = (CallRequestStore)store;
+      return (callStore.matches(this.id,
+          ((CallArgs)this.args).method, ((CallArgs)this.args).args));
+    } else if (this.args instanceof RegArgs && store instanceof RegisterRequestStore) {
+      RegisterRequestStore regStore = (RegisterRequestStore)store;
+      return (regStore.matches(this.id,
+          ((RegArgs)this.args).eventType, ((RegArgs)this.args).enable));
+    } else if (this.args instanceof AttrArgs && store instanceof AttrRequestStore) {
+      AttrRequestStore attrStore = (AttrRequestStore)store;
+      return (attrStore.matches(id,
+          ((AttrArgs)this.args).attrName, ((AttrArgs)this.args).attrValue));
+    }
+
+    return (false);
   }
 
   public static Matcher<TestClientTasks> createRequest(SWTObject obj, Class<?> objClass, Object... args) {

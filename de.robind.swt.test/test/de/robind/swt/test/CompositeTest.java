@@ -12,8 +12,6 @@ import java.util.concurrent.Callable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
@@ -48,8 +46,6 @@ public class CompositeTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     Composite composite = new Composite(this.shell, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(composite, Composite.class, this.shell, 4711)));
   }
 
@@ -63,6 +59,7 @@ public class CompositeTest extends AbstractWidgetTest {
   public void layout() {
     Composite composite = new Composite(this.shell, 4711);
     composite.layout();
+    assertThat(getClientTasks(), is(createRequest(composite, Composite.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(composite, "layout", true, false)));
   }
 
@@ -70,6 +67,7 @@ public class CompositeTest extends AbstractWidgetTest {
   public void layoutBoolean() {
     Composite composite = new Composite(this.shell, 4711);
     composite.layout(true);
+    assertThat(getClientTasks(), is(createRequest(composite, Composite.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(composite, "layout", true, false)));
   }
 
@@ -77,6 +75,7 @@ public class CompositeTest extends AbstractWidgetTest {
   public void layoutBooleanBoolean() {
     Composite composite = new Composite(this.shell, 4711);
     composite.layout(true, true);
+    assertThat(getClientTasks(), is(createRequest(composite, Composite.class, this.shell, 4711)));
     assertThat(getClientTasks(), is(callRequest(composite, "layout", true, true)));
   }
 
@@ -134,6 +133,8 @@ public class CompositeTest extends AbstractWidgetTest {
     };
 
     composite.layout(changed);
+    assertThat(getClientTasks(), is(createRequest(composite, Composite.class, this.shell, 4711)));
+    assertThat(getClientTasks(), is(createRequest(changed[0], Composite.class, composite, 0)));
     assertThat(getClientTasks(), is(callRequest(composite, "layout", changed, SWT.NONE)));
   }
 
@@ -191,6 +192,8 @@ public class CompositeTest extends AbstractWidgetTest {
     };
 
     composite.layout(changed, SWT.NONE);
+    assertThat(getClientTasks(), is(createRequest(composite, Composite.class, this.shell, 4711)));
+    assertThat(getClientTasks(), is(createRequest(changed[0], Composite.class, composite, 0)));
     assertThat(getClientTasks(), is(callRequest(composite, "layout", changed, SWT.NONE)));
   }
 }

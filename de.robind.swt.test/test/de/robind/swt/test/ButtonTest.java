@@ -14,8 +14,6 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
@@ -57,8 +55,6 @@ public class ButtonTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     Button button = new Button(this.shell, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(button, Button.class, this.shell, 4711)));
   }
 
@@ -223,6 +219,7 @@ public class ButtonTest extends AbstractWidgetTest {
 
     button.setText("foo");
     assertThat(button.getText(), is(equalTo("foo")));
+    assertThat(getClientTasks(), is(createRequest(button, Button.class, this.shell, 0)));
     assertThat(getClientTasks(), is(callRequest(button, "setText", "foo")));
   }
 }

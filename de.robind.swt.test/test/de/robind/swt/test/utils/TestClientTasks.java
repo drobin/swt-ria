@@ -9,12 +9,9 @@ import org.eclipse.swt.widgets.Event;
 
 public class TestClientTasks implements ClientTasks {
   private Object callMethodResult = null;
-  Queue<CreateRequestStore> createRequestQueue = new LinkedList<TestClientTasks.CreateRequestStore>();
-  Queue<CallRequestStore> callRequestQueue = new LinkedList<TestClientTasks.CallRequestStore>();
-  Queue<RegisterRequestStore> registerRequestQueue = new LinkedList<TestClientTasks.RegisterRequestStore>();
-  Queue<AttrRequestStore> attrRequestQueue = new LinkedList<TestClientTasks.AttrRequestStore>();
+  Queue<RequestStore> requestQueue = new LinkedList<TestClientTasks.RequestStore>();
 
-  static abstract class AbstractRequestStore {
+  static abstract class RequestStore {
     Key key;
     int id;
 
@@ -27,7 +24,7 @@ public class TestClientTasks implements ClientTasks {
     }
   }
 
-  static class CreateRequestStore extends AbstractRequestStore {
+  static class CreateRequestStore extends RequestStore {
     Class<?> objClass;
     Object args[];
 
@@ -60,7 +57,7 @@ public class TestClientTasks implements ClientTasks {
     }
   }
 
-  static class CallRequestStore extends AbstractRequestStore {
+  static class CallRequestStore extends RequestStore {
     String method;
     Object args[];
 
@@ -93,7 +90,7 @@ public class TestClientTasks implements ClientTasks {
     }
   }
 
-  static class RegisterRequestStore extends AbstractRequestStore {
+  static class RegisterRequestStore extends RequestStore {
     int eventType;
     boolean enable;
 
@@ -114,7 +111,7 @@ public class TestClientTasks implements ClientTasks {
     }
   }
 
-  static class AttrRequestStore extends AbstractRequestStore {
+  static class AttrRequestStore extends RequestStore {
     String attrName;
     Object attrValue;
 
@@ -140,15 +137,11 @@ public class TestClientTasks implements ClientTasks {
 
   public void clearState() {
     this.callMethodResult = null;
-    this.createRequestQueue.clear();
-    this.callRequestQueue.clear();
-    this.registerRequestQueue.clear();
-    this.attrRequestQueue.clear();
+    this.requestQueue.clear();
   }
 
   public int getQueueSize() {
-    return (this.createRequestQueue.size() + this.callRequestQueue.size() +
-        this.registerRequestQueue.size() + this.attrRequestQueue.size());
+    return (this.requestQueue.size());
   }
 
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
@@ -159,7 +152,7 @@ public class TestClientTasks implements ClientTasks {
     store.id = id;
     store.objClass = objClass;
     store.args = args;
-    this.createRequestQueue.offer(store);
+    this.requestQueue.offer(store);
   }
 
   public Object callMethod(Key key, int id, String method, Object... args)
@@ -173,7 +166,7 @@ public class TestClientTasks implements ClientTasks {
     store.id = id;
     store.method = method;
     store.args = args;
-    this.callRequestQueue.offer(store);
+    this.requestQueue.offer(store);
 
     return (result);
   }
@@ -186,7 +179,7 @@ public class TestClientTasks implements ClientTasks {
     store.id = id;
     store.attrName = attrName;
     store.attrValue = attrValue;
-    this.attrRequestQueue.offer(store);
+    this.requestQueue.offer(store);
   }
 
   public void registerEvent(Key key, int id, int eventType, boolean enable)
@@ -197,7 +190,7 @@ public class TestClientTasks implements ClientTasks {
     store.id = id;
     store.eventType = eventType;
     store.enable = enable;
-    this.registerRequestQueue.offer(store);
+    this.requestQueue.offer(store);
   }
 
   public Event waitForEvent(Key key) throws Exception {

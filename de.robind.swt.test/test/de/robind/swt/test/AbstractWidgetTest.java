@@ -1,5 +1,9 @@
 package de.robind.swt.test;
 
+import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Display;
@@ -35,6 +39,9 @@ public class AbstractWidgetTest {
     DisplayPool.getInstance().offerKey(new Key() {});
     this.display = new Display();
     this.shell = new Shell(this.display);
+
+    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
+    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
   }
 
   @After

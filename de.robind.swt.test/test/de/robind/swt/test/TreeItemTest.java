@@ -9,8 +9,6 @@ import static org.junit.Assert.assertThat;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.junit.After;
@@ -64,8 +62,6 @@ public class TreeItemTest extends AbstractWidgetTest {
   @Test
   public void ctorRequest() {
     TreeItem treeItem = new TreeItem(this.tree, 4711);
-    assertThat(getClientTasks(), is(createRequest(this.display, Display.class)));
-    assertThat(getClientTasks(), is(createRequest(this.shell, Shell.class, this.display)));
     assertThat(getClientTasks(), is(createRequest(this.tree, Tree.class, this.shell, SWT.DEFAULT)));
     assertThat(getClientTasks(), is(createRequest(treeItem, TreeItem.class, this.tree, 4711)));
   }
