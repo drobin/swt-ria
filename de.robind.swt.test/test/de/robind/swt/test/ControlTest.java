@@ -16,6 +16,8 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTObject;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.test.TestControl;
@@ -1007,5 +1009,98 @@ public class ControlTest extends AbstractWidgetTest {
     assertThat(other.getParent(), is(sameInstance(control)));
     assertThat(control.getParent(), is(sameInstance((Composite)this.shell)));
     assertThat(this.shell.getParent(), is(nullValue()));
+  }
+
+  @Test
+  public void getFont() {
+    Font defaultFont = new Font(this.display, "xxx", 1, 2);
+    getClientTasks().setCallMethodResult(defaultFont);
+
+    Control control = new TestControl(this.shell, 0);
+    Font font = control.getFont();
+
+    assertThat(font, is(sameInstance(defaultFont)));
+    assertThat(getClientTasks().getQueueSize(), is(4));
+    assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
+    assertThat(getClientTasks(), is(callRequest(control, "getFont")));
+    assertThat(getClientTasks(), is(createRequest(font.getFontData()[0], FontData.class, "xxx", 1, 2)));
+    assertThat(getClientTasks(), is(createRequest(font, Font.class, this.display, font.getFontData())));
+
+
+    Font nextFont = control.getFont();
+    assertThat(nextFont, is(sameInstance(font)));
+    assertThat(getClientTasks().getQueueSize(), is(0));
+  }
+
+  @Test
+  public void setFontFontDisposed() {
+    Control control = new TestControl(this.shell, 0);
+
+    Font font = new Font(this.display, "xxx", 1, 2);
+    font.setKey(control.getKey());
+    font.dispose();
+
+    exception.expect(swtCode(SWT.ERROR_INVALID_ARGUMENT));
+
+    control.setFont(font);
+  }
+
+  @Test
+  public void setFont() {
+    Control control = new TestControl(this.shell, 0);
+    Font font = new Font(this.display, "xxx", 1, 2);
+
+    control.setFont(font);
+
+    assertThat(getClientTasks().getQueueSize(), is(4));
+    assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
+    assertThat(getClientTasks(), is(createRequest(font.getFontData()[0], FontData.class, "xxx", 1, 2)));
+    assertThat(getClientTasks(), is(createRequest(font, Font.class, this.display, font.getFontData())));
+    assertThat(getClientTasks(), is(callRequest(control, "setFont", font)));
+
+    Font nextFont = control.getFont();
+    assertThat(nextFont, is(sameInstance(font)));
+    assertThat(getClientTasks().getQueueSize(), is(0));
+
+    control.setFont(font);
+    assertThat(getClientTasks().getQueueSize(), is(0));
+
+    nextFont = control.getFont();
+    assertThat(nextFont, is(sameInstance(font)));
+    assertThat(getClientTasks().getQueueSize(), is(0));
+  }
+
+  @Test
+  public void setFontNull() {
+    Control control = new TestControl(this.shell, 0);
+    Font font = new Font(this.display, "xxx", 1, 2);
+
+    control.setFont(font);
+
+    assertThat(getClientTasks().getQueueSize(), is(4));
+    assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
+    assertThat(getClientTasks(), is(createRequest(font.getFontData()[0], FontData.class, "xxx", 1, 2)));
+    assertThat(getClientTasks(), is(createRequest(font, Font.class, this.display, font.getFontData())));
+    assertThat(getClientTasks(), is(callRequest(control, "setFont", font)));
+
+    Font nextFont = control.getFont();
+    assertThat(nextFont, is(sameInstance(font)));
+    assertThat(getClientTasks().getQueueSize(), is(0));
+
+    control.setFont(null);
+
+    assertThat(getClientTasks().getQueueSize(), is(1));
+    assertThat(getClientTasks(), is(callRequest(control, "setFont", (Object)null)));
+
+    Font defaultFont = new Font(this.display, "def", 3, 4);
+    getClientTasks().setCallMethodResult(defaultFont);
+    nextFont = control.getFont();
+
+    assertThat(nextFont, is(sameInstance(defaultFont)));
+    assertThat(getClientTasks().getQueueSize(), is(3));
+    assertThat(getClientTasks(), is(callRequest(control, "getFont")));
+    assertThat(getClientTasks(), is(createRequest(nextFont.getFontData()[0], FontData.class, "def", 3, 4)));
+    assertThat(getClientTasks(), is(createRequest(nextFont, Font.class, this.display, nextFont.getFontData())));
+
   }
 }

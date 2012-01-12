@@ -34,6 +34,11 @@ public class SWT {
   public static final int BEGINNING = 1;
 
   /**
+   * The font style constant indicating a bold weight font (value is 1<<0).
+   */
+  public static final int BOLD = 1 << 0;
+
+  /**
    * Style constant for bordered behavior (value is 1<<11).
    * <p>
    * Note that this is a <i>HINT.</i>
@@ -162,6 +167,13 @@ public class SWT {
   public static final int ERROR_FAILED_EXEC = 46;
 
   /**
+   * SWT error constant indicating that an attempt was made to invoke an SWT
+   * operation using a graphics object which had already been disposed (value
+   * is 44).
+   */
+  public static final int ERROR_GRAPHIC_DISPOSED = 44;
+
+  /**
    * SWT error constant indicating that an invalid argument was passed in
    * (value is 5).
    */
@@ -192,6 +204,12 @@ public class SWT {
    * implemented on this platform (value is 20).
    */
   public static final int ERROR_NOT_IMPLEMENTED = 20;
+
+  /**
+   * SWT error constant indicating that no more handles for an operating system
+   * resource are available (value is 2).
+   */
+  public static final int ERROR_NO_HANDLES = 2;
 
   /**
    * SWT error constant indicating that a null argument was passed in
@@ -266,6 +284,11 @@ public class SWT {
    * (value is 1<<8).
    */
   public static final int HORIZONTAL = 1 << 8;
+
+  /**
+   * The font style constant indicating an italic font (value is 1<<1).
+   */
+  public static final int ITALIC = 1 << 1;
 
   /**
    * Keyboard event constant representing the keypad location. (value is 1<<1).
@@ -380,6 +403,13 @@ public class SWT {
    * support on text fields (value is 1<<1).
    */
   public static final int MULTI = 1 << 1;
+
+  /**
+   * The font style constant indicating a normal weight, non-italic font
+   * (value is 0). This constant is also used with ProgressBar to indicate a
+   * normal state.
+   */
+  public static final int NORMAL = 0;
 
   /**
    * Style constant for no background behavior (value is 1<<18).
@@ -688,11 +718,13 @@ public class SWT {
     switch (code) {
       case SWT.ERROR_CANNOT_BE_ZERO: return ("CANNOT_BE_ZERO");
       case SWT.ERROR_DEVICE_DISPOSED: return ("DEVICE_DISPOSED");
+      case SWT.ERROR_GRAPHIC_DISPOSED: return ("GRAPHIC_DISPOSED");
       case SWT.ERROR_FAILED_EXEC: return ("FAILED_EXEC");
       case SWT.ERROR_INVALID_ARGUMENT: return ("INVALID_ARGUMENT");
       case SWT.ERROR_INVALID_MESSAGE: return ("INVALID_MESSAGE");
       case SWT.ERROR_INVALID_PARENT: return ("INVALID_PARENT");
       case SWT.ERROR_INVALID_SUBCLASS: return ("INVALID_SUBCLASS");
+      case SWT.ERROR_NO_HANDLES: return ("NO_HANDLES");
       case SWT.ERROR_NOT_IMPLEMENTED: return ("NOT_IMPLEMENTED");
       case SWT.ERROR_NULL_ARGUMENT: return ("NULL_ARGUMENT");
       case SWT.ERROR_THREAD_INVALID_ACCESS: return ("THREAD_INVALID_ACCESS");

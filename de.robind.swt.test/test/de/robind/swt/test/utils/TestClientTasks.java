@@ -22,6 +22,30 @@ public class TestClientTasks implements ClientTasks {
 
       return (true);
     }
+
+    protected static boolean matchArray(Object a1[], Object a2[]) {
+      if (a1.length != a2.length) {
+        return (false);
+      }
+
+      for (int i = 0; i < a1.length; i++) {
+        if (a1[i] != null) {
+          if (a1[i].getClass().isArray()) {
+            if (!matchArray((Object[])a1[i], (Object[])a2[i])) {
+              return (false);
+            }
+          } else if (!a1[i].equals(a2[i])) {
+            return (false);
+          }
+        } else {
+          if (a1[i] != a2[i]) {
+            return (false);
+          }
+        }
+      }
+
+      return (true);
+    }
   }
 
   static class CreateRequestStore extends RequestStore {
@@ -37,20 +61,8 @@ public class TestClientTasks implements ClientTasks {
         return (false);
       }
 
-      if (this.args.length != args.length) {
+      if (!RequestStore.matchArray(this.args, args)) {
         return (false);
-      }
-
-      for (int i = 0; i < this.args.length; i++) {
-        if (this.args[i] != null) {
-          if (!this.args[i].equals(args[i])) {
-            return (false);
-          }
-        } else {
-          if (this.args[i] != args[i]) {
-            return (false);
-          }
-        }
       }
 
       return (true);
@@ -70,20 +82,8 @@ public class TestClientTasks implements ClientTasks {
         return (false);
       }
 
-      if (this.args.length != args.length) {
+      if (!RequestStore.matchArray(this.args, args)) {
         return (false);
-      }
-
-      for (int i = 0; i < this.args.length; i++) {
-        if (this.args[i] != null) {
-          if (!this.args[i].equals(args[i])) {
-            return (false);
-          }
-        } else {
-          if (this.args[i] != args[i]) {
-            return (false);
-          }
-        }
       }
 
       return (true);

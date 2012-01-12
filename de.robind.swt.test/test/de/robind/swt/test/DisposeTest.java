@@ -124,6 +124,7 @@ public class DisposeTest extends ClientTasksSupport {
         { TestControl.class, "addPaintListener", p(PaintListener.class), a(new TestPaintListener()) },
         { TestControl.class, "addTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
         { TestControl.class, "getBounds", p(), a() },
+        { TestControl.class, "getFont", p(), a() },
         { TestControl.class, "getLayoutData", p(), a() },
         { TestControl.class, "getParent", p(), a() },
         { TestControl.class, "removeControlListener", p(ControlListener.class), a(new TestControlListener()) },

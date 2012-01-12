@@ -18,6 +18,7 @@ import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Drawable;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Rectangle;
 
 /**
@@ -46,6 +47,11 @@ public abstract class Control extends Widget implements Drawable {
    * Layout-data assigned to the control
    */
   Object layoutData = null;
+
+  /**
+   * The font assigned to the control
+   */
+  private Font font = null;
 
   /**
    * Constructs a new instance of this class given its parent and a style
@@ -408,6 +414,31 @@ public abstract class Control extends Widget implements Drawable {
   }
 
   /**
+   * Returns the font that the receiver will use to paint textual information.
+   *
+   * @return the receiver's font
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public Font getFont() throws SWTException {
+    checkWidget();
+
+    if (this.font == null) {
+      this.font = (Font)callMethod("getFont");
+      this.font.setKey(getKey());
+    }
+
+    return (this.font);
+  }
+
+  /**
    * Returns layout data which is associated with the receiver.
    *
    * @return the receiver's layout data
@@ -760,6 +791,48 @@ public abstract class Control extends Widget implements Drawable {
 
     checkWidget();
     callMethod("setBounds", x, y, width, height);
+  }
+
+  /**
+   * Sets the font that the receiver will use to paint textual information to
+   * the font specified by the argument, or to the default font for that kind
+   * of control if the argument is null.
+   *
+   * @param font the new font (or null)
+   * @throws SWTException
+   *  <ul>
+   *    <li>{@link SWT#ERROR_INVALID_ARGUMENT} -
+   *      if the argument has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_WIDGET_DISPOSED} -
+   *      if the receiver has been disposed
+   *    </li>
+   *    <li>{@link SWT#ERROR_THREAD_INVALID_ACCESS} -
+   *      if not called from the thread that created the receiver
+   *    </li>
+   *  </ul>
+   */
+  public void setFont(Font font) throws SWTException {
+    checkWidget();
+
+    if (font == this.font) {
+      // Nothing has changed
+      return;
+    }
+
+    if (font != null) {
+      font.setKey(getKey());
+
+      if (font.isDisposed()) {
+        throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+      }
+
+      this.font = font;
+      callMethod("setFont", font);
+    } else {
+      this.font = null;
+      callMethod("setFont", (Object)null);
+    }
   }
 
   /**

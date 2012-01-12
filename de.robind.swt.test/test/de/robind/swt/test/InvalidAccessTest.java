@@ -25,6 +25,8 @@ import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.server.DisplayPool;
 import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
@@ -122,6 +124,7 @@ public class InvalidAccessTest extends ClientTasksSupport {
         { TestControl.class, "addPaintListener", p(PaintListener.class), a(new TestPaintListener()) },
         { TestControl.class, "addTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
         { TestControl.class, "getBounds", p(), a() },
+        { TestControl.class, "getFont", p(), a() },
         { TestControl.class, "getLayoutData", p(), a() },
         { TestControl.class, "getParent", p(), a() },
         { TestControl.class, "removeControlListener", p(ControlListener.class), a(new TestControlListener()) },
@@ -137,6 +140,7 @@ public class InvalidAccessTest extends ClientTasksSupport {
         { TestControl.class, "removePaintListener", p(PaintListener.class), a(new TestPaintListener()) },
         { TestControl.class, "removeTraverseListener", p(TraverseListener.class), a(new TestTraverseListener()) },
         { TestControl.class, "setBounds", p(int.class, int.class, int.class, int.class), a(0, 0, 0, 0) },
+        { TestControl.class, "setFont", p(Font.class), a(new Font(new Device() {}, "foo", 1, 2)) },
         { TestControl.class, "setLayoutData", p(Object.class), a((Object)null) },
         { TestControl.class, "setRedraw", p(boolean.class), a(true) },
 
