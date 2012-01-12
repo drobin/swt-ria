@@ -1,6 +1,5 @@
 package org.eclipse.swt.graphics;
 
-import org.eclipse.swt.SWTObject;
 
 /**
  * This class is the abstract superclass of all graphics resource objects.
@@ -17,7 +16,7 @@ import org.eclipse.swt.SWTObject;
  * workings of the hierarchy. No support is provided for user-written classes
  * which are implemented as subclasses of this class.
  */
-public abstract class Resource extends SWTObject {
+public abstract class Resource {
   /**
    * The devise where the resource was created.
    */
@@ -45,7 +44,6 @@ public abstract class Resource extends SWTObject {
   public void dispose() {
     if (!isDisposed()) {
       this.disposed = true;
-      callMethod("dispose");
     }
   }
 
