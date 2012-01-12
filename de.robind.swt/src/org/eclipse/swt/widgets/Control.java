@@ -432,7 +432,6 @@ public abstract class Control extends Widget implements Drawable {
 
     if (this.font == null) {
       this.font = (Font)callMethod("getFont");
-      this.font.setKey(getKey());
     }
 
     return (this.font);
@@ -821,18 +820,13 @@ public abstract class Control extends Widget implements Drawable {
     }
 
     if (font != null) {
-      font.setKey(getKey());
-
       if (font.isDisposed()) {
         throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
       }
-
-      this.font = font;
-      callMethod("setFont", font);
-    } else {
-      this.font = null;
-      callMethod("setFont", (Object)null);
     }
+
+    this.font = font;
+    callMethod("setFont", font);
   }
 
   /**
