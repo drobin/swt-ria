@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
@@ -300,6 +303,52 @@ public class SWTObject {
       mapping.put("width", ((Rectangle)argument).width);
       mapping.put("height", ((Rectangle)argument).height);
       return (mapping);
+    } else if (argument instanceof Font) {
+      // A Font is transformed into a mapping
+      Map<String, Object> mapping = new HashMap<String, Object>();
+      FontData fontData[] = ((Font)argument).getFontData();
+      mapping.put("class", Font.class.getName());
+      mapping.put("count", fontData.length);
+      for (int i = 0; i < fontData.length; i++) {
+        mapping.put(i + "_height", fontData[i].getHeight());
+        mapping.put(i + "_locale", fontData[i].getLocale());
+        mapping.put(i + "_name", fontData[i].getName());
+        mapping.put(i + "_style", fontData[i].getStyle());
+      }
+      return (mapping);
+    } else if (argument instanceof Map) {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> mapping = (Map<String, Object>)argument;
+      if (Font.class.getName().equals(mapping.get("class"))) {
+        FontData fontData[] = new FontData[(Integer)mapping.get("count")];
+
+        for (int i = 0; i < fontData.length; i++) {
+          String name = (String)mapping.get(i + "_name");
+          Integer height = (Integer)mapping.get(i + "_height");
+          Integer style = (Integer)mapping.get(i + "_style");
+          String locale = (String)mapping.get(i + "_locale");
+
+          fontData[i] = new FontData();
+
+          if (name != null) {
+            fontData[i].setName(name);
+          }
+          if (height != null) {
+            fontData[i].setHeight(height);
+          }
+          if (style != null) {
+            fontData[i].setStyle(style);
+          }
+          if (locale != null) {
+            fontData[i].setLocale(locale);
+          }
+        }
+
+        return (new Font(Display.getCurrent(), fontData));
+      } else {
+        throw new IllegalArgumentException(
+            "No mapping defined for " + mapping.get("class"));
+      }
     } else {
       return (argument);
     }

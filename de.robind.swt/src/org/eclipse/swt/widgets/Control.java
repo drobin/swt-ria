@@ -1,5 +1,6 @@
 package org.eclipse.swt.widgets;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -19,6 +20,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Rectangle;
 
 /**
@@ -431,7 +433,33 @@ public abstract class Control extends Widget implements Drawable {
     checkWidget();
 
     if (this.font == null) {
-      this.font = (Font)callMethod("getFont");
+      @SuppressWarnings("unchecked")
+      Map<String, Object> mapping = (Map<String, Object>)callMethod("getFont");
+      FontData fontData[] = new FontData[(Integer)mapping.get("count")];
+
+      for (int i = 0; i < fontData.length; i++) {
+        String name = (String)mapping.get(i + "_name");
+        Integer height = (Integer)mapping.get(i + "_height");
+        Integer style = (Integer)mapping.get(i + "_style");
+        String locale = (String)mapping.get(i + "_locale");
+
+        fontData[i] = new FontData();
+
+        if (name != null) {
+          fontData[i].setName(name);
+        }
+        if (height != null) {
+          fontData[i].setHeight(height);
+        }
+        if (style != null) {
+          fontData[i].setStyle(style);
+        }
+        if (locale != null) {
+          fontData[i].setLocale(locale);
+        }
+      }
+
+      this.font = new Font(getDisplay(), fontData);
     }
 
     return (this.font);
@@ -823,10 +851,25 @@ public abstract class Control extends Widget implements Drawable {
       if (font.isDisposed()) {
         throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
       }
-    }
 
-    this.font = font;
-    callMethod("setFont", font);
+      this.font = font;
+      FontData fontData[] = this.font.getFontData();
+
+      Map<String, Object> mapping = new HashMap<String, Object>();
+      mapping.put("count", fontData.length);
+      mapping.put("class", Font.class.getName());
+      for (int i = 0; i < fontData.length; i++) {
+        mapping.put(i + "_height", fontData[i].getHeight());
+        mapping.put(i + "_locale", fontData[i].getLocale());
+        mapping.put(i + "_name", fontData[i].getName());
+        mapping.put(i + "_style", fontData[i].getStyle());
+      }
+
+      callMethod("setFont", mapping);
+    } else {
+      this.font = null;
+      callMethod("setFont", (Object)null);
+    }
   }
 
   /**

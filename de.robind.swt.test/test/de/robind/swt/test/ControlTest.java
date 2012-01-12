@@ -8,10 +8,12 @@ import static de.robind.swt.test.utils.TypedEventMatcher.event;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
@@ -1012,13 +1014,19 @@ public class ControlTest extends AbstractWidgetTest {
 
   @Test
   public void getFont() {
+    Map<String, Object> mapping = new HashMap<String, Object>();
+    mapping.put("count", 1);
+    mapping.put("0_name", "xxx");
+    mapping.put("0_style", 2);
+    mapping.put("0_height", 1);
+
     Font defaultFont = new Font(this.display, "xxx", 1, 2);
-    getClientTasks().setCallMethodResult(defaultFont);
+    getClientTasks().setCallMethodResult(mapping);
 
     Control control = new TestControl(this.shell, 0);
     Font font = control.getFont();
 
-    assertThat(font, is(sameInstance(defaultFont)));
+    assertThat(font, is(equalTo(defaultFont)));
     assertThat(getClientTasks().getQueueSize(), is(2));
     assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
     assertThat(getClientTasks(), is(callRequest(control, "getFont")));
@@ -1042,6 +1050,14 @@ public class ControlTest extends AbstractWidgetTest {
 
   @Test
   public void setFont() {
+    Map<String, Object> mapping = new HashMap<String, Object>();
+    mapping.put("class", Font.class.getName());
+    mapping.put("count", 1);
+    mapping.put("0_name", "xxx");
+    mapping.put("0_style", 2);
+    mapping.put("0_height", 1);
+    mapping.put("0_locale", null);
+
     Control control = new TestControl(this.shell, 0);
     Font font = new Font(this.display, "xxx", 1, 2);
 
@@ -1049,7 +1065,7 @@ public class ControlTest extends AbstractWidgetTest {
 
     assertThat(getClientTasks().getQueueSize(), is(2));
     assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
-    assertThat(getClientTasks(), is(callRequest(control, "setFont", font)));
+    assertThat(getClientTasks(), is(callRequest(control, "setFont", mapping)));
 
     Font nextFont = control.getFont();
     assertThat(nextFont, is(sameInstance(font)));
@@ -1068,11 +1084,19 @@ public class ControlTest extends AbstractWidgetTest {
     Control control = new TestControl(this.shell, 0);
     Font font = new Font(this.display, "xxx", 1, 2);
 
+    Map<String, Object> mapping = new HashMap<String, Object>();
+    mapping.put("class", Font.class.getName());
+    mapping.put("count", 1);
+    mapping.put("0_name", "xxx");
+    mapping.put("0_style", 2);
+    mapping.put("0_height", 1);
+    mapping.put("0_locale", null);
+
     control.setFont(font);
 
     assertThat(getClientTasks().getQueueSize(), is(2));
     assertThat(getClientTasks(), is(createRequest(control, TestControl.class, this.shell, 0)));
-    assertThat(getClientTasks(), is(callRequest(control, "setFont", font)));
+    assertThat(getClientTasks(), is(callRequest(control, "setFont", mapping)));
 
     Font nextFont = control.getFont();
     assertThat(nextFont, is(sameInstance(font)));
@@ -1084,10 +1108,10 @@ public class ControlTest extends AbstractWidgetTest {
     assertThat(getClientTasks(), is(callRequest(control, "setFont", (Object)null)));
 
     Font defaultFont = new Font(this.display, "def", 3, 4);
-    getClientTasks().setCallMethodResult(defaultFont);
+    getClientTasks().setCallMethodResult(mapping);
     nextFont = control.getFont();
 
-    assertThat(nextFont, is(sameInstance(defaultFont)));
+    assertThat(nextFont, is(equalTo(defaultFont)));
     assertThat(getClientTasks().getQueueSize(), is(1));
     assertThat(getClientTasks(), is(callRequest(control, "getFont")));
   }
