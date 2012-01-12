@@ -1,3 +1,5 @@
+dependsOnChildren()
+
 allprojects {
   apply plugin: 'java'
   group = 'de.robind.swt'
@@ -27,5 +29,12 @@ subprojects {
   
   dependencies {
     testCompile name: 'junit', version: '4.8.2'
+  }
+}
+
+project(':de.robind.swt.protocol') {
+  dependencies {
+    compile name: 'netty', version: '3.2.6.Final'
+    compile project(':de.robind.swt.msg')
   }
 }
