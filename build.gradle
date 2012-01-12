@@ -38,3 +38,13 @@ project(':de.robind.swt.protocol') {
     compile project(':de.robind.swt.msg')
   }
 }
+
+project(':de.robind.swt.client') {
+  dependencies {
+    compile name: 'swt'
+    compile name: 'log4j', version: '1.2.16'
+    compile name: 'netty', version: '3.2.6.Final'
+    compile project(':de.robind.swt.msg')
+    compile project(':de.robind.swt.protocol')
+  }
+}
