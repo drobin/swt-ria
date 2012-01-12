@@ -23,6 +23,7 @@ public class FontDataTest {
     assertThat(data.getName(), is(nullValue()));
     assertThat(data.getHeight(), is(0));
     assertThat(data.getStyle(), is(0));
+    assertThat(data.getLocale(), is(nullValue()));
   }
 
   @Test
@@ -46,6 +47,7 @@ public class FontDataTest {
     assertThat(data.getName(), is(equalTo("foo")));
     assertThat(data.getHeight(), is(1));
     assertThat(data.getStyle(), is(2));
+    assertThat(data.getLocale(), is(nullValue()));
   }
 
   @Test
@@ -92,5 +94,21 @@ public class FontDataTest {
 
     data.setStyle(SWT.ITALIC | 0x80);
     assertThat(data.getStyle(), is(SWT.ITALIC));
+  }
+
+  @Test
+  public void setLocaleNullLocale() {
+    exception.expect(swtCode(SWT.ERROR_NULL_ARGUMENT));
+    FontData data = new FontData();
+    data.setLocale(null);
+  }
+
+  @Test
+  public void setLocale() {
+    FontData data = new FontData();
+    assertThat(data.getLocale(), is(nullValue()));
+
+    data.setLocale("foo");
+    assertThat(data.getLocale(), is(equalTo("foo")));
   }
 }

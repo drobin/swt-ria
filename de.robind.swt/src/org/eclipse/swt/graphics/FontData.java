@@ -54,6 +54,11 @@ public class FontData {
   private int style;
 
   /**
+   * The locale of the font
+   */
+  private String locale;
+
+  /**
    * Constructs a new uninitialized font data.
    */
   public FontData() {
@@ -131,6 +136,23 @@ public class FontData {
   }
 
   /**
+   * Returns the locale of the receiver.
+   * <p>
+   * The locale determines which platform character set this font is going to
+   * use. Widgets and graphics operations that use this font will convert
+   * UNICODE strings to the platform character set of the specified locale.
+   * <p>
+   * On platforms where there are multiple character sets for a given
+   * language/country locale, the variant portion of the locale will determine
+   * the character set.
+   *
+   * @return the String representing a Locale object
+   */
+  public String getLocale() {
+    return (this.locale);
+  }
+
+  /**
    * Returns the name of the receiver. On platforms that support font
    * foundries, the return value will be the foundry followed by a dash ("-")
    * followed by the face name.
@@ -170,6 +192,27 @@ public class FontData {
     }
 
     this.height = height;
+  }
+
+  /**
+   * Sets the locale of the receiver.
+   * <p>
+   * The locale determines which platform character set this font is going to
+   * use. Widgets and graphics operations that use this font will convert
+   * UNICODE strings to the platform character set of the specified locale.
+   * <p>
+   * On platforms where there are multiple character sets for a given
+   * language/country locale, the variant portion of the locale will determine
+   * the character set.
+   *
+   * @param locale the String representing a Locale object
+   */
+  public void setLocale(String locale) {
+    if (locale == null) {
+      throw new SWTException(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    this.locale = locale;
   }
 
   /**
