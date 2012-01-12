@@ -127,4 +127,17 @@ public class FontTest {
     font.dispose();
     font.getFontData();
   }
+
+  @Test
+  public void equals() {
+    Device device = new Device() {};
+    Font font = new Font(device, "foo", 1, 2);
+
+    assertThat(font.equals(font), is(true));
+    assertThat(font.equals(null),is(false));
+    assertThat(font.equals(1), is(false));
+    assertThat(font.equals(new FontData()), is(false));
+    assertThat(font.equals(new Font(new Device() {}, "foo", 1, 2)), is(false));
+    assertThat(font.equals(new Font(device, "foo", 1, 2)), is(true));
+  }
 }

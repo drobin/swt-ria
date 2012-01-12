@@ -1,5 +1,7 @@
 package org.eclipse.swt.graphics;
 
+import java.util.Arrays;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 
@@ -157,5 +159,61 @@ public class Font extends Resource {
   @Override
   public boolean isDisposed() {
     return (this.disposed);
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+
+    result = prime * result + Arrays.hashCode(fontData);
+
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+
+    if (obj == null) {
+      return (false);
+    }
+
+    if (getClass() != obj.getClass()) {
+      return (false);
+    }
+
+    Font other = (Font)obj;
+
+    if (this.getDevice() != other.getDevice()) {
+      return (false);
+    }
+
+    if ((this.fontData == null) && (other.fontData != null)) {
+      return (false);
+    }
+
+    if (!Arrays.equals(this.fontData, other.fontData)) {
+      return (false);
+    }
+
+    return (true);
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + " [fontData=" +
+        Arrays.toString(this.fontData) + "]";
   }
 }

@@ -298,12 +298,12 @@ public class FontData {
 
     FontData other = (FontData)obj;
 
-    if ((this.name == null) && (other.name != null)) {
-      return (false);
+    if (this.name == null) {
+      return (this.name == other.name);
     }
 
-    if ((this.locale == null) && (other.locale != null)) {
-      return (false);
+    if (this.locale == null) {
+      return (this.locale == other.locale);
     }
 
     if ((this.height != other.height) || (this.style != other.style) ||
