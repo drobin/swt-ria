@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+version = "snapshot"
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+  }
+
+  test {
+    java {
+      srcDir 'test'
+    }
+  }
+}
+
+repositories {
+  flatDir {
+    dirs '../de.robind.swt.libs'
+  }
+}
+
+dependencies {
+  testCompile name: 'junit', version: '4.+'
+}
