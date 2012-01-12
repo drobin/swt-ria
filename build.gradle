@@ -1,0 +1,31 @@
+allprojects {
+  apply plugin: 'java'
+  group = 'de.robind.swt'
+  version = 'snapshot'
+  
+  repositories {
+    flatDir {
+      dirs "$rootDir/de.robind.swt.libs"
+    }
+  }
+}
+
+subprojects {
+  sourceSets {
+    main {
+      java {
+        srcDir 'src'
+      }
+    }
+  
+    test {
+      java {
+        srcDir 'test'
+      }
+    }
+  }
+  
+  dependencies {
+    testCompile name: 'junit', version: '4.8.2'
+  }
+}
