@@ -2,7 +2,6 @@ package org.eclipse.swt.graphics;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.SWTObject;
 
 /**
  * Instances of this class describe operating system fonts.
@@ -37,7 +36,7 @@ import org.eclipse.swt.SWTObject;
  * managed by each instance when those instances are no longer required, and
  * thus no dispose() method is provided.
  */
-public class FontData extends SWTObject {
+public class FontData {
   /**
    * The name of the font
    */
@@ -58,7 +57,6 @@ public class FontData extends SWTObject {
    * Constructs a new uninitialized font data.
    */
   public FontData() {
-    createObject();
   }
 
   /**
@@ -118,8 +116,6 @@ public class FontData extends SWTObject {
       throw new SWTException(SWT.ERROR_INVALID_ARGUMENT);
     }
 
-    createObject(name, height, style);
-
     this.name = name;
     this.height = height;
     this.style = style;
@@ -174,7 +170,6 @@ public class FontData extends SWTObject {
     }
 
     this.height = height;
-    callMethod("setHeight", height);
   }
 
   /**
@@ -211,7 +206,6 @@ public class FontData extends SWTObject {
     }
 
     this.name = name;
-    callMethod("setName", name);
   }
 
   /**
@@ -224,7 +218,5 @@ public class FontData extends SWTObject {
   public void setStyle(int style) {
     final int mask = SWT.NORMAL | SWT.BOLD | SWT.ITALIC;
     this.style = style & mask;
-
-    callMethod("setStyle", style);
   }
 }
