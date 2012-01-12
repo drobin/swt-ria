@@ -262,4 +262,66 @@ public class FontData {
     final int mask = SWT.NORMAL | SWT.BOLD | SWT.ITALIC;
     this.style = style & mask;
   }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+
+    result = prime * result + height;
+    result = prime * result + ((locale == null) ? 0 : locale.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + style;
+
+    return (result);
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return (true);
+    }
+
+    if (obj == null) {
+      return (false);
+    }
+
+    if (getClass() != obj.getClass()) {
+      return (false);
+    }
+
+    FontData other = (FontData)obj;
+
+    if ((this.name == null) && (other.name != null)) {
+      return (false);
+    }
+
+    if ((this.locale == null) && (other.locale != null)) {
+      return (false);
+    }
+
+    if ((this.height != other.height) || (this.style != other.style) ||
+        !this.locale.equals(other.locale) || !this.name.equals(other.name)) {
+
+      return (false);
+    }
+
+    return (true);
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + " [name=" + this.name +
+        ", height=" + this.height + ", style=" + this.style +
+        ", locale=" + this.locale + "]";
+  }
 }

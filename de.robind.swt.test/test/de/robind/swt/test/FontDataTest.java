@@ -111,4 +111,23 @@ public class FontDataTest {
     data.setLocale("foo");
     assertThat(data.getLocale(), is(equalTo("foo")));
   }
+
+  @Test
+  public void equals() {
+    FontData data = new FontData("foo", 1, 2);
+    data.setLocale("bar");
+
+    FontData data2 = new FontData("foo", 1, 2);
+    data2.setLocale("xxx");
+
+    assertThat(data.equals(data), is(true));
+    assertThat(data.equals(null), is(false));
+    assertThat(data.equals(1), is(false));
+    assertThat(new FontData().equals(data), is(false));
+    assertThat(new FontData("foo", 1, 2).equals(data), is(false));
+    assertThat(data.equals(new FontData("foo", 99, 2)), is(false));
+    assertThat(data.equals(new FontData("foo", 1, 99)), is(false));
+    assertThat(data.equals(data2), is(false));
+    assertThat(data.equals(new FontData("xxx", 1, 2)), is(false));
+  }
 }
