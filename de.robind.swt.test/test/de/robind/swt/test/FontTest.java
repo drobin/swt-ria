@@ -1,6 +1,5 @@
 package de.robind.swt.test;
 
-import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static de.robind.swt.test.utils.SWTExceptionMatcher.swtCode;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -11,12 +10,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.server.Key;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class FontTest extends ClientTasksSupport {
+public class FontTest {
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
@@ -39,15 +37,10 @@ public class FontTest extends ClientTasksSupport {
     Device device = new Device() {};
     FontData fd = new FontData();
     Font font = new Font(device, fd);
-    font.setKey(new Key() {});
 
     assertThat(font.getDevice(), is(sameInstance(device)));
     assertThat(font.getFontData().length, is(1));
     assertThat(font.getFontData()[0], is(sameInstance(fd)));
-
-    assertThat(getClientTasks().getQueueSize(), is(2));
-    assertThat(getClientTasks(), is(createRequest(fd, FontData.class)));
-    assertThat(getClientTasks(), is(createRequest(font, Font.class, device, new FontData[] {fd})));
   }
 
   @Test
@@ -86,17 +79,11 @@ public class FontTest extends ClientTasksSupport {
         new FontData()
     };
     Font font = new Font(device, fds);
-    font.setKey(new Key() {});
 
     assertThat(font.getDevice(), is(sameInstance(device)));
     assertThat(font.getFontData().length, is(2));
     assertThat(font.getFontData()[0], is(sameInstance(fds[0])));
     assertThat(font.getFontData()[1], is(sameInstance(fds[1])));
-
-    assertThat(getClientTasks().getQueueSize(), is(3));
-    assertThat(getClientTasks(), is(createRequest(fds[0], FontData.class)));
-    assertThat(getClientTasks(), is(createRequest(fds[1], FontData.class)));
-    assertThat(getClientTasks(), is(createRequest(font, Font.class, device, fds)));
   }
 
   @Test
@@ -124,17 +111,12 @@ public class FontTest extends ClientTasksSupport {
   public void ctorDeviceStringIntInt() {
     Device device = new Device() {};
     Font font = new Font(device, "foo", 1, 2);
-    font.setKey(new Key() {});
 
     assertThat(font.getDevice(), is(sameInstance(device)));
     assertThat(font.getFontData().length, is(1));
     assertThat(font.getFontData()[0].getName(), is(equalTo("foo")));
     assertThat(font.getFontData()[0].getHeight(), is(1));
     assertThat(font.getFontData()[0].getStyle(), is(2));
-
-    assertThat(getClientTasks().getQueueSize(), is(2));
-    assertThat(getClientTasks(), is(createRequest(font.getFontData()[0], FontData.class, "foo", 1, 2)));
-    assertThat(getClientTasks(), is(createRequest(font, Font.class, device, font.getFontData())));
   }
 
   @Test
@@ -142,7 +124,6 @@ public class FontTest extends ClientTasksSupport {
     exception.expect(swtCode(SWT.ERROR_GRAPHIC_DISPOSED));
 
     Font font = new Font(new Device() {}, "foo", 1, 2);
-    font.setKey(new Key() {});
     font.dispose();
     font.getFontData();
   }

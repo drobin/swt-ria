@@ -2,7 +2,6 @@ package org.eclipse.swt.graphics;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.server.Key;
 
 /**
  * Instances of this class manage operating system resources that define how
@@ -95,13 +94,6 @@ public class Font extends Resource {
 
     this.device = device;
     this.fontData = fds;
-
-    createObject(device, fds);
-
-    // Assign FontData-instances to this object-tree
-    for (int i = 0; i < this.fontData.length; i++) {
-      this.fontData[i].setKey(getKey());
-    }
   }
 
   /**
@@ -165,17 +157,5 @@ public class Font extends Resource {
   @Override
   public boolean isDisposed() {
     return (this.disposed);
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.swt.SWTObject#setKey(org.eclipse.swt.server.Key)
-   */
-  @Override
-  public void setKey(Key key) {
-    for (int i = 0; i < this.fontData.length; i++) {
-      this.fontData[i].setKey(key);
-    }
-
-    super.setKey(key);
   }
 }
