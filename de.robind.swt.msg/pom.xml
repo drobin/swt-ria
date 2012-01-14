@@ -22,4 +22,9 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <parent>
+  	<groupId>de.robind.swt</groupId>
+  	<artifactId>de.robind.swt</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  </parent>
 </project>
