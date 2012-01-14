@@ -34,7 +34,7 @@
   </dependencies>
   <parent>
   	<groupId>de.robind.swt</groupId>
-  	<artifactId>de.robind.swt</artifactId>
+  	<artifactId>de.robind.swt.app</artifactId>
   	<version>0.0.1-SNAPSHOT</version>
   </parent>
 </project>
