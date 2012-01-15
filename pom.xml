@@ -16,5 +16,6 @@
     <module>de.robind.swt.protocol</module>
     <module>de.robind.swt.client</module>
     <module>de.robind.swt</module>
+    <module>de.robind.swt.server</module>
   </modules>
 </project>
