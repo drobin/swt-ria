@@ -16,6 +16,12 @@ public class SWTBaseException extends Exception {
    */
   public enum Reason {
     /**
+     * This reason is used by {@link ClientTasks#getClientTasks()} and shows,
+     * that is was not possible to create a {@link ClientTasks}-instance.
+     */
+    ClientTasks,
+
+    /**
      * No special reason
      */
     Unknown,
