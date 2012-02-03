@@ -26,6 +26,7 @@ public class SWTObject {
    */
   protected SWTObject() {
     this.id = generateId();
+    SWTObjectPool.getInstance().registerObject(this);
   }
 
   /**
