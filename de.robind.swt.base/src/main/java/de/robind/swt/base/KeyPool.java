@@ -1,5 +1,9 @@
 package de.robind.swt.base;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+
 /**
  * The {@link KeyPool} maintains a list of {@link Key keys}.
  * <p>
@@ -18,6 +22,11 @@ public class KeyPool {
   private static KeyPool singleton = null;
 
   /**
+   * Queue holds all keys maintained by this pool.
+   */
+  private BlockingQueue<Key> keyQueue = new LinkedBlockingQueue<Key>();
+
+  /**
    * Returns the singleton instance of the {@link KeyPool}.
    *
    * @return The singleton instance of the {@link KeyPool}.
@@ -28,5 +37,25 @@ public class KeyPool {
     }
 
     return (singleton);
+  }
+
+  /**
+   * Assigns a new key to the {@link KeyPool}.
+   *
+   * @param key the key to assign
+   */
+  public void offerKey(Key key) {
+    this.keyQueue.offer(key);
+  }
+
+  /**
+   * Removes a key from the pool.
+   * <p>
+   * If no key is currently assigned, <code>null</code> is returned.
+   *
+   * @return A key assigned to the pool
+   */
+  public Key takeKey() {
+    return (this.keyQueue.poll());
   }
 }
