@@ -55,6 +55,15 @@ public class SWTObject {
   }
 
   /**
+   * Assigns a key to the object.
+   *
+   * @param key
+   */
+  void setKey(Key key) {
+    this.key = key;
+  }
+
+  /**
    * Generates a unique identifier.
    *
    * @return A unique identifier

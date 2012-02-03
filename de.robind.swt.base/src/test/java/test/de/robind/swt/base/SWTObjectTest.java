@@ -2,13 +2,16 @@ package test.de.robind.swt.base;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.robind.swt.base.Key;
 import de.robind.swt.base.SWTObject;
 
 public class SWTObjectTest {
@@ -31,5 +34,23 @@ public class SWTObjectTest {
   @Test
   public void getKey() {
     assertThat(new SWTObject() {}.getKey(), is(nullValue()));
+  }
+
+  @Test
+  public void setKey() throws Exception {
+    Method setKeyMethod = SWTObject.class.getDeclaredMethod("setKey", Key.class);
+    assertThat(setKeyMethod.getModifiers(), is(0)); // Test for default-access
+    setKeyMethod.setAccessible(true);
+
+    SWTObject obj = new SWTObject() {};
+    Key key = new Key() {};
+
+    assertThat(obj.getKey(), is(nullValue()));
+
+    setKeyMethod.invoke(obj, key);
+    assertThat(obj.getKey(), is(sameInstance(key)));
+
+    setKeyMethod.invoke(obj, (Key)null);
+    assertThat(obj.getKey(), is(nullValue()));
   }
 }
