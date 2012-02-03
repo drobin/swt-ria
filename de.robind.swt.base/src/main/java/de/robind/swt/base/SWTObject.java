@@ -1,6 +1,8 @@
 package de.robind.swt.base;
 
 
+
+
 /**
  * The base-class for all SWT-objects.
  * <p>
@@ -21,6 +23,11 @@ public class SWTObject {
   private int id;
 
   /**
+   * The key assigned to the object.
+   */
+  private Key key = null;
+
+  /**
    * Creates a new {@link SWTObject}-instance and assigns an unique
    * {@link #getId() id} to the instance.
    */
@@ -36,6 +43,15 @@ public class SWTObject {
    */
   public int getId() {
     return (this.id);
+  }
+
+  /**
+   * Returns the key, which is assigned (if any) to the instance.
+   *
+   * @return The assigned key
+   */
+  public Key getKey() {
+    return (this.key);
   }
 
   /**
