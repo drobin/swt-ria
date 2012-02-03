@@ -39,6 +39,62 @@ public abstract class ClientTasks {
   }
 
   /**
+   * Asks the connected client to create an object.
+   *
+   * @param key The key of the client-connection
+   * @param id The id of the object to be created
+   * @param objClass The class of the object to be created
+   * @param args Arguments which should be passed to the constructor
+   * @throws SWTBaseException Exception with reason {@link Reason#AppServer}.
+   *         The operation has resulted into an error.
+   */
+  public abstract void createObject(Key key, int id, Class<?> objClass,
+      Object... args) throws SWTBaseException;
+
+  /**
+   * Asks the connected client to invoke a method.
+   *
+   * @param key The key of the client-connection
+   * @param id The id of the destination object
+   * @param method Name of method to be invoked
+   * @param args Arguments passed to the method
+   * @return Result returned by the client-method
+   * @throws SWTBaseException Exception with reason {@link Reason#AppServer}.
+   *         The operation has resulted into an error.
+   */
+  public abstract Object callMethod(Key key, int id, String method,
+      Object... args) throws SWTBaseException;
+
+  /**
+   * Asks the client to enable event-handling for an object.
+   *
+   * @param key The key of the client-connection
+   * @param id The id of the destination object
+   * @param eventType the event-type, where the event-handling should be
+   *                  enabed/disabled.
+   * @param enable if set to <code>true</code>, the event-handling should be
+   *               enabled. If set to <code>false</code>, it should be
+   *               disabled.
+   * @throws SWTBaseException Exception with reason {@link Reason#AppServer}.
+   *         The operation has resulted into an error.
+   */
+  public abstract void registerEvent(Key key, int id, int eventType,
+      boolean enable) throws SWTBaseException;
+
+  /**
+   * Asks the client to update an attribute.
+   *
+   * @param key The key of the client-connection
+   * @param id The if of the destination object
+   * @param attrName The name of the attribute to update
+   * @param attrValue The new value of the attribute
+   * @throws SWTBaseException Exception with reason {@link Reason#AppServer}.
+   *         The operation has resulted into an error.
+   */
+  public abstract void updateAttribute(Key key, int id, String attrName,
+      Object attrValue) throws SWTBaseException;
+
+  /**
    * Creates a new instance of the {@link ClientTasks}-class.
    * @return
    * @throws Exception

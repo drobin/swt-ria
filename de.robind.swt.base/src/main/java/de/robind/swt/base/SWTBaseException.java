@@ -22,6 +22,15 @@ public class SWTBaseException extends Exception {
     ClientTasks,
 
     /**
+     * This reason is used by the {@link ClientTasks}-methods and shows, that
+     * the operation has failed on the application-server.
+     * <p>
+     * The application-server has generated an error or the client reported
+     * an error.
+     */
+    AppServer,
+
+    /**
      * No special reason
      */
     Unknown,
