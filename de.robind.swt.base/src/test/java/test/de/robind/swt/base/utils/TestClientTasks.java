@@ -1,5 +1,7 @@
 package test.de.robind.swt.base.utils;
 
+import java.util.Properties;
+
 import de.robind.swt.base.ClientTasks;
 import de.robind.swt.base.Key;
 import de.robind.swt.base.SWTBaseException;
@@ -42,6 +44,14 @@ public class TestClientTasks extends ClientTasks {
   public void updateAttribute(Key key, int id, String attrName, Object attrValue)
       throws SWTBaseException {
 
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  /* (non-Javadoc)
+   * @see de.robind.swt.base.ClientTasks#waitForEvent(de.robind.swt.base.Key)
+   */
+  @Override
+  public Properties waitForEvent(Key key) throws SWTBaseException {
     throw new UnsupportedOperationException("Not implemented");
   }
 }

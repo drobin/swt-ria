@@ -1,5 +1,7 @@
 package de.robind.swt.base;
 
+import java.util.Properties;
+
 import de.robind.swt.base.SWTBaseException.Reason;
 
 
@@ -93,6 +95,18 @@ public abstract class ClientTasks {
    */
   public abstract void updateAttribute(Key key, int id, String attrName,
       Object attrValue) throws SWTBaseException;
+
+  /**
+   * Receives an event from the client.
+   * <p>
+   * The method blocks the calling thread until an event arrives.
+   *
+   * @return The properties of the event received from the client
+   * @throws InterruptedException if the current thread was interrupted
+   * @throws SWTBaseException Exception with reason {@link Reason#AppServer}.
+   *         The operation has resulted into an error.
+   */
+  public abstract Properties waitForEvent(Key key) throws SWTBaseException;
 
   /**
    * Creates a new instance of the {@link ClientTasks}-class.
