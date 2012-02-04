@@ -6,10 +6,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.jboss.netty.channel.Channel;
 
+import de.robind.swt.base.Key;
+import de.robind.swt.base.KeyPool;
 import de.robind.swt.msg.SWTEvent;
 import de.robind.swt.msg.SWTMessageFactory;
 import de.robind.swt.msg.SWTResponse;
@@ -107,7 +107,7 @@ public class SWTApplication extends Thread {
   @Override
   public void run() {
     try {
-      DisplayPool.getInstance().offerKey(this.key);
+      KeyPool.getInstance().offerKey(this.key);
 
       Class<?> appClass = Class.forName("de.robind.swt.demo.ButtonDemo");
       Method mainMethod = appClass.getMethod("main", String[].class);

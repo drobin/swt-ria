@@ -1,6 +1,6 @@
 package de.robind.swt.server;
 
-import org.eclipse.swt.server.Key;
+import de.robind.swt.base.Key;
 
 /**
  * A {@link Key} for a {@link SWTApplication}.

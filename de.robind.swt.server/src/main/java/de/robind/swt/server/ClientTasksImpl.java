@@ -1,13 +1,14 @@
 package de.robind.swt.server;
 
-import java.lang.reflect.Field;
+import java.util.Properties;
 
-import org.eclipse.swt.SWTObject;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.Key;
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.SWT;
 import org.jboss.netty.channel.Channels;
 
+import de.robind.swt.base.ClientTasks;
+import de.robind.swt.base.Key;
+import de.robind.swt.base.SWTObject;
+import de.robind.swt.base.SWTObjectPool;
 import de.robind.swt.msg.SWTAttrRequest;
 import de.robind.swt.msg.SWTAttrResponse;
 import de.robind.swt.msg.SWTCallRequest;
@@ -26,12 +27,12 @@ import de.robind.swt.msg.SWTResponse;
  *
  * @author Robin Doer
  */
-public class ClientTasksImpl implements ClientTasks {
+public class ClientTasksImpl extends ClientTasks {
   /* (non-Javadoc)
-   * @see org.eclipse.swt.server.ClientTasks#createObject(org.eclipse.swt.server.Key, int, java.lang.Class, java.lang.Object[])
+   * @see de.robind.swt.base.ClientTasks#createObject(de.robind.swt.base.Key, int, java.lang.Class, java.lang.Object[])
    */
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
-      throws Throwable {
+      throws org.eclipse.swt.SWTException {
 
     SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
@@ -39,23 +40,27 @@ public class ClientTasksImpl implements ClientTasks {
         id, objClass, normalizeArguments(args));
 
     Channels.write(app.getChannel(), request);
-    SWTResponse response = app.getResponseQueue().take();
+    SWTResponse response = waitForResponse(app);
 
     if (response instanceof SWTException) {
-      throw ((SWTException)response).getCause();
+      org.eclipse.swt.SWTException e =
+          new org.eclipse.swt.SWTException(SWT.ERROR_FAILED_EXEC);
+      e.throwable = ((SWTException)response).getCause();
+      throw e;
     }
 
     if (!(response instanceof SWTNewResponse)) {
-      throw new Exception("Illegal response of type " +
+      throw new org.eclipse.swt.SWTException(SWT.ERROR_INVALID_ARGUMENT,
+          "Illegal response of type " +
           response.getClass().getName() + " received");
     }
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.server.ClientTasks#callMethod(org.eclipse.swt.server.Key, int, java.lang.String, java.lang.Object[])
+   * @see de.robind.swt.base.ClientTasks#callMethod(de.robind.swt.base.Key, int, java.lang.String, java.lang.Object[])
    */
   public Object callMethod(Key key, int id, String method, Object... args)
-      throws Throwable {
+      throws org.eclipse.swt.SWTException {
 
     SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
@@ -63,14 +68,18 @@ public class ClientTasksImpl implements ClientTasks {
         id, method, normalizeArguments(args));
 
     Channels.write(app.getChannel(), request);
-    SWTResponse response = app.getResponseQueue().take();
+    SWTResponse response = waitForResponse(app);
 
     if (response instanceof SWTException) {
-      throw ((SWTException)response).getCause();
+      org.eclipse.swt.SWTException e =
+          new org.eclipse.swt.SWTException(SWT.ERROR_FAILED_EXEC);
+      e.throwable = ((SWTException)response).getCause();
+      throw e;
     }
 
     if (!(response instanceof SWTCallResponse)) {
-      throw new Exception("Illegal response of type " +
+      throw new org.eclipse.swt.SWTException(SWT.ERROR_INVALID_ARGUMENT,
+          "Illegal response of type " +
           response.getClass().getName() + " received");
     }
 
@@ -78,10 +87,10 @@ public class ClientTasksImpl implements ClientTasks {
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.server.ClientTasks#registerEvent(org.eclipse.swt.server.Key, int, int, boolean)
+   * @see de.robind.swt.base.ClientTasks#registerEvent(de.robind.swt.base.Key, int, int, boolean)
    */
   public void registerEvent(Key key, int id, int eventType, boolean enable)
-      throws Throwable {
+      throws org.eclipse.swt.SWTException {
 
     SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
@@ -89,23 +98,27 @@ public class ClientTasksImpl implements ClientTasks {
         id, eventType, enable);
 
     Channels.write(app.getChannel(), request);
-    SWTResponse response = app.getResponseQueue().take();
+    SWTResponse response = waitForResponse(app);
 
     if (response instanceof SWTException) {
-      throw ((SWTException)response).getCause();
+      org.eclipse.swt.SWTException e =
+          new org.eclipse.swt.SWTException(SWT.ERROR_FAILED_EXEC);
+      e.throwable = ((SWTException)response).getCause();
+      throw e;
     }
 
     if (!(response instanceof SWTRegResponse)) {
-      throw new Exception("Illegal response of type " +
+      throw new org.eclipse.swt.SWTException(SWT.ERROR_INVALID_ARGUMENT,
+          "Illegal response of type " +
           response.getClass().getName() + " received");
     }
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.server.ClientTasks#updateAttribute(org.eclipse.swt.server.Key, int, java.lang.String, java.lang.Object)
+   * @see de.robind.swt.base.ClientTasks#updateAttribute(de.robind.swt.base.Key, int, java.lang.String, java.lang.Object)
    */
   public void updateAttribute(Key key, int id, String attrName,
-      Object attrValue) throws Throwable {
+      Object attrValue) throws org.eclipse.swt.SWTException {
 
     SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
@@ -113,40 +126,90 @@ public class ClientTasksImpl implements ClientTasks {
         id, attrName, normalizeArgument(attrValue));
 
     Channels.write(app.getChannel(), request);
-    SWTResponse response = app.getResponseQueue().take();
+    SWTResponse response = waitForResponse(app);
 
     if (response instanceof SWTException) {
-      throw ((SWTException)response).getCause();
+      org.eclipse.swt.SWTException e =
+          new org.eclipse.swt.SWTException(SWT.ERROR_FAILED_EXEC);
+      e.throwable = ((SWTException)response).getCause();
+      throw e;
     }
 
     if (!(response instanceof SWTAttrResponse)) {
-      throw new Exception("Illegal response of type " +
+      throw new org.eclipse.swt.SWTException(SWT.ERROR_INVALID_ARGUMENT,
+          "Illegal response of type " +
           response.getClass().getName() + " received");
     }
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.server.ClientTasks#waitForEvent(org.eclipse.swt.server.Key)
+   * @see de.robind.swt.base.ClientTasks#waitForEvent(de.robind.swt.base.Key)
    */
-  public Event waitForEvent(Key key) throws Exception, InterruptedException {
+  public Properties waitForEvent(Key key) throws org.eclipse.swt.SWTException {
     SWTApplicationKey appKey = checkKey(key);
     SWTApplication app = appKey.getApplication();
-    SWTEvent swtEvent = app.getEventQueue().take();
+    SWTEvent swtEvent = waitForEvent(app);
 
-    Event event = new Event();
+    Properties eventProperties = new Properties();
     for (String attribute: swtEvent.getAttributes()) {
-      Field f = Event.class.getField(attribute);
       Object value = swtEvent.getAttributeValue(attribute);
 
       if (value instanceof SWTObjectId) {
-        SWTObject obj = SWTObject.findObjectById(((SWTObjectId)value).getId());
-        f.set(event, obj);
+        SWTObjectPool pool = SWTObjectPool.getInstance();
+        SWTObject obj = pool.findObjectById(((SWTObjectId)value).getId());
+        eventProperties.put(attribute, obj);
       } else {
-        f.set(event, value);
+        eventProperties.put(attribute, value);
       }
     }
 
-    return (event);
+    return (eventProperties);
+  }
+
+  /**
+   * Waits for a response-message.
+   * <p>
+   * An {@link InterruptedException} is wrapped into a
+   * {@link org.eclipse.swt.SWTException}
+   *
+   * @param app The source application
+   * @return the next response
+   * @throws org.eclipse.swt.SWTException if the current thread was interrupted
+   */
+  private SWTResponse waitForResponse(SWTApplication app)
+      throws org.eclipse.swt.SWTException {
+
+    try {
+      return (app.getResponseQueue().take());
+    } catch (InterruptedException cause) {
+      org.eclipse.swt.SWTException e =
+          new org.eclipse.swt.SWTException(SWT.ERROR_FAILED_EXEC);
+      e.throwable = cause;
+      throw e;
+    }
+  }
+
+  /**
+   * Waits for an event.
+   * <p>
+   * A {@link InterruptedException} is wrapped into a
+   * {@link org.eclipse.swt.SWTException}.
+   *
+   * @param app The source application
+   * @return The next event
+   * @throws org.eclipse.swt.SWTException if the current thread was interrupted
+   */
+  private SWTEvent waitForEvent(SWTApplication app)
+      throws org.eclipse.swt.SWTException {
+
+    try {
+      return (app.getEventQueue().take());
+    } catch (InterruptedException cause) {
+      org.eclipse.swt.SWTException e =
+          new org.eclipse.swt.SWTException(SWT.ERROR_FAILED_EXEC);
+      e.throwable = cause;
+      throw e;
+    }
   }
 
   /**
