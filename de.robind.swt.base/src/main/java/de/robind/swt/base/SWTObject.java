@@ -157,6 +157,35 @@ public class SWTObject {
   }
 
   /**
+   * Sends an event-registration-message to the client.
+   * <p>
+   * If a {@link #getKey() key} is assigned to the object, then the request
+   * is send immediately. Otherwise the request is scheduled until a
+   * {@link #setKey(Key) key is available}.
+   *
+   * @param eventType The event-type to (un-)register
+   * @param enable If set to <code>true</code>, the event-handling is enabled
+   *               for the requested type, otherwise it is disabled
+   * @throws SWTBaseException failed to send or schedule the request
+   */
+  public void registerEvent(final int eventType, final boolean enable)
+      throws SWTBaseException {
+
+    ChangeLogEntry entry = new ChangeLogEntry() {
+      public void run(de.robind.swt.base.Key key) throws SWTBaseException {
+        ClientTasks clientTasks = ClientTasks.getClientTasks();
+        clientTasks.registerEvent(key, getId(), eventType, enable);
+      }
+    };
+
+    if (getKey() != null) {
+      entry.run(getKey());
+    } else {
+      this.changeLog.offer(entry);
+    }
+  }
+
+  /**
    * Generates a unique identifier.
    *
    * @return A unique identifier

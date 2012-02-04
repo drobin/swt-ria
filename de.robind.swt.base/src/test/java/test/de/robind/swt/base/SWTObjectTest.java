@@ -20,6 +20,7 @@ import org.junit.rules.ExpectedException;
 import test.de.robind.swt.base.utils.TestClientTasks;
 import test.de.robind.swt.base.utils.TestClientTasks.CallMethodInvocation;
 import test.de.robind.swt.base.utils.TestClientTasks.CreateObjectInvocation;
+import test.de.robind.swt.base.utils.TestClientTasks.RegisterEventInvocation;
 import test.de.robind.swt.base.utils.TestUtils;
 import de.robind.swt.base.ClientTasks;
 import de.robind.swt.base.Key;
@@ -196,6 +197,49 @@ public class SWTObjectTest {
     exception.expect(reason(Reason.FailedExec));
 
     obj.callMethod("foo", 1, "xxx");
+  }
+
+  @Test
+  public void registerEvent() throws Exception {
+    SWTObject obj = new SWTObject() {};
+    Key key = new Key() {};
+    setKey(obj, key);
+
+    obj.registerEvent(4711, true);
+
+    TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
+    assertThat(clientTasks.invocationQueue.size(), is(1));
+    assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(RegisterEventInvocation.class)));
+
+    RegisterEventInvocation invocation = (RegisterEventInvocation)clientTasks.invocationQueue.poll();
+
+    assertThat(invocation.key, is(sameInstance(key)));
+    assertThat(invocation.id, is(1));
+    assertThat(invocation.eventType, is(4711));
+    assertThat(invocation.enable, is(true));
+  }
+
+  @Test
+  public void registerEventScheduled() throws Exception {
+    SWTObject obj = new SWTObject() {};
+    Key key = new Key() {};
+
+    obj.registerEvent(4711, true);
+
+    TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
+    assertThat(clientTasks.invocationQueue.size(), is(0));
+
+    setKey(obj, key);
+
+    assertThat(clientTasks.invocationQueue.size(), is(1));
+    assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(RegisterEventInvocation.class)));
+
+    RegisterEventInvocation invocation = (RegisterEventInvocation)clientTasks.invocationQueue.poll();
+
+    assertThat(invocation.key, is(sameInstance(key)));
+    assertThat(invocation.id, is(1));
+    assertThat(invocation.eventType, is(4711));
+    assertThat(invocation.enable, is(true));
   }
 
   private void setKey(SWTObject obj, Key key)

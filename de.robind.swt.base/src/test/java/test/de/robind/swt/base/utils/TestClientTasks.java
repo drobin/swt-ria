@@ -50,6 +50,21 @@ public class TestClientTasks extends ClientTasks {
     }
   }
 
+  public static class RegisterEventInvocation extends MethodInvocation {
+    public int id;
+    public int eventType;
+    public boolean enable;
+
+    public RegisterEventInvocation(
+        Key key, int id, int eventType, boolean enable) {
+      super(key);
+
+      this.id = id;
+      this.eventType = eventType;
+      this.enable = enable;
+    }
+  }
+
   /* (non-Javadoc)
    * @see de.robind.swt.base.ClientTasks#createObject(de.robind.swt.base.Key, int, java.lang.Class, java.lang.Object[])
    */
@@ -83,7 +98,8 @@ public class TestClientTasks extends ClientTasks {
   public void registerEvent(Key key, int id, int eventType, boolean enable)
       throws SWTBaseException {
 
-    throw new UnsupportedOperationException("Not implemented");
+    this.invocationQueue.offer(
+        new RegisterEventInvocation(key, id, eventType, enable));
   }
 
   /* (non-Javadoc)
