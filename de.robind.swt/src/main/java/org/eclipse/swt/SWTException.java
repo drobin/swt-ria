@@ -1,5 +1,7 @@
 package org.eclipse.swt;
 
+import de.robind.swt.base.SWTBaseException;
+
 
 /**
  * This runtime exception is thrown whenever a recoverable error occurs
@@ -69,6 +71,31 @@ public class SWTException extends RuntimeException {
   public SWTException(int code, String message) {
     super(message);
     this.code = code;
+  }
+
+  /**
+   * Constructs a new instance which wraps the given {@link SWTBaseException}.
+   *
+   * @param cause The cause of the exception
+   */
+  public SWTException(SWTBaseException cause) {
+    super();
+
+    if (cause == null) {
+      throw new SWTError(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    this.throwable = cause;
+
+    // Map Reason to SWT-error-code
+    switch (cause.getReason()) {
+      case ClientTasks: this.code = SWT.ERROR_FAILED_EXEC; break;
+      case AppServer:   this.code = SWT.ERROR_FAILED_EXEC; break;
+      case FailedExec:  this.code = SWT.ERROR_FAILED_EXEC; break;
+      case Unknown:     this.code = SWT.ERROR_UNSPECIFIED; break;
+      default: throw new SWTError(SWT.ERROR_INVALID_ARGUMENT,
+          "Cannot map " + cause.getReason() + " into a SWT-errorcode");
+    }
   }
 
   /**

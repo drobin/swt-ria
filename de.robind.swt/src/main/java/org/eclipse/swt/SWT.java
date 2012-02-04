@@ -1,6 +1,5 @@
 package org.eclipse.swt;
 
-import de.robind.swt.base.SWTBaseException;
 
 /**
  * This class provides access to a small number of SWT system-wide methods,
@@ -736,36 +735,5 @@ public class SWT {
 
     throw new SWTError(SWT.ERROR_INVALID_ARGUMENT,
         "Unknown error-code ( " + code + ")");
-  }
-
-  /**
-   * Throws a new {@link SWTException} by wrapping the given
-   * {@link SWTBaseException} into the {@link SWTException}.
-   *
-   * @param cause The cause of the exception
-   * @throws SWTError Failed to create the exception
-   */
-  public static SWTException exception(SWTBaseException cause)
-      throws SWTError {
-
-    if (cause == null) {
-      throw new SWTError(SWT.ERROR_NULL_ARGUMENT);
-    }
-
-    // Map Reason to SWT-error-code
-    int code;
-    switch (cause.getReason()) {
-      case ClientTasks: code = SWT.ERROR_FAILED_EXEC; break;
-      case AppServer:   code = SWT.ERROR_FAILED_EXEC; break;
-      case FailedExec:  code = SWT.ERROR_FAILED_EXEC; break;
-      case Unknown:     code = SWT.ERROR_UNSPECIFIED; break;
-      default: throw new SWTError(SWT.ERROR_INVALID_ARGUMENT,
-          "Cannot map " + cause.getReason() + " into a SWT-errorcode");
-    }
-
-    SWTException e = new SWTException(code);
-    e.throwable = cause;
-
-    return (e);
   }
 }
