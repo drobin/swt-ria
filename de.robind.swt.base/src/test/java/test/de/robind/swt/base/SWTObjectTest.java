@@ -6,8 +6,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
-import static test.de.robind.swt.base.utils.SWTBaseExceptionMatcher.reason;
+import static test.de.robind.swt.base.utils.SWTExceptionMatcher.swtCode;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,8 +24,6 @@ import test.de.robind.swt.base.utils.TestClientTasks.UpdateAttributeInvocation;
 import test.de.robind.swt.base.utils.TestUtils;
 import de.robind.swt.base.ClientTasks;
 import de.robind.swt.base.Key;
-import de.robind.swt.base.SWTBaseException;
-import de.robind.swt.base.SWTBaseException.Reason;
 import de.robind.swt.base.SWTObject;
 
 public class SWTObjectTest {
@@ -188,11 +188,11 @@ public class SWTObjectTest {
   }
 
   @Test
-  public void callMethodScheduled() throws SWTBaseException {
+  public void callMethodScheduled() {
     SWTObject obj = new SWTObject() {};
 
-    exception.expect(SWTBaseException.class);
-    exception.expect(reason(Reason.FailedExec));
+    exception.expect(SWTException.class);
+    exception.expect(swtCode(SWT.ERROR_FAILED_EXEC));
 
     obj.callMethod("foo", 1, "xxx");
   }

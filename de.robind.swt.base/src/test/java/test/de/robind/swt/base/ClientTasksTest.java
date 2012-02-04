@@ -5,10 +5,12 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
-import static test.de.robind.swt.base.utils.SWTBaseExceptionMatcher.reason;
+import static test.de.robind.swt.base.utils.SWTExceptionMatcher.swtCode;
 
 import java.lang.reflect.Field;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,8 +19,6 @@ import org.junit.rules.ExpectedException;
 
 import test.de.robind.swt.base.utils.TestClientTasks;
 import de.robind.swt.base.ClientTasks;
-import de.robind.swt.base.SWTBaseException;
-import de.robind.swt.base.SWTBaseException.Reason;
 
 public class ClientTasksTest {
   @Rule
@@ -40,7 +40,7 @@ public class ClientTasksTest {
   }
 
   @Test
-  public void getClientTasks() throws SWTBaseException {
+  public void getClientTasks() {
     System.setProperty("de.robind.swt.clienttasks", TestClientTasks.class.getName());
 
     ClientTasks clientTasks = ClientTasks.getClientTasks();
@@ -49,11 +49,11 @@ public class ClientTasksTest {
   }
 
   @Test
-  public void getClientTasksFailure() throws SWTBaseException {
+  public void getClientTasksFailure() {
     System.setProperty("de.robind.swt.clienttasks", "xxx");
 
-    exception.expect(SWTBaseException.class);
-    exception.expect(reason(Reason.ClientTasks));
+    exception.expect(SWTException.class);
+    exception.expect(swtCode(SWT.ERROR_FAILED_EXEC));
 
     ClientTasks.getClientTasks();
   }

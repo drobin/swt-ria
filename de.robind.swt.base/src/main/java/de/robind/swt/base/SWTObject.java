@@ -3,7 +3,8 @@ package de.robind.swt.base;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import de.robind.swt.base.SWTBaseException.Reason;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 
 
 
@@ -75,9 +76,9 @@ public class SWTObject {
    * entry, then the changelog is emptied (executed) after the key is assigned.
    *
    * @param key The key to assign the to object
-   * @throws SWTBaseException failed to execute entries from the changelog
+   * @throws SWTException failed to execute entries from the changelog
    */
-  public void setKey(Key key) throws SWTBaseException {
+  public void setKey(Key key) throws SWTException {
     if (key != null) {
       this.key = key;
 
@@ -98,9 +99,9 @@ public class SWTObject {
    * {@link #setKey(Key) key is available}.
    *
    * @param args Arguments passed to the constructor of the class
-   * @throws SWTBaseException failed to send or schedule creation-request
+   * @throws SWTException failed to send or schedule creation-request
    */
-  public void createObject(Object... args) throws SWTBaseException {
+  public void createObject(Object... args) throws SWTException {
     createObjectAs(getClass(), args);
   }
 
@@ -114,13 +115,13 @@ public class SWTObject {
    *
    * @param as Class to be created
    * @param args Arguments passed to the constructor of the class
-   * @throws SWTBaseException failed to send or schedule creation-request
+   * @throws SWTException failed to send or schedule creation-request
    */
   public void createObjectAs(final Class<?> as, final Object... args)
-      throws SWTBaseException {
+      throws SWTException {
 
     ChangeLogEntry entry = new ChangeLogEntry() {
-      public void run(Key key) throws SWTBaseException {
+      public void run(Key key) throws SWTException {
         ClientTasks tasks = ClientTasks.getClientTasks();
         tasks.createObject(key, getId(), as, args);
       }
@@ -143,13 +144,13 @@ public class SWTObject {
    * @param method Name of method to invoke
    * @param args Arguments which should be passed to the method
    * @return Result returned by the method-invocation
-   * @throws SWTBaseException failed to send the call-request
+   * @throws SWTException failed to send the call-request
    */
   public Object callMethod(String method, Object... args)
-      throws SWTBaseException {
+      throws SWTException {
 
     if (getKey() == null) {
-      throw new SWTBaseException(Reason.FailedExec);
+      throw new SWTException(SWT.ERROR_FAILED_EXEC);
     }
 
     ClientTasks clientTasks = ClientTasks.getClientTasks();
@@ -166,13 +167,13 @@ public class SWTObject {
    * @param eventType The event-type to (un-)register
    * @param enable If set to <code>true</code>, the event-handling is enabled
    *               for the requested type, otherwise it is disabled
-   * @throws SWTBaseException failed to send or schedule the request
+   * @throws SWTException failed to send or schedule the request
    */
   public void registerEvent(final int eventType, final boolean enable)
-      throws SWTBaseException {
+      throws SWTException {
 
     ChangeLogEntry entry = new ChangeLogEntry() {
-      public void run(de.robind.swt.base.Key key) throws SWTBaseException {
+      public void run(de.robind.swt.base.Key key) throws SWTException {
         ClientTasks clientTasks = ClientTasks.getClientTasks();
         clientTasks.registerEvent(key, getId(), eventType, enable);
       }
@@ -194,13 +195,13 @@ public class SWTObject {
    *
    * @param fieldName The field-name of the attribute to update
    * @param value The value to be send to the client
-   * @throws SWTBaseException failed to send or schedule the request
+   * @throws SWTException failed to send or schedule the request
    */
   public void updateAttribute(final String fieldName, final Object value)
-      throws SWTBaseException {
+      throws SWTException {
 
     ChangeLogEntry entry = new ChangeLogEntry() {
-      public void run(Key key) throws SWTBaseException {
+      public void run(Key key) throws SWTException {
         ClientTasks clientTasks = ClientTasks.getClientTasks();
         clientTasks.updateAttribute(key, getId(), fieldName, value);
       }

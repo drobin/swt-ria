@@ -4,9 +4,10 @@ import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Queue;
 
+import org.eclipse.swt.SWTException;
+
 import de.robind.swt.base.ClientTasks;
 import de.robind.swt.base.Key;
-import de.robind.swt.base.SWTBaseException;
 
 public class TestClientTasks extends ClientTasks {
   public Queue<MethodInvocation> invocationQueue =
@@ -85,7 +86,7 @@ public class TestClientTasks extends ClientTasks {
    */
   @Override
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
-      throws SWTBaseException {
+      throws SWTException {
 
     this.invocationQueue.offer(
         new CreateObjectInvocation(key, id, objClass, args));
@@ -96,7 +97,7 @@ public class TestClientTasks extends ClientTasks {
    */
   @Override
   public Object callMethod(Key key, int id, String method, Object... args)
-      throws SWTBaseException {
+      throws SWTException {
 
     this.invocationQueue.offer(new CallMethodInvocation(key, id, method, args));
 
@@ -111,7 +112,7 @@ public class TestClientTasks extends ClientTasks {
    */
   @Override
   public void registerEvent(Key key, int id, int eventType, boolean enable)
-      throws SWTBaseException {
+      throws SWTException {
 
     this.invocationQueue.offer(
         new RegisterEventInvocation(key, id, eventType, enable));
@@ -122,7 +123,7 @@ public class TestClientTasks extends ClientTasks {
    */
   @Override
   public void updateAttribute(Key key, int id, String attrName, Object attrValue)
-      throws SWTBaseException {
+      throws SWTException {
 
     this.invocationQueue.offer(
         new UpdateAttributeInvocation(key, id, attrName, attrValue));
@@ -132,7 +133,7 @@ public class TestClientTasks extends ClientTasks {
    * @see de.robind.swt.base.ClientTasks#waitForEvent(de.robind.swt.base.Key)
    */
   @Override
-  public Properties waitForEvent(Key key) throws SWTBaseException {
+  public Properties waitForEvent(Key key) throws SWTException {
     throw new UnsupportedOperationException("Not implemented");
   }
 }

@@ -1,5 +1,7 @@
 package de.robind.swt.base;
 
+import org.eclipse.swt.SWTException;
+
 /**
  * An entry in the {@link SWTObject#changeLog changelog}.
  * <p>
@@ -14,5 +16,5 @@ interface ChangeLogEntry {
    * @param key The key passed to the entry
    * @throws SWTBaseException failed to execute the changelog-entry
    */
-  void run(Key key) throws SWTBaseException;
+  void run(Key key) throws SWTException;
 }
