@@ -1,5 +1,7 @@
 package org.eclipse.swt;
 
+import de.robind.swt.base.SWTBaseException;
+
 
 /**
  * This error is thrown whenever an unrecoverable error occurs internally in
@@ -80,6 +82,31 @@ public class SWTError extends Error {
   }
 
   /**
+   * Constructs a new instance which wraps the given {@link SWTBaseException}.
+   *
+   * @param cause The cause of the exception
+   */
+  public SWTError(SWTBaseException cause) {
+    super();
+
+    if (cause == null) {
+      throw new SWTError(SWT.ERROR_NULL_ARGUMENT);
+    }
+
+    this.throwable = cause;
+
+    // Map Reason to SWT-error-code
+    switch (cause.getReason()) {
+      case ClientTasks: this.code = SWT.ERROR_FAILED_EXEC; break;
+      case AppServer:   this.code = SWT.ERROR_FAILED_EXEC; break;
+      case FailedExec:  this.code = SWT.ERROR_FAILED_EXEC; break;
+      case Unknown:     this.code = SWT.ERROR_UNSPECIFIED; break;
+      default: throw new SWTError(SWT.ERROR_INVALID_ARGUMENT,
+          "Cannot map " + cause.getReason() + " into a SWT-errorcode");
+    }
+  }
+
+  /**
    * Returns the underlying throwable that caused the problem,
    * or null if this information is not available.
    * <p>
@@ -109,20 +136,5 @@ public class SWTError extends Error {
     }
 
     return (super.getMessage () + " (" + throwable.toString () + ")");
-  }
-
-  /**
-   * Outputs a printable representation of this error's
-   * stack trace on the standard error stream.
-   * <p>
-   * Note: printStackTrace(PrintStream) and printStackTrace(PrintWriter)
-   * are not provided in order to maintain compatibility with CLDC.
-   */
-  @Override
-  public void printStackTrace () {
-    super.printStackTrace();
-    // TODO SWT on MacOS makes the followin check:
-    // TODO if (Library.JAVA_VERSION < Library.JAVA_VERSION(1, 4, 0) && throwable != null) {
-    // TODO We will assume that the java-version is always greater than 1.4.0
   }
 }
