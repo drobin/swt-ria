@@ -11,6 +11,7 @@ import de.robind.swt.base.SWTBaseException;
 public class TestClientTasks extends ClientTasks {
   public Queue<MethodInvocation> invocationQueue =
       new LinkedList<TestClientTasks.MethodInvocation>();
+  public Object callMethodResult = null;
 
   public static class MethodInvocation {
     public Key key;
@@ -35,6 +36,20 @@ public class TestClientTasks extends ClientTasks {
     }
   }
 
+  public static class CallMethodInvocation extends MethodInvocation {
+    public int id;
+    public String method;
+    public Object args[];
+
+    public CallMethodInvocation(Key key, int id, String method, Object args[]) {
+      super(key);
+
+      this.id = id;
+      this.method = method;
+      this.args = args;
+    }
+  }
+
   /* (non-Javadoc)
    * @see de.robind.swt.base.ClientTasks#createObject(de.robind.swt.base.Key, int, java.lang.Class, java.lang.Object[])
    */
@@ -53,7 +68,12 @@ public class TestClientTasks extends ClientTasks {
   public Object callMethod(Key key, int id, String method, Object... args)
       throws SWTBaseException {
 
-    throw new UnsupportedOperationException("Not implemented");
+    this.invocationQueue.offer(new CallMethodInvocation(key, id, method, args));
+
+    Object result = this.callMethodResult;
+    this.callMethodResult = null;
+
+    return (result);
   }
 
   /* (non-Javadoc)

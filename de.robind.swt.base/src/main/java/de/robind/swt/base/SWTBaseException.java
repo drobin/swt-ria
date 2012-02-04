@@ -31,6 +31,11 @@ public class SWTBaseException extends Exception {
     AppServer,
 
     /**
+     * Failed to execute an operation.
+     */
+    FailedExec,
+
+    /**
      * No special reason
      */
     Unknown,

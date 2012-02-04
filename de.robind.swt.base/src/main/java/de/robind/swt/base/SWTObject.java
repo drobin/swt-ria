@@ -3,6 +3,8 @@ package de.robind.swt.base;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import de.robind.swt.base.SWTBaseException.Reason;
+
 
 
 
@@ -129,6 +131,29 @@ public class SWTObject {
     } else {
       this.changeLog.offer(entry);
     }
+  }
+
+  /**
+   * Invokes a method.
+   * <p>
+   * <b>NOTE:</b> A method-invocation cannot be scheduled! So, if no key is
+   * assigned, a {@link SWTBaseException} with reason {@link Reason#FailedExec}
+   * is thrown.
+   *
+   * @param method Name of method to invoke
+   * @param args Arguments which should be passed to the method
+   * @return Result returned by the method-invocation
+   * @throws SWTBaseException failed to send the call-request
+   */
+  public Object callMethod(String method, Object... args)
+      throws SWTBaseException {
+
+    if (getKey() == null) {
+      throw new SWTBaseException(Reason.FailedExec);
+    }
+
+    ClientTasks clientTasks = ClientTasks.getClientTasks();
+    return (clientTasks.callMethod(key, getId(), method, args));
   }
 
   /**
