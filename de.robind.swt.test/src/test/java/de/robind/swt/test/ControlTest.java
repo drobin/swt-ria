@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
@@ -28,6 +27,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.junit.Test;
 
+import de.robind.swt.base.SWTObject;
 import de.robind.swt.test.utils.TestControlListener;
 import de.robind.swt.test.utils.TestDragDetectListener;
 import de.robind.swt.test.utils.TestEvent;

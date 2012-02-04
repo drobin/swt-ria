@@ -1,18 +1,19 @@
 package org.eclipse.swt.widgets;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Queue;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.DeviceData;
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
+
+import de.robind.swt.base.ClientTasks;
+import de.robind.swt.base.Key;
+import de.robind.swt.base.KeyPool;
+import de.robind.swt.base.SWTObjectPool;
 
 /**
  * TODO Needs to be implemented!!
@@ -140,7 +141,8 @@ public class Display extends Device {
     ToDo todo = null;
     while ((todo = this.dispatcherQueue.poll()) != null) {
       if (todo.event != null) {
-        Widget widget = (Widget)SWTObject.findObjectById(todo.event.swtObjectId);
+        SWTObjectPool pool = SWTObjectPool.getInstance();
+        Widget widget = (Widget)pool.findObjectById(todo.event.swtObjectId);
         widget.notifyListeners(todo.event.type, todo.event);
       }
 
@@ -172,10 +174,11 @@ public class Display extends Device {
   public boolean sleep() throws SWTException {
     checkDevice();
 
-    ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
+    ClientTasks clientTasks = ClientTasks.getClientTasks();
     try {
-      Event event = clientTasks.waitForEvent(getKey());
-      if (event != null) {
+      Properties eventProperties = clientTasks.waitForEvent(getKey());
+      if (eventProperties != null) {
+        Event event = new Event(eventProperties);
         ToDo todo = new ToDo(event);
         this.dispatcherQueue.offer(todo);
         return (true);
@@ -262,25 +265,6 @@ public class Display extends Device {
     return (Display.findDisplay(Thread.currentThread()));
   }
 
-  public void updateAttribute(SWTObject obj, String attrName)
-      throws SWTException {
-
-    checkDevice();
-
-    try {
-      Object attrValue = obj.getClass().getField(attrName).get(obj);
-      ClientTasks clientTasks = DisplayPool.getInstance().getClientTasks();
-
-      clientTasks.updateAttribute(getKey(), obj.getId(), attrName, attrValue);
-    } catch (Throwable t) {
-      // TODO Do you need a special code for the exception?
-      SWTException e = new SWTException();
-      e.throwable = (t instanceof InvocationTargetException) ?
-          ((InvocationTargetException)t).getCause() : t;
-      throw e;
-    }
-  }
-
   /* (non-Javadoc)
    * @see org.eclipse.swt.graphics.Device#checkDevice()
    */
@@ -302,7 +286,7 @@ public class Display extends Device {
    */
   @Override
   protected void create(DeviceData data) {
-    DisplayPool.getInstance().addDisplay(this);
+    setKey(KeyPool.getInstance().takeKey());
     this.thread = Thread.currentThread();
     Display.displayList.add(this);
 

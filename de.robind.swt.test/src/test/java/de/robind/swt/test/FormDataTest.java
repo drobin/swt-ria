@@ -9,8 +9,9 @@ import static org.junit.Assert.assertThat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.server.Key;
 import org.junit.Test;
+
+import de.robind.swt.base.Key;
 
 public class FormDataTest extends ClientTasksSupport {
   @Test

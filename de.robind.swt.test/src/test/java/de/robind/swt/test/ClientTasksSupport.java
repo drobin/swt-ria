@@ -1,10 +1,10 @@
 package de.robind.swt.test;
 
-import org.eclipse.swt.server.DisplayPool;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
+import de.robind.swt.base.ClientTasks;
 import de.robind.swt.test.utils.TestClientTasks;
 
 public class ClientTasksSupport {
@@ -24,7 +24,6 @@ public class ClientTasksSupport {
   }
 
   protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
+    return ((TestClientTasks)ClientTasks.getClientTasks());
   }
 }

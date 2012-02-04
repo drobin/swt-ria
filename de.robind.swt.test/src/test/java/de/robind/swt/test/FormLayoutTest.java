@@ -6,8 +6,9 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.server.Key;
 import org.junit.Test;
+
+import de.robind.swt.base.Key;
 
 public class FormLayoutTest extends ClientTasksSupport {
   @Test

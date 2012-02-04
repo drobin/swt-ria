@@ -2,11 +2,11 @@ package de.robind.swt.test.utils;
 
 import java.util.Arrays;
 
-import org.eclipse.swt.SWTObject;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.internal.matchers.TypeSafeMatcher;
 
+import de.robind.swt.base.SWTObject;
 import de.robind.swt.test.utils.TestClientTasks.AttrRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.CallRequestStore;
 import de.robind.swt.test.utils.TestClientTasks.CreateRequestStore;

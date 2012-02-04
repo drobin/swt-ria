@@ -7,8 +7,9 @@ import org.apache.log4j.Logger;
 import org.aspectj.lang.Signature;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.server.Trackable;
+
+import de.robind.swt.base.SWTObject;
 
 /**
  * Aspect tracks fields annotated with the {@link Trackable}-annotation.
@@ -22,11 +23,11 @@ public aspect TrackableAspect {
    * The logger of the aspect
    */
   private static final Logger logger = Logger.getLogger(TrackableAspect.class);
-  
+
   /**
    * The pointcut tracks fields annotated with the
    * {@link Trackable}-annotation.
-   * 
+   *
    * @param obj The object, where the field is located
    * @param value The new value
    */
@@ -57,12 +58,12 @@ public aspect TrackableAspect {
       throw exc;
     }
   }
-  
+
   /**
    * Checks the target-object, where the field was updated.
    * <p>
    * It must be a cubclass of {@link SWTObject}.
-   * 
+   *
    * @param target Target object to chek
    * @return The target {@link SWTObject}
    * @throws RuntimeException if <code>target</code> is not a subclass of
@@ -78,10 +79,10 @@ public aspect TrackableAspect {
           SWTObject.class.getName());
     }
   }
-  
+
   /**
    * Invokes a method <code>attributeChanged</code> on the destination-object.
-   * 
+   *
    * @param obj The object, which is invoked
    * @param field The name of the field, which has changed
    * @throws NoSuchMethodException if no such method exists

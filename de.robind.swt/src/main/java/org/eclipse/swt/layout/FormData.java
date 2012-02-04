@@ -2,10 +2,11 @@ package org.eclipse.swt.layout;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.SWTObject;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Control;
+
+import de.robind.swt.base.Key;
+import de.robind.swt.base.SWTObject;
 
 /**
  * Instances of this class are used to define the attachments of a control in
@@ -91,7 +92,7 @@ public class FormData extends SWTObject {
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.swt.SWTObject#setKey(org.eclipse.swt.server.Key)
+   * @see de.robind.swt.base.SWTObject#setKey(de.robind.swt.base.Key)
    */
   @Override
   public void setKey(Key key) {
@@ -133,6 +134,16 @@ public class FormData extends SWTObject {
       this.bottom.setKey(getKey());
     }
 
-    updateAttribute(field);
+    Object value;
+
+    try {
+      value = getClass().getField(field).get(this);
+    } catch (Exception cause) {
+      SWTException e = new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+      e.throwable = cause;
+      throw e;
+    }
+
+    updateAttribute(field, value);
   }
 }

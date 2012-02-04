@@ -1,13 +1,15 @@
 package de.robind.swt.test.utils;
 
 import java.util.LinkedList;
+import java.util.Properties;
 import java.util.Queue;
 
-import org.eclipse.swt.server.ClientTasks;
-import org.eclipse.swt.server.Key;
-import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.SWTException;
 
-public class TestClientTasks implements ClientTasks {
+import de.robind.swt.base.ClientTasks;
+import de.robind.swt.base.Key;
+
+public class TestClientTasks extends ClientTasks {
   private Object callMethodResult = null;
   Queue<RequestStore> requestQueue = new LinkedList<TestClientTasks.RequestStore>();
 
@@ -145,7 +147,7 @@ public class TestClientTasks implements ClientTasks {
   }
 
   public void createObject(Key key, int id, Class<?> objClass, Object... args)
-      throws Throwable {
+      throws SWTException {
 
     CreateRequestStore store = new CreateRequestStore();
     store.key = key;
@@ -156,7 +158,7 @@ public class TestClientTasks implements ClientTasks {
   }
 
   public Object callMethod(Key key, int id, String method, Object... args)
-      throws Throwable {
+      throws SWTException {
 
     Object result = this.callMethodResult;
     this.callMethodResult = null;
@@ -172,7 +174,7 @@ public class TestClientTasks implements ClientTasks {
   }
 
   public void updateAttribute(Key key, int id, String attrName, Object attrValue)
-      throws Throwable {
+      throws SWTException {
 
     AttrRequestStore store = new AttrRequestStore();
     store.key = key;
@@ -183,7 +185,7 @@ public class TestClientTasks implements ClientTasks {
   }
 
   public void registerEvent(Key key, int id, int eventType, boolean enable)
-      throws Throwable {
+      throws SWTException {
 
     RegisterRequestStore store = new RegisterRequestStore();
     store.key = key;
@@ -193,7 +195,7 @@ public class TestClientTasks implements ClientTasks {
     this.requestQueue.offer(store);
   }
 
-  public Event waitForEvent(Key key) throws Exception {
+  public Properties waitForEvent(Key key) throws SWTException {
     // TODO Auto-generated method stub
     return null;
   }

@@ -4,14 +4,15 @@ import static de.robind.swt.test.utils.ClientTaskMatcher.createRequest;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+
+import de.robind.swt.base.Key;
+import de.robind.swt.base.KeyPool;
 
 public class AbstractWidgetTest extends ClientTasksSupport {
   protected Display display = null;
@@ -22,7 +23,7 @@ public class AbstractWidgetTest extends ClientTasksSupport {
 
   @Before
   public void before() {
-    DisplayPool.getInstance().offerKey(new Key() {});
+    KeyPool.getInstance().offerKey(new Key() {});
     this.display = new Display();
     this.shell = new Shell(this.display);
 

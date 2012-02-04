@@ -2,8 +2,9 @@ package org.eclipse.swt.graphics;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.widgets.Display;
+
+import de.robind.swt.base.SWTObject;
 
 /**
  * This class is the abstract superclass of all device objects, such as the

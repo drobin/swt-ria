@@ -10,8 +10,6 @@ import static org.junit.Assert.assertThat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -19,7 +17,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import de.robind.swt.test.utils.TestClientTasks;
+import de.robind.swt.base.Key;
+import de.robind.swt.base.KeyPool;
 
 public class FormAttachmentTest extends ClientTasksSupport {
   @Rule
@@ -43,7 +42,7 @@ public class FormAttachmentTest extends ClientTasksSupport {
 
   @Test
   public void ctorControl() {
-    DisplayPool.getInstance().offerKey(new Key() {});
+    KeyPool.getInstance().offerKey(new Key() {});
     Display display = new Display();
     Shell shell = new Shell(display);
 
@@ -65,7 +64,7 @@ public class FormAttachmentTest extends ClientTasksSupport {
 
   @Test
   public void ctorControlInt() {
-    DisplayPool.getInstance().offerKey(new Key() {});
+    KeyPool.getInstance().offerKey(new Key() {});
     Display display = new Display();
     Shell shell = new Shell(display);
 
@@ -87,7 +86,7 @@ public class FormAttachmentTest extends ClientTasksSupport {
 
   @Test
   public void ctorControlIntInt() {
-    DisplayPool.getInstance().offerKey(new Key() {});
+    KeyPool.getInstance().offerKey(new Key() {});
     Display display = new Display();
     Shell shell = new Shell(display);
 
@@ -179,7 +178,7 @@ public class FormAttachmentTest extends ClientTasksSupport {
 
   @Test
   public void updateControl() {
-    DisplayPool.getInstance().offerKey(new Key() {});
+    KeyPool.getInstance().offerKey(new Key() {});
     Display display = new Display();
     Shell shell = new Shell(display);
 
@@ -233,10 +232,5 @@ public class FormAttachmentTest extends ClientTasksSupport {
     assertThat(getClientTasks().getQueueSize(), is(2));
     assertThat(getClientTasks(), is(createRequest(attachment, FormAttachment.class)));
     assertThat(getClientTasks(), is(attrRequest(attachment, "offset", 4711)));
-  }
-
-  protected TestClientTasks getClientTasks() {
-    DisplayPool pool = DisplayPool.getInstance();
-    return ((TestClientTasks)pool.getClientTasks());
   }
 }

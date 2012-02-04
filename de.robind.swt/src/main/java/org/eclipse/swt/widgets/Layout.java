@@ -1,8 +1,9 @@
 package org.eclipse.swt.widgets;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.graphics.Point;
+
+import de.robind.swt.base.SWTObject;
 
 /**
  * A layout controls the position and size of the children of a composite

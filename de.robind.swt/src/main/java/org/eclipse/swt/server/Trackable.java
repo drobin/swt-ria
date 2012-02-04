@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
-import org.eclipse.swt.SWTObject;
+import de.robind.swt.base.SWTObject;
 
 /**
  * The {@link Field}, annotated with this type is tracked by AspectJ.

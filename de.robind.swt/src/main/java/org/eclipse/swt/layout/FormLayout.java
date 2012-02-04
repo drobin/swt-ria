@@ -1,5 +1,6 @@
 package org.eclipse.swt.layout;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.server.Trackable;
 import org.eclipse.swt.widgets.Composite;
@@ -132,6 +133,16 @@ public class FormLayout extends LayoutAdapter {
    * @throws SWTException if the attribute was not updated at the client
    */
   public void attributeChanged(String field) throws SWTException {
-    updateAttribute(field);
+    Object value;
+
+    try {
+      value = getClass().getField(field).get(this);
+    } catch (Exception cause) {
+      SWTException e = new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+      e.throwable = cause;
+      throw e;
+    }
+
+    updateAttribute(field, value);
   }
 }

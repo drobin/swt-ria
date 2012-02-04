@@ -7,8 +7,9 @@ import static org.junit.Assert.assertThat;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.server.Key;
 import org.junit.Test;
+
+import de.robind.swt.base.Key;
 
 public class GridDataTest extends ClientTasksSupport {
   @Test

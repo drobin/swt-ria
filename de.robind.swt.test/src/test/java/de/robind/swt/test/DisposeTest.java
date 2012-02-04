@@ -23,8 +23,6 @@ import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.server.DisplayPool;
-import org.eclipse.swt.server.Key;
 import org.eclipse.swt.test.TestControl;
 import org.eclipse.swt.test.TestScrollable;
 import org.eclipse.swt.test.TestWidget;
@@ -47,6 +45,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import de.robind.swt.base.Key;
+import de.robind.swt.base.KeyPool;
 import de.robind.swt.test.utils.TestControlListener;
 import de.robind.swt.test.utils.TestDisposeListener;
 import de.robind.swt.test.utils.TestDragDetectListener;
@@ -173,7 +173,7 @@ public class DisposeTest extends ClientTasksSupport {
 
   @Before
   public void before() throws Exception {
-    DisplayPool.getInstance().offerKey(new Key() {});
+    KeyPool.getInstance().offerKey(new Key() {});
     this.display = new Display();
     this.shell = new Shell(this.display);
 

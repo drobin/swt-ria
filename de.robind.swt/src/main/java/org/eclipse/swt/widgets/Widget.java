@@ -4,10 +4,11 @@ import java.util.Properties;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.SWTObject;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.TypedListener;
-import org.eclipse.swt.server.ClientTasks;
+
+import de.robind.swt.base.ClientTasks;
+import de.robind.swt.base.SWTObject;
 
 /**
  * This class is the abstract superclass of all user interface objects.

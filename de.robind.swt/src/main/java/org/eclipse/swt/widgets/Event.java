@@ -1,8 +1,14 @@
 package org.eclipse.swt.widgets;
 
-import org.eclipse.swt.SWTObject;
+import java.lang.reflect.Field;
+import java.util.Properties;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
+
+import de.robind.swt.base.SWTObject;
 
 /**
  * Instances of this class provide a description of a particular event which
@@ -173,6 +179,22 @@ public class Event {
    * pointer at the time the mouse button was pressed or released
    */
   public int y;
+
+  public Event() {
+  }
+
+  public Event(Properties properties) {
+    for (Object key: properties.keySet()) {
+      try {
+        Field field = getClass().getField((String)key);
+        field.set(this, properties.getProperty((String)key));
+      } catch (Exception cause) {
+        SWTException e = new SWTException(SWT.ERROR_INVALID_ARGUMENT);
+        e.throwable = cause;
+        throw e;
+      }
+    }
+  }
 
   /**
    * Gets the bounds.
