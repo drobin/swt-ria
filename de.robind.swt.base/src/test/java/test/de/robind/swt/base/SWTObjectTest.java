@@ -62,6 +62,53 @@ public class SWTObjectTest {
   }
 
   @Test
+  public void createObject() throws Exception {
+    SWTObject obj = new SWTObject() {};
+    Key key = new Key() {};
+    setKey(obj, key);
+
+    obj.createObject(1, "foo");
+
+    TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
+    assertThat(clientTasks.invocationQueue.size(), is(1));
+    assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(CreateObjectInvocation.class)));
+
+    CreateObjectInvocation invocation = (CreateObjectInvocation)clientTasks.invocationQueue.poll();
+
+    assertThat(invocation.key, is(sameInstance(key)));
+    assertThat(invocation.id, is(1));
+    assertThat(invocation.objClass.getName(), equalTo(obj.getClass().getName()));
+    assertThat(invocation.args.length, is(2));
+    assertThat((Integer)invocation.args[0], is(1));
+    assertThat((String)invocation.args[1], is(equalTo("foo")));
+  }
+
+  @Test
+  public void createObjectScheduled() throws Exception {
+    SWTObject obj = new SWTObject() {};
+    Key key = new Key() {};
+
+    obj.createObject(1, "foo");
+
+    TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
+    assertThat(clientTasks.invocationQueue.size(), is(0));
+
+    setKey(obj, key);
+
+    assertThat(clientTasks.invocationQueue.size(), is(1));
+    assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(CreateObjectInvocation.class)));
+
+    CreateObjectInvocation invocation = (CreateObjectInvocation)clientTasks.invocationQueue.poll();
+
+    assertThat(invocation.key, is(sameInstance(key)));
+    assertThat(invocation.id, is(1));
+    assertThat(invocation.objClass.getName(), equalTo(obj.getClass().getName()));
+    assertThat(invocation.args.length, is(2));
+    assertThat((Integer)invocation.args[0], is(1));
+    assertThat((String)invocation.args[1], is(equalTo("foo")));
+  }
+
+  @Test
   public void createObjectAs() throws Exception {
     SWTObject obj = new SWTObject() {};
     Key key = new Key() {};
