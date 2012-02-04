@@ -21,6 +21,7 @@ import test.de.robind.swt.base.utils.TestClientTasks;
 import test.de.robind.swt.base.utils.TestClientTasks.CallMethodInvocation;
 import test.de.robind.swt.base.utils.TestClientTasks.CreateObjectInvocation;
 import test.de.robind.swt.base.utils.TestClientTasks.RegisterEventInvocation;
+import test.de.robind.swt.base.utils.TestClientTasks.UpdateAttributeInvocation;
 import test.de.robind.swt.base.utils.TestUtils;
 import de.robind.swt.base.ClientTasks;
 import de.robind.swt.base.Key;
@@ -240,6 +241,49 @@ public class SWTObjectTest {
     assertThat(invocation.id, is(1));
     assertThat(invocation.eventType, is(4711));
     assertThat(invocation.enable, is(true));
+  }
+
+  @Test
+  public void updateAttribute() throws Exception {
+    SWTObject obj = new SWTObject() {};
+    Key key = new Key() {};
+    setKey(obj, key);
+
+    obj.updateAttribute("foo", 4711);
+
+    TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
+    assertThat(clientTasks.invocationQueue.size(), is(1));
+    assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(UpdateAttributeInvocation.class)));
+
+    UpdateAttributeInvocation invocation = (UpdateAttributeInvocation)clientTasks.invocationQueue.poll();
+
+    assertThat(invocation.key, is(sameInstance(key)));
+    assertThat(invocation.id, is(1));
+    assertThat(invocation.attrName, is(equalTo("foo")));
+    assertThat((Integer)invocation.attrValue, is(4711));
+  }
+
+  @Test
+  public void updateAttributeScheduled() throws Exception {
+    SWTObject obj = new SWTObject() {};
+    Key key = new Key() {};
+
+    obj.updateAttribute("foo", 4711);
+
+    TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
+    assertThat(clientTasks.invocationQueue.size(), is(0));
+
+    setKey(obj, key);
+
+    assertThat(clientTasks.invocationQueue.size(), is(1));
+    assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(UpdateAttributeInvocation.class)));
+
+    UpdateAttributeInvocation invocation = (UpdateAttributeInvocation)clientTasks.invocationQueue.poll();
+
+    assertThat(invocation.key, is(sameInstance(key)));
+    assertThat(invocation.id, is(1));
+    assertThat(invocation.attrName, is(equalTo("foo")));
+    assertThat((Integer)invocation.attrValue, is(4711));
   }
 
   private void setKey(SWTObject obj, Key key)

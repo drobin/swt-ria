@@ -186,6 +186,34 @@ public class SWTObject {
   }
 
   /**
+   * Updates the value of the given attribute.
+   * <p>
+   * If a {@link #getKey() key} is assigned to the object, then the request
+   * is send immediately. Otherwise the request is scheduled until a
+   * {@link #setKey(Key) key is available}.
+   *
+   * @param fieldName The field-name of the attribute to update
+   * @param value The value to be send to the client
+   * @throws SWTBaseException failed to send or schedule the request
+   */
+  public void updateAttribute(final String fieldName, final Object value)
+      throws SWTBaseException {
+
+    ChangeLogEntry entry = new ChangeLogEntry() {
+      public void run(Key key) throws SWTBaseException {
+        ClientTasks clientTasks = ClientTasks.getClientTasks();
+        clientTasks.updateAttribute(key, getId(), fieldName, value);
+      }
+    };
+
+    if (getKey() != null) {
+      entry.run(getKey());
+    } else {
+      this.changeLog.offer(entry);
+    }
+  }
+
+  /**
    * Generates a unique identifier.
    *
    * @return A unique identifier

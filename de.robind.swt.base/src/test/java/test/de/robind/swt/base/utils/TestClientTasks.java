@@ -65,6 +65,21 @@ public class TestClientTasks extends ClientTasks {
     }
   }
 
+  public static class UpdateAttributeInvocation extends MethodInvocation {
+    public int id;
+    public String attrName;
+    public Object attrValue;
+
+    public UpdateAttributeInvocation(
+        Key key, int id, String attrName, Object attrValue) {
+      super(key);
+
+      this.id = id;
+      this.attrName = attrName;
+      this.attrValue = attrValue;
+    }
+  }
+
   /* (non-Javadoc)
    * @see de.robind.swt.base.ClientTasks#createObject(de.robind.swt.base.Key, int, java.lang.Class, java.lang.Object[])
    */
@@ -109,7 +124,8 @@ public class TestClientTasks extends ClientTasks {
   public void updateAttribute(Key key, int id, String attrName, Object attrValue)
       throws SWTBaseException {
 
-    throw new UnsupportedOperationException("Not implemented");
+    this.invocationQueue.offer(
+        new UpdateAttributeInvocation(key, id, attrName, attrValue));
   }
 
   /* (non-Javadoc)
