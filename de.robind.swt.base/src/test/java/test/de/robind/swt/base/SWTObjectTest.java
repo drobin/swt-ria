@@ -10,6 +10,7 @@ import static test.de.robind.swt.base.utils.SWTBaseExceptionMatcher.reason;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import org.junit.After;
 import org.junit.Before;
@@ -291,7 +292,7 @@ public class SWTObjectTest {
              IllegalAccessException {
 
     Method setKeyMethod = SWTObject.class.getDeclaredMethod("setKey", Key.class);
-    assertThat(setKeyMethod.getModifiers(), is(0)); // Test for default-access
+    assertThat(Modifier.isProtected(setKeyMethod.getModifiers()), is(true));
     setKeyMethod.setAccessible(true);
     setKeyMethod.invoke(obj, key);
   }

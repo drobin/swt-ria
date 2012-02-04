@@ -77,7 +77,7 @@ public class SWTObject {
    * @param key The key to assign the to object
    * @throws SWTBaseException failed to execute entries from the changelog
    */
-  void setKey(Key key) throws SWTBaseException {
+  protected void setKey(Key key) throws SWTBaseException {
     if (key != null) {
       this.key = key;
 
