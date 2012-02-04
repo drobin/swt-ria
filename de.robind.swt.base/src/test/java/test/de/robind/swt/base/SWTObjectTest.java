@@ -8,10 +8,6 @@ import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 import static test.de.robind.swt.base.utils.SWTBaseExceptionMatcher.reason;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -66,10 +62,10 @@ public class SWTObjectTest {
 
     assertThat(obj.getKey(), is(nullValue()));
 
-    setKey(obj, key);
+    obj.setKey(key);
     assertThat(obj.getKey(), is(sameInstance(key)));
 
-    setKey(obj , null);
+    obj.setKey(null);
     assertThat(obj.getKey(), is(nullValue()));
   }
 
@@ -77,7 +73,7 @@ public class SWTObjectTest {
   public void createObject() throws Exception {
     SWTObject obj = new SWTObject() {};
     Key key = new Key() {};
-    setKey(obj, key);
+    obj.setKey(key);
 
     obj.createObject(1, "foo");
 
@@ -105,7 +101,7 @@ public class SWTObjectTest {
     TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
     assertThat(clientTasks.invocationQueue.size(), is(0));
 
-    setKey(obj, key);
+    obj.setKey(key);
 
     assertThat(clientTasks.invocationQueue.size(), is(1));
     assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(CreateObjectInvocation.class)));
@@ -124,7 +120,7 @@ public class SWTObjectTest {
   public void createObjectAs() throws Exception {
     SWTObject obj = new SWTObject() {};
     Key key = new Key() {};
-    setKey(obj, key);
+    obj.setKey(key);
 
     obj.createObjectAs(Integer.class, 1, "foo");
 
@@ -152,7 +148,7 @@ public class SWTObjectTest {
     TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
     assertThat(clientTasks.invocationQueue.size(), is(0));
 
-    setKey(obj, key);
+    obj.setKey(key);
 
     assertThat(clientTasks.invocationQueue.size(), is(1));
     assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(CreateObjectInvocation.class)));
@@ -171,7 +167,7 @@ public class SWTObjectTest {
   public void callMethod() throws Exception {
     SWTObject obj = new SWTObject() {};
     Key key = new Key() {};
-    setKey(obj, key);
+    obj.setKey(key);
 
     TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
     clientTasks.callMethodResult = 4711;
@@ -205,7 +201,7 @@ public class SWTObjectTest {
   public void registerEvent() throws Exception {
     SWTObject obj = new SWTObject() {};
     Key key = new Key() {};
-    setKey(obj, key);
+    obj.setKey(key);
 
     obj.registerEvent(4711, true);
 
@@ -231,7 +227,7 @@ public class SWTObjectTest {
     TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
     assertThat(clientTasks.invocationQueue.size(), is(0));
 
-    setKey(obj, key);
+    obj.setKey(key);
 
     assertThat(clientTasks.invocationQueue.size(), is(1));
     assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(RegisterEventInvocation.class)));
@@ -248,7 +244,7 @@ public class SWTObjectTest {
   public void updateAttribute() throws Exception {
     SWTObject obj = new SWTObject() {};
     Key key = new Key() {};
-    setKey(obj, key);
+    obj.setKey(key);
 
     obj.updateAttribute("foo", 4711);
 
@@ -274,7 +270,7 @@ public class SWTObjectTest {
     TestClientTasks clientTasks = (TestClientTasks)ClientTasks.getClientTasks();
     assertThat(clientTasks.invocationQueue.size(), is(0));
 
-    setKey(obj, key);
+    obj.setKey(key);
 
     assertThat(clientTasks.invocationQueue.size(), is(1));
     assertThat(clientTasks.invocationQueue.peek(), is(instanceOf(UpdateAttributeInvocation.class)));
@@ -285,15 +281,5 @@ public class SWTObjectTest {
     assertThat(invocation.id, is(1));
     assertThat(invocation.attrName, is(equalTo("foo")));
     assertThat((Integer)invocation.attrValue, is(4711));
-  }
-
-  private void setKey(SWTObject obj, Key key)
-      throws NoSuchMethodException, InvocationTargetException,
-             IllegalAccessException {
-
-    Method setKeyMethod = SWTObject.class.getDeclaredMethod("setKey", Key.class);
-    assertThat(Modifier.isProtected(setKeyMethod.getModifiers()), is(true));
-    setKeyMethod.setAccessible(true);
-    setKeyMethod.invoke(obj, key);
   }
 }
