@@ -1,5 +1,8 @@
 package de.robind.swt.base;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 
 
 
@@ -26,6 +29,12 @@ public class SWTObject {
    * The key assigned to the object.
    */
   private Key key = null;
+
+  /**
+   * The changelog collects actions until a
+   * {@link #setKey(Key) key is assigned}.
+   */
+  private Queue<ChangeLogEntry> changeLog = new LinkedList<ChangeLogEntry>();
 
   /**
    * Creates a new {@link SWTObject}-instance and assigns an unique
@@ -56,11 +65,56 @@ public class SWTObject {
 
   /**
    * Assigns a key to the object.
+   * <p>
+   * If <code>null</code> is passed to the method, the current assignment is
+   * removed.
+   * <p>
+   * If you assign a key to the object and the changelog contains at least one
+   * entry, then the changelog is emptied (executed) after the key is assigned.
    *
-   * @param key
+   * @param key The key to assign the to object
+   * @throws SWTBaseException failed to execute entries from the changelog
    */
-  void setKey(Key key) {
-    this.key = key;
+  void setKey(Key key) throws SWTBaseException {
+    if (key != null) {
+      this.key = key;
+
+      while (!this.changeLog.isEmpty()) {
+        ChangeLogEntry entry = this.changeLog.poll();
+        entry.run(key);
+      }
+    } else {
+      this.key = null;
+    }
+  }
+
+  /**
+   * Sends an object-creation-request of an object of class <code>as</code>
+   * to the client.
+   * <p>
+   * If a {@link #getKey() key} is assigned to the object, then the request
+   * is send immediately. Otherwise the request is scheduled until a
+   * {@link #setKey(Key) key is available}.
+   *
+   * @param as Class to be created
+   * @param args Arguments passed to the constructor of the class
+   * @throws SWTBaseException failed to send or schedule creation-request
+   */
+  public void createObjectAs(final Class<?> as, final Object... args)
+      throws SWTBaseException {
+
+    ChangeLogEntry entry = new ChangeLogEntry() {
+      public void run(Key key) throws SWTBaseException {
+        ClientTasks tasks = ClientTasks.getClientTasks();
+        tasks.createObject(key, getId(), as, args);
+      }
+    };
+
+    if (getKey() != null) {
+      entry.run(getKey());
+    } else {
+      this.changeLog.offer(entry);
+    }
   }
 
   /**
